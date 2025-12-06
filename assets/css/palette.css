@@ -1,0 +1,45 @@
+/* Color Palette */
+:root {
+    --jasmine: #FCE597ff;
+    --hunyadi-yellow: #FFC46Aff;
+    --gamboge: #ECA032ff;
+    --china-rose: #B25A68ff;
+    --cool-gray: #939CC7ff;
+}
+
+/* Gradients */
+.gradient-top {
+    background: linear-gradient(0deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-right {
+    background: linear-gradient(90deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-bottom {
+    background: linear-gradient(180deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-left {
+    background: linear-gradient(270deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-top-right {
+    background: linear-gradient(45deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-bottom-right {
+    background: linear-gradient(135deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-top-left {
+    background: linear-gradient(225deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-bottom-left {
+    background: linear-gradient(315deg, #FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
+
+.gradient-radial {
+    background: radial-gradient(#FCE597ff, #FFC46Aff, #ECA032ff, #B25A68ff, #939CC7ff);
+}
