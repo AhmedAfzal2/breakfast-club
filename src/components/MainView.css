@@ -22,6 +22,7 @@
   width: 49px;
   height: 54px;
   position: relative;
+  cursor: pointer;
 }
 
 .nav-bar-button img {
@@ -50,4 +51,151 @@
   position: fixed;
   bottom: 0;
   left: 0;
+}
+
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 282px;
+  height: 100vh;
+  padding: 8px;
+  background-color: var(--jasmine);
+  z-index: 999;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-bar.active {
+  transform: translateX(0);
+}
+
+.nav-close-button {
+  width: 37px;
+  height: 37px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.nav-close-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nav-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.nav-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  border-bottom: 2px solid #000;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.2rem;
+  color: #000;
+  text-transform: lowercase;
+}
+
+.nav-item img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.nav-chickens {
+  width: 242px;
+  height: 49px;
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-chickens img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Responsive - expand on larger screens */
+@media (min-width: 768px) {
+  .nav-bar {
+    width: 350px;
+  }
+  
+  .nav-chickens {
+    width: 300px;
+    height: 60px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-bar {
+    width: 400px;
+  }
+  
+  .nav-chickens {
+    width: 350px;
+    height: 70px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .nav-bar {
+    width: 450px;
+  }
+  
+  .nav-chickens {
+    width: 400px;
+    height: 80px;
+  }
 }
