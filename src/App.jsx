@@ -1,10 +1,8 @@
 import React from "react";
-import RestaurantScene from "./components/reservation/RestaurantScene";
+import Game from "./components/reservation/game/Game";
 
 function App() {
-  return (
-    <RestaurantScene />
-  );
+  return <Game />;
 }
 
 export default App;
