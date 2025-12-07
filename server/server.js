@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import contactRoutes from './routes/contact.js';
 import reservationRoutes from './routes/reservations.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -17,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/contact', contactRoutes);
 app.use('/api/reservations', reservationRoutes);
 
 // Health check route
