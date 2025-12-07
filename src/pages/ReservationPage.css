@@ -108,6 +108,24 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
+.table-numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reservation-label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.table-ids {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
 .field-error-message {
   display: block;
   color: var(--china-rose);

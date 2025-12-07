@@ -42,6 +42,40 @@ function ReservationPage() {
     return counts;
   };
 
+  // Dummy capacity mapping - will be replaced with database data later
+  const getTableCapacity = (tableId) => {
+    // Dummy data: assign capacity based on table ID (only 2 or 4)
+    // In production, this will fetch from database
+    // Only tables 1-6 exist
+    const capacityMap = {
+      1: 4, 2: 4, 3: 2, 4: 2, 5: 4, 6: 4
+    };
+    return capacityMap[tableId] || 4; // Default to 4 if not in map
+  };
+
+  // Handle table selection - adds a table to the selectedTables list
+  const handleTableSelect = (tableId) => {
+    // Check if table is already selected
+    const isAlreadySelected = selectedTables.some(table => table.id === tableId);
+    
+    if (!isAlreadySelected) {
+      // Add the table to the selected list with dummy capacity
+      // Capacity will be fetched from database later
+      const capacity = getTableCapacity(tableId);
+      setSelectedTables(prevTables => [
+        ...prevTables,
+        { id: tableId, capacity: capacity }
+      ]);
+    }
+  };
+
+  // Handle table deselection - removes a table from the selectedTables list
+  const handleTableDeselect = (tableId) => {
+    setSelectedTables(prevTables => 
+      prevTables.filter(table => table.id !== tableId)
+    );
+  };
+
   // Validate date and time before opening reservation form
   const validateDateAndTime = () => {
     let isValid = true;
@@ -241,6 +275,8 @@ function ReservationPage() {
             </label>
             <div className="table-game-container">
               {/* Game table will be added here */}
+              {/* Use handleTableSelect(tableId) to add selected tables */}
+              {/* Use handleTableDeselect(tableId) to remove selected tables */}
             </div>
           </div>
           <div className="details-section">
@@ -273,7 +309,21 @@ function ReservationPage() {
               <h3 className="heading section-label">reservation details</h3>
               <div className="slot-line" />
               <div className="reservation-info">
-                {/* Reservation details will be displayed here */}
+                {selectedTables.length > 0 ? (
+                  <div className="table-numbers">
+                    <span className="reservation-label">Selected Tables: </span>
+                    <span className="table-ids">
+                      {selectedTables.map((table, index) => (
+                        <React.Fragment key={table.id}>
+                          <span>Table {table.id}</span>
+                          {index < selectedTables.length - 1 && <span className="bullet">•</span>}
+                        </React.Fragment>
+                      ))}
+                    </span>
+                  </div>
+                ) : (
+                  <span>No tables selected</span>
+                )}
               </div>
             </div>
             <div className="reserve-button-section">
