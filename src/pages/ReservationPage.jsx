@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Layout from "../components/Layout/Layout";
@@ -26,6 +26,8 @@ function ReservationPage() {
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([]);
+  const [gameEnable, setGameEnable] = useState(false);
+  const [reservedTables, setReservedTables] = useState([]);
 
   // Calculate max guests based on selected tables
   const calculateMaxGuests = () => {
@@ -44,7 +46,6 @@ function ReservationPage() {
 
   // Dummy capacity mapping - will be replaced with database data later
   const getTableCapacity = (tableId) => {
-    console.log(tables);
     return tables.find((t) => t.id == tableId).capacity;
   };
 
@@ -108,7 +109,7 @@ function ReservationPage() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  
+
   // Get minimum time (1 hour from now, rounded to next 30-minute interval)
   const getMinTime = () => {
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
@@ -164,7 +165,22 @@ function ReservationPage() {
 
   // Check if both date and time are selected
   const isDateAndTimeSelected = () => {
+    if (selectedDate && selectedTime && !gameEnable) setGameEnable(true);
     return selectedDate && selectedTime;
+  };
+
+  // dummy function which should lookup database to see already reserved tables
+  // for the given time and return a list of table ids for that
+  const getReservedTables = (date, time) => {
+    // 2 random tables as dummy data
+    let a = Math.floor(Math.random() * 6) + 1;
+    let b;
+
+    do {
+      b = Math.floor(Math.random() * 6) + 1;
+    } while (b === a);
+
+    return [a, b];
   };
 
   // Handle date and time selection - unified function
@@ -176,8 +192,8 @@ function ReservationPage() {
       }
     }
     if (time !== undefined) {
-    setSelectedTime(time);
-    setIsTimeSpinnerOpen(false);
+      setSelectedTime(time);
+      setIsTimeSpinnerOpen(false);
       if (time) {
         setTimeError("");
       }
@@ -185,6 +201,14 @@ function ReservationPage() {
     // Slot details will automatically update via React re-render
     // when both selectedDate and selectedTime are truthy
   };
+
+  // sets reserved tables whenever time and date are selected
+  useEffect(() => {
+    if (selectedDate && selectedTime) {
+      const result = getReservedTables(selectedDate, selectedTime);
+      setReservedTables(result);
+    }
+  }, [selectedDate, selectedTime]);
 
   const handleTimeChange = (time) => {
     handleDateAndTimeSelection(undefined, time);
@@ -210,7 +234,7 @@ function ReservationPage() {
         <img src={clockIcon} alt="Clock" />
       </button>
       {isTimeSpinnerOpen && (
-        <div 
+        <div
           className="time-spinner-popup"
           onClick={(e) => {
             e.preventDefault();
@@ -236,29 +260,29 @@ function ReservationPage() {
       label: "date",
       component: (
         <div>
-        <DatePicker
-          selected={selectedDate}
+          <DatePicker
+            selected={selectedDate}
             onChange={(date) => {
               handleDateAndTimeSelection(date, undefined);
             }}
-          dateFormat="MM/dd/yyyy"
-          customInput={<CustomDateInput />}
-          wrapperClassName="date-picker-wrapper"
-          minDate={today}
-          maxDate={currentMonthEnd}
-          filterDate={(date) => {
-            // Only allow dates in current month and not in the past
+            dateFormat="MM/dd/yyyy"
+            customInput={<CustomDateInput />}
+            wrapperClassName="date-picker-wrapper"
+            minDate={today}
+            maxDate={currentMonthEnd}
+            filterDate={(date) => {
+              // Only allow dates in current month and not in the past
               const dateOnly = new Date(
                 date.getFullYear(),
                 date.getMonth(),
                 date.getDate()
               );
-            return dateOnly >= today && dateOnly <= currentMonthEnd;
-          }}
-          openToDate={today}
-          showMonthDropdown={false}
-          showYearDropdown={false}
-        />
+              return dateOnly >= today && dateOnly <= currentMonthEnd;
+            }}
+            openToDate={today}
+            showMonthDropdown={false}
+            showYearDropdown={false}
+          />
           {dateError && (
             <span className="field-error-message">{dateError}</span>
           )}
@@ -286,15 +310,15 @@ function ReservationPage() {
     <Layout>
       <div className="reservation-page">
         <h1 className="page-heading">RESERVE TABLES</h1>
-        
+
         <FormContainer fields={formFields} className="date-time-form" />
 
         <div className="table-selection-container">
           <div className="table-selection">
             <label className="heading section-label">
               select table
-              <span 
-                className="help-icon" 
+              <span
+                className="help-icon"
                 onClick={() => setIsHelpPopupOpen(!isHelpPopupOpen)}
                 onMouseEnter={() => setIsHelpPopupOpen(true)}
                 onMouseLeave={() => setIsHelpPopupOpen(false)}
@@ -305,25 +329,41 @@ function ReservationPage() {
                     <div className="help-popup-content">
                       <h4 className="help-popup-title">Game Instructions</h4>
                       <ul className="help-popup-list">
-                        <li><strong>WASD</strong> - Move character</li>
-                        <li><strong>E</strong> - Reserve table (when at table)</li>
-                        <li><strong>F</strong> - Unreserve table (when at table)</li>
-                        <li>Selected tables will appear in reservation details</li>
+                        <li>
+                          <strong>WASD</strong> - Move character
+                        </li>
+                        <li>
+                          <strong>E</strong> - Reserve table (when at table)
+                        </li>
+                        <li>
+                          <strong>F</strong> - Unreserve table (when at table)
+                        </li>
+                        <li>
+                          Selected tables will appear in reservation details
+                        </li>
                       </ul>
                     </div>
                   </div>
                 )}
               </span>
             </label>
-            <div className={`table-game-container ${!isDateAndTimeSelected() ? 'disabled' : ''}`}>
+            <div
+              className={`table-game-container ${
+                !isDateAndTimeSelected() ? "disabled" : ""
+              }`}
+            >
               {!isDateAndTimeSelected() && (
                 <div className="table-game-overlay">
-                  <span className="overlay-message">Please select date and time</span>
+                  <span className="overlay-message">
+                    Please select date and time
+                  </span>
                 </div>
               )}
               <Game
                 onSelect={handleTableSelect}
                 onUnselect={handleTableDeselect}
+                enabled={gameEnable}
+                reservedTables={reservedTables}
               />
             </div>
           </div>
@@ -344,7 +384,7 @@ function ReservationPage() {
                 )}
               </div>
               <div className="slot-max">
-                max guests: {isDateAndTimeSelected() ? (3 * 4 + 3 * 2) : 0}
+                max guests: {isDateAndTimeSelected() ? 3 * 4 + 3 * 2 : 0}
               </div>
             </div>
             <div className="reservation-details-section">
@@ -430,7 +470,7 @@ function ReservationPage() {
                 reservationData
               );
               setIsReservationFormOpen(false);
-          // Optionally show a success message or redirect
+              // Optionally show a success message or redirect
             } else {
               console.error("Failed to submit reservation:", result.message);
               // Optionally show an error message

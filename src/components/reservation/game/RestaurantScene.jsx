@@ -34,7 +34,7 @@ const RestaurantScene = forwardRef((props, ref) => {
       {tables.map((t) => {
         return (
           <img
-            src={t.src}
+            src={t.reserved ? t.seated_src : t.src}
             id={"table" + t.id}
             key={t.id}
             style={{
