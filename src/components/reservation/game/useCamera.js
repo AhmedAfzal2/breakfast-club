@@ -47,7 +47,7 @@ function detectCollision(cameraPos, charOffset, tables, nearTableId) {
     const tablePos = new Pos(table.x, table.y, table);
 
     // for highlighting when close by
-    if (collisionCompare(charPos, tablePos, true)) {
+    if (!table.reserved && collisionCompare(charPos, tablePos, true)) {
       // only highlight one table near
       if (!nearAny)
         document
@@ -111,7 +111,13 @@ function walkingDirection(keys) {
   else return "none";
 }
 
-export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
+export default function useCamera(
+  bgRef,
+  charRef,
+  onSelect,
+  onUnselect,
+  enabled
+) {
   const cameraPos = useRef({ x: 0, y: world.height - view.height });
   const charOffset = useRef({ x: 400, y: 200 });
   const nearTableId = useRef(0);
@@ -123,12 +129,17 @@ export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
 
   let walkFrame = 0;
   let updateWalkFrame = 0;
+  const UPDATE_FRAME_DELAY = 20;
   let currentDirection = "top";
 
   useEffect(() => {
     const animate = (time) => {
-      // check for table select
+      if (!enabled) {
+        requestAnimationFrame(animate);
+        return;
+      }
       if (keys.current["e"] && nearTableId.current !== 0) {
+        // check for table select
         if (!pressedTables.current[nearTableId.current]) {
           document.getElementById("table" + nearTableId.current).src =
             tables.find((t) => t.id == nearTableId.current).reserved_src;
@@ -143,25 +154,6 @@ export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
           pressedTables.current[nearTableId.current] = false;
         }
       }
-      // for (const tableId of Object.keys(nearTables.current)) {
-      //   if (tableId == nearTableId.current && keys.current["e"]) {
-      //     if (!pressedTables.current[tableId]) {
-      //       document.getElementById("table" + tableId).src = tables.find(
-      //         (t) => t.id == tableId
-      //       ).reserved_src;
-      //       onSelect(tableId);
-      //       pressedTables.current[tableId] = true;
-      //     }
-      //   } else if (nearTables.current[tableId] && keys.current["f"]) {
-      //     if (pressedTables.current[tableId]) {
-      //       document.getElementById("table" + tableId).src = tables.find(
-      //         (t) => t.id == tableId
-      //       ).src;
-      //       onUnselect(tableId);
-      //       pressedTables.current[tableId] = false;
-      //     }
-      //   }
-      // }
 
       // animate walking
       const direction = walkingDirection(keys);
@@ -175,7 +167,7 @@ export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
         }
       }
 
-      updateWalkFrame = (updateWalkFrame + 1) % 30;
+      updateWalkFrame = (updateWalkFrame + 1) % UPDATE_FRAME_DELAY;
 
       // to get time between last update and this update
       if (!lastTime.current) lastTime.current = time;
@@ -274,5 +266,5 @@ export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
 
     // start the loop
     requestAnimationFrame(animate);
-  }, []);
+  }, [enabled]);
 }

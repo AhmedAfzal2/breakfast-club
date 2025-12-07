@@ -10,6 +10,7 @@ const tables = [
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
     reserved_src: "assets/images/table_2_reserved.png",
+    seated_src: "assets/images/table_2_seated.png",
     capacity: 2,
   },
   {
@@ -20,6 +21,7 @@ const tables = [
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
     reserved_src: "assets/images/table_2_reserved.png",
+    seated_src: "assets/images/table_2_seated.png",
     capacity: 2,
   },
   {
@@ -30,6 +32,7 @@ const tables = [
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
     reserved_src: "assets/images/table_4_reserved.png",
+    seated_src: "assets/images/table_4_seated.png",
     capacity: 4,
   },
   {
@@ -40,6 +43,7 @@ const tables = [
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
     reserved_src: "assets/images/table_4_reserved.png",
+    seated_src: "assets/images/table_4_seated.png",
     capacity: 4,
   },
   {
@@ -50,6 +54,7 @@ const tables = [
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
     reserved_src: "assets/images/table_2_reserved.png",
+    seated_src: "assets/images/table_2_seated.png",
     capacity: 2,
   },
   {
@@ -60,6 +65,7 @@ const tables = [
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
     reserved_src: "assets/images/table_4_reserved.png",
+    seated_src: "assets/images/table_4_seated.png",
     capacity: 4,
   },
 ];

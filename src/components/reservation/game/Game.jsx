@@ -3,6 +3,7 @@ import Character from "./Character";
 import useCamera from "./useCamera";
 import RestaurantScene from "./RestaurantScene";
 import config from "./gameConstants";
+import tables from "./tables";
 
 const { world, view, char, bar } = config;
 
@@ -16,11 +17,16 @@ const style = {
   },
 };
 
-function Game({ onSelect, onUnselect }) {
+function Game({ onSelect, onUnselect, enabled, reservedTables }) {
   const bgRef = useRef();
   const charRef = useRef();
 
-  useCamera(bgRef, charRef, onSelect, onUnselect);
+  for (const table of tables) {
+    if (reservedTables.includes(table.id)) table.reserved = true;
+    else table.reserved = false;
+  }
+
+  useCamera(bgRef, charRef, onSelect, onUnselect, enabled);
 
   return (
     <div style={{ ...style.viewport }}>
