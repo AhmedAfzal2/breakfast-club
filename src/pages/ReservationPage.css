@@ -141,8 +141,8 @@
 .time-input-wrapper {
   position: relative;
   width: 100%;
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .time-spinner-popup {
@@ -150,13 +150,14 @@
   top: 100%;
   padding: 1rem;
   margin-top: 0.5rem;
-  background-color: var(--hunyadi-yellow);
+  background-color: var(--jasmine);
   border: 2px solid var(--china-rose);
   border-radius: 12px;
   z-index: 999;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 60%;
   box-sizing: border-box;
+  left: 40%;
 }
 
 .date-picker-wrapper,
