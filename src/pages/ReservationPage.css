@@ -108,6 +108,15 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
+.field-error-message {
+  display: block;
+  color: var(--china-rose);
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
 .table-game-container {
   flex: 1;
   min-height: 0;
