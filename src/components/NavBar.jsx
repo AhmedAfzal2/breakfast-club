@@ -1,15 +1,15 @@
 import React from "react";
 import "./Layout.css";
-import chickens from "/assets/images/icons/chickens.png";
+import chickens from "../../assets/images/icons/chickens.png";
 import NavBarRow from "./NavBarRow";
 import { Menu, Info, Phone, Calendar, X} from "lucide-react";
 
 function NavBar({ isOpen, onClose }) {
   const navItems = [
-    { icon: Menu, text: "menu", path: "/" },
-    { icon: Info, text: "about us", path: "/" },
-    { icon: Phone, text: "contact us", path: "/contact" },
-    { icon: Calendar, text: "reservations", path: "/reservations" },
+    { icon: Menu, text: "menu" },
+    { icon: Info, text: "about us" },
+    { icon: Phone, text: "contact us" },
+    { icon: Calendar, text: "reservations" },
   ];
 
   return (
@@ -25,13 +25,7 @@ function NavBar({ isOpen, onClose }) {
           </div>
           <div className="nav-items">
             {navItems.map((item, index) => (
-              <NavBarRow 
-                key={index} 
-                icon={<item.icon className="pixel-icon" />} 
-                text={item.text}
-                path={item.path}
-                onClose={onClose}
-              />
+            <NavBarRow key={index} icon={<item.icon className="pixel-icon" />} text={item.text}/>
             ))}
           </div>
           <div className="nav-chickens">
