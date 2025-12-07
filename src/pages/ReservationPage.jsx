@@ -36,7 +36,7 @@ function ReservationPage() {
   // Get table counts by capacity
   const getTableCounts = () => {
     const counts = {};
-    selectedTables.forEach(table => {
+    selectedTables.forEach((table) => {
       counts[table.capacity] = (counts[table.capacity] || 0) + 1;
     });
     return counts;
@@ -77,7 +77,7 @@ function ReservationPage() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  
+
   // Get minimum time (1 hour from now, rounded to next 30-minute interval)
   const getMinTime = () => {
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
@@ -105,11 +105,7 @@ function ReservationPage() {
         className="date-input"
         readOnly
       />
-      <button
-        type="button"
-        className="calendar-icon-button"
-        onClick={onClick}
-      >
+      <button type="button" className="calendar-icon-button" onClick={onClick}>
         <img src={calendarIcon} alt="Calendar" />
       </button>
     </div>
@@ -119,9 +115,11 @@ function ReservationPage() {
     if (!selectedTime) return "";
     const h = selectedTime.getHours();
     const m = selectedTime.getMinutes();
-    const hour12 = h > 12 ? h - 12 : (h === 0 ? 12 : h);
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    return `${hour12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+    const hour12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
+    const ampm = h >= 12 ? "PM" : "AM";
+    return `${hour12.toString().padStart(2, "0")}:${m
+      .toString()
+      .padStart(2, "0")} ${ampm}`;
   };
 
   const handleTimeIconClick = (e) => {
@@ -161,7 +159,7 @@ function ReservationPage() {
         <img src={clockIcon} alt="Clock" />
       </button>
       {isTimeSpinnerOpen && (
-        <div 
+        <div
           className="time-spinner-popup"
           onClick={(e) => {
             e.preventDefault();
@@ -213,7 +211,7 @@ function ReservationPage() {
         </div>
       ),
       sectionClassName: "form-section",
-      wrapperClassName: "form-field-wrapper"
+      wrapperClassName: "form-field-wrapper",
     },
     {
       label: "time",
@@ -224,15 +222,15 @@ function ReservationPage() {
         </div>
       ),
       sectionClassName: "form-section",
-      wrapperClassName: "form-field-wrapper"
-    }
+      wrapperClassName: "form-field-wrapper",
+    },
   ];
 
   return (
     <Layout>
       <div className="reservation-page">
         <h1 className="page-heading">RESERVE TABLES</h1>
-        
+
         <FormContainer fields={formFields} className="date-time-form" />
 
         <div className="table-selection-container">
@@ -256,8 +254,12 @@ function ReservationPage() {
                       .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
                       .map(([capacity, count], index, array) => (
                         <React.Fragment key={capacity}>
-                          <span>{count}x {capacity}-seater</span>
-                          {index < array.length - 1 && <span className="bullet">•</span>}
+                          <span>
+                            {count}x {capacity}-seater
+                          </span>
+                          {index < array.length - 1 && (
+                            <span className="bullet">•</span>
+                          )}
                         </React.Fragment>
                       ))}
                   </>
@@ -265,9 +267,7 @@ function ReservationPage() {
                   <span>No tables selected</span>
                 )}
               </div>
-              <div className="slot-max">
-                max guests: {maxGuests}
-              </div>
+              <div className="slot-max">max guests: {maxGuests}</div>
             </div>
             <div className="reservation-details-section">
               <h3 className="heading section-label">reservation details</h3>

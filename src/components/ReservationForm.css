@@ -14,7 +14,7 @@
 }
 
 .reservation-form-popup {
-  background-color: var(--hunyadi-yellow);
+  background-color: var(--jasmine);
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
@@ -40,6 +40,8 @@
   color: white;
   margin: 0;
   text-transform: uppercase;
+  font-weight: normal;
+
 }
 
 .reservation-form-close {
@@ -86,7 +88,7 @@
   font-family: 'Pixelify Sans', sans-serif;
   font-size: 1.3rem;
   color: var(--china-rose);
-  font-weight: 600;
+  font-weight: 100;
   flex-shrink: 0;
 }
 
