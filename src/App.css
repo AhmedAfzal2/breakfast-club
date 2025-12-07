@@ -1,0 +1,43 @@
+.heading{
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 32px;
+}
+.page-heading {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-weight: 300;
+    color: var(--gamboge);
+    border-bottom: 2px solid var(--gamboge);
+    margin-bottom: 34px;
+}
+
+.section-label {
+    font-weight: 300;
+    color: black;
+}
+
+.custom-button {
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  background-color: var(--gamboge);
+  color: white;
+  border: none;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: var(--china-rose);
+}
+
+.date-time-page {
+  width: 100%;
+  min-height: calc(100vh - 137px);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+

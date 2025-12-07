@@ -1,0 +1,91 @@
+.form-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 17px 17px 17px 17px;
+  border-radius: 12px;
+  background-color: var(--hunyadi-yellow);
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* Alias for backward compatibility */
+.date-time-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 17px 17px 17px 17px;
+  border-radius: 12px;
+  background-color: var(--hunyadi-yellow);
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.form-field-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Specific styles for date and time sections */
+.date-section {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.calendar-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.time-section {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.time-box {
+  width: 100%;
+  height: 80px;
+  background-color: var(--jasmine);
+  border-radius: 12px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
