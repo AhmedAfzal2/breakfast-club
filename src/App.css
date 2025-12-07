@@ -6,11 +6,15 @@
     font-family: 'Pixelify Sans', sans-serif;
     font-weight: 300;
     color: var(--gamboge);
+    text-transform: uppercase;
     border-bottom: 2px solid var(--gamboge);
-    margin-bottom: 34px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
 }
 
 .section-label {
+    font-size: 25px;
     font-weight: 300;
     color: black;
 }
@@ -33,7 +37,7 @@
   background-color: var(--china-rose);
 }
 
-.date-time-page {
+.reservation-page {
   width: 100%;
   min-height: calc(100vh - 137px);
   background-color: white;
