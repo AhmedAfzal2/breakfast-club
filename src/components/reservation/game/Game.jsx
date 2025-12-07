@@ -16,11 +16,11 @@ const style = {
   },
 };
 
-function Game() {
+function Game({ onSelect, onUnselect }) {
   const bgRef = useRef();
   const charRef = useRef();
 
-  useCamera(bgRef, charRef);
+  useCamera(bgRef, charRef, onSelect, onUnselect);
 
   return (
     <div style={{ ...style.viewport }}>

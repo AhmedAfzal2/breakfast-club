@@ -104,7 +104,7 @@ function walkingDirection(keys) {
   else return "none";
 }
 
-export default function useCamera(bgRef, charRef) {
+export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
   const cameraPos = useRef({ x: 0, y: 0 });
   const charOffset = useRef({ x: 400, y: 280 });
   const nearTables = useRef({});
@@ -127,6 +127,7 @@ export default function useCamera(bgRef, charRef) {
             document.getElementById("table" + tableId).src = tables.find(
               (t) => t.id == tableId
             ).reserved_src;
+            onSelect(t.id);
             pressedTables.current[tableId] = true;
           }
         } else if (nearTables.current[tableId] && keys.current["f"]) {
@@ -134,6 +135,7 @@ export default function useCamera(bgRef, charRef) {
             document.getElementById("table" + tableId).src = tables.find(
               (t) => t.id == tableId
             ).src;
+            onUnselect(t.id);
             pressedTables.current[tableId] = false;
           }
         }
