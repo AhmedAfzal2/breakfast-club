@@ -12,6 +12,7 @@ import Game from "../components/reservation/game/Game";
 import tables from "../components/reservation/game/tables";
 import "../App.css";
 import "./ReservationPage.css";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 
 function ReservationPage() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -21,6 +22,7 @@ function ReservationPage() {
   const [dateError, setDateError] = useState("");
   const [timeError, setTimeError] = useState("");
   const [isHelpPopupOpen, setIsHelpPopupOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([]);
@@ -421,6 +423,8 @@ function ReservationPage() {
         onClose={() => setIsReservationFormOpen(false)}
         onSubmit={async (formData) => {
           // Extract table numbers as a list
+          setIsReservationFormOpen(false);
+          setIsConfirmationOpen(true); // show confirmation popup
           const tableNumbers = selectedTables.map((table) => table.id);
 
           // Format reservation data with required and optional fields clearly marked
@@ -476,6 +480,10 @@ function ReservationPage() {
             // Optionally show an error message
           }
         }}
+      />
+      <ConfirmationPopup
+        isOpen={isConfirmationOpen}
+        onClose={() => setIsConfirmationOpen(false)}
       />
     </Layout>
   );

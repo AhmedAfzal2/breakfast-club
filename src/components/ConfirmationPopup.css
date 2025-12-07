@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap');
+
+.cute-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.cute-confirm-popup {
+  background: var(--jasmine);
+  width: 260px;
+  padding: 20px;
+  border-radius: 18px;
+  position: relative;
+  text-align: center;
+
+  animation: cutePop 0.22s ease-out;
+}
+
+@keyframes cutePop {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.cute-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.cute-confirm-title {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+.cute-confirm-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin: 10px auto;
+}
+
+.cute-confirm-text {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 14px;
+}
+
+.cute-ok-btn {
+  background: var(--gamboge);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: transform 0.15s ease;
+}
+
+.cute-ok-btn:hover {
+  transform: scale(1.04);
+}
