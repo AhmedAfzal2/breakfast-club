@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import arrowIcon from "../../assets/images/icons/arrow.png";
+import tickIcon from "../../assets/images/icons/tick.png";
 import "./TimeSpinner.css";
 
 function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
@@ -27,6 +28,8 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
     return minTime.getHours() >= 12 ? 'PM' : 'AM';
   });
 
+  const [error, setError] = useState("");
+
   const updateTime = (newHours, newMinutes, newAmPm) => {
     const now = new Date();
     let hour24 = newHours;
@@ -35,9 +38,13 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
 
     const newTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour24, newMinutes);
     
+    // Clear error when user changes time
+    setError("");
+    
     // Check if time is valid (not before minTime and within 30-minute intervals)
     if (newTime >= minTime && newTime <= new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 30)) {
-      onTimeChange(newTime);
+      // Don't call onTimeChange here, just update local state
+      // onTimeChange will be called only on confirm
     }
   };
 
@@ -107,11 +114,36 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
   };
 
   const handleButtonClick = (e, callback) => {
+    e.preventDefault();
     e.stopPropagation();
     callback();
   };
 
+  const validateTime = (timeToValidate) => {
+    const now = new Date();
+    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    
+    // Check if time is before current time
+    if (timeToValidate < now) {
+      return "Cannot select a time in the past";
+    }
+    
+    // Check if time is before one hour from now
+    if (timeToValidate < oneHourFromNow) {
+      return "Reservations must be at least 1 hour from now";
+    }
+    
+    // Check if time is within valid range (before 11:30 PM)
+    const maxTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 30);
+    if (timeToValidate > maxTime) {
+      return "Reservations must be before 11:30 PM";
+    }
+    
+    return null; // Valid time
+  };
+
   const handleConfirm = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     const now = new Date();
     let hour24 = hours;
@@ -120,85 +152,113 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
 
     const newTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour24, minutes);
     
-    if (newTime >= minTime && newTime <= new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 30)) {
-      onTimeChange(newTime);
+    const validationError = validateTime(newTime);
+    if (validationError) {
+      setError(validationError);
+      return;
     }
+    
+    // Time is valid, clear error and proceed
+    setError("");
+    onTimeChange(newTime);
   };
 
   return (
-    <div className="time-spinner-wrapper" onClick={(e) => e.stopPropagation()}>
-      <div className="time-spinner-container">
-        <div className="time-spinner-group">
-          <button 
-            type="button" 
-            className="spinner-button spinner-button-up" 
-            onClick={(e) => handleButtonClick(e, incrementHours)}
-          >
-            <img src={arrowIcon} alt="Up" />
-          </button>
-          <div className="spinner-value-wrapper">
-            <div className="spinner-value">{hours.toString().padStart(2, '0')}</div>
+    <div 
+      className="time-spinner-wrapper" 
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      <div 
+        className="time-spinner-container"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
+        <div className="time-spinner-left">
+          <div className="time-spinner-group">
+            <button 
+              type="button" 
+              className="spinner-button spinner-button-up" 
+              onClick={(e) => handleButtonClick(e, incrementHours)}
+            >
+              <img src={arrowIcon} alt="Up" />
+            </button>
+            <div className="spinner-value-wrapper">
+              <div className="spinner-value">{hours.toString().padStart(2, '0')}</div>
+            </div>
+            <button 
+              type="button" 
+              className="spinner-button spinner-button-down" 
+              onClick={(e) => handleButtonClick(e, decrementHours)}
+            >
+              <img src={arrowIcon} alt="Down" />
+            </button>
           </div>
-          <button 
-            type="button" 
-            className="spinner-button spinner-button-down" 
-            onClick={(e) => handleButtonClick(e, decrementHours)}
-          >
-            <img src={arrowIcon} alt="Down" />
-          </button>
-        </div>
-        <div className="time-spinner-separator">:</div>
-        <div className="time-spinner-group">
-          <button 
-            type="button" 
-            className="spinner-button spinner-button-up" 
-            onClick={(e) => handleButtonClick(e, incrementMinutes)}
-          >
-            <img src={arrowIcon} alt="Up" />
-          </button>
-          <div className="spinner-value-wrapper">
-            <div className="spinner-value">{minutes.toString().padStart(2, '0')}</div>
+          <div className="time-spinner-separator">:</div>
+          <div className="time-spinner-group">
+            <button 
+              type="button" 
+              className="spinner-button spinner-button-up" 
+              onClick={(e) => handleButtonClick(e, incrementMinutes)}
+            >
+              <img src={arrowIcon} alt="Up" />
+            </button>
+            <div className="spinner-value-wrapper">
+              <div className="spinner-value">{minutes.toString().padStart(2, '0')}</div>
+            </div>
+            <button 
+              type="button" 
+              className="spinner-button spinner-button-down" 
+              onClick={(e) => handleButtonClick(e, decrementMinutes)}
+            >
+              <img src={arrowIcon} alt="Down" />
+            </button>
           </div>
-          <button 
-            type="button" 
-            className="spinner-button spinner-button-down" 
-            onClick={(e) => handleButtonClick(e, decrementMinutes)}
-          >
-            <img src={arrowIcon} alt="Down" />
-          </button>
-        </div>
-        <div className="time-spinner-group">
-          <button 
-            type="button" 
-            className="spinner-button spinner-button-up" 
-            onClick={(e) => handleButtonClick(e, toggleAmPm)}
-          >
-            <img src={arrowIcon} alt="Up" />
-          </button>
-          <div className="spinner-value-wrapper">
-            <div className="spinner-value">{amPm}</div>
+          <div className="time-spinner-group">
+            <button 
+              type="button" 
+              className="spinner-button spinner-button-up" 
+              onClick={(e) => handleButtonClick(e, toggleAmPm)}
+            >
+              <img src={arrowIcon} alt="Up" />
+            </button>
+            <div className="spinner-value-wrapper">
+              <div className="spinner-value">{amPm}</div>
+            </div>
+            <button 
+              type="button" 
+              className="spinner-button spinner-button-down" 
+              onClick={(e) => handleButtonClick(e, toggleAmPm)}
+            >
+              <img src={arrowIcon} alt="Down" />
+            </button>
           </div>
-          <button 
-            type="button" 
-            className="spinner-button spinner-button-down" 
-            onClick={(e) => handleButtonClick(e, toggleAmPm)}
-          >
-            <img src={arrowIcon} alt="Down" />
-          </button>
-        </div>
-      </div>
-      <div className="time-spinner-confirm-row">
-        <div className="time-spinner-display">
-          {formatTime()}
         </div>
         <button 
           type="button" 
           className="time-spinner-confirm-button"
           onClick={handleConfirm}
         >
-          ✓
+          <img src={tickIcon} alt="Confirm" />
         </button>
       </div>
+      {error && (
+        <div className="time-spinner-error">
+          {error}
+        </div>
+      )}
     </div>
   );
 }

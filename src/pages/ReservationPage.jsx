@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Layout from "../components/Layout/Layout";
@@ -106,27 +106,7 @@ function ReservationPage() {
     setIsTimeSpinnerOpen(false);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isTimeSpinnerOpen) {
-        const timeInputWrapper = document.querySelector('.time-input-wrapper');
-        const timeSpinnerPopup = document.querySelector('.time-spinner-popup');
-        if (timeInputWrapper && timeSpinnerPopup) {
-          if (!timeInputWrapper.contains(event.target) && !timeSpinnerPopup.contains(event.target)) {
-            setIsTimeSpinnerOpen(false);
-          }
-        }
-      }
-    };
-
-    if (isTimeSpinnerOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isTimeSpinnerOpen]);
+  // Popup only closes when tick button is clicked, not on outside click
 
   const CustomTimeInput = ({ value, onClick }) => (
     <div className="time-input-wrapper">
@@ -148,7 +128,14 @@ function ReservationPage() {
       {isTimeSpinnerOpen && (
         <div 
           className="time-spinner-popup"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           <TimeSpinner
             selectedTime={selectedTime}
