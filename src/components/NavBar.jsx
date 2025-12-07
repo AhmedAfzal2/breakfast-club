@@ -1,0 +1,40 @@
+import React from "react";
+import "./MainView.css";
+import chickens from "../../assets/images/icons/chickens.png";
+import NavBarRow from "./NavBarRow";
+import { Menu, Info, Phone, Calendar, X} from "lucide-react";
+
+function NavBar({ isOpen, onClose }) {
+  const navItems = [
+    { icon: Menu, text: "menu" },
+    { icon: Info, text: "about us" },
+    { icon: Phone, text: "contact us" },
+    { icon: Calendar, text: "reservations" },
+  ];
+
+  return (
+    <>
+      <div
+        className={`nav-overlay ${isOpen ? "active" : ""}`}
+        onClick={onClose}
+      ></div>
+      <nav className={`nav-bar ${isOpen ? "active" : ""}`}>
+        <div className="nav-content">
+          <div className="nav-close-button" onClick={onClose}>
+            <X className="pixel-icon" size={40} strokeWidth={3} />
+          </div>
+          <div className="nav-items">
+            {navItems.map((item, index) => (
+            <NavBarRow key={index} icon={<item.icon className="pixel-icon" />} text={item.text}/>
+            ))}
+          </div>
+          <div className="nav-chickens">
+            <img src={chickens} alt="Chickens" />
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+}
+
+export default NavBar;
