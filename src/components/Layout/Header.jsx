@@ -1,7 +1,6 @@
 import React from "react";
-import "./MainView.css";
-import navBarImage from "../../assets/images/icons/nav-bar.png";
-import breakfastClubLogo from "../../assets/images/breakfast_club_logo.png";
+import "./Layout.css";
+import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
 import { Menu } from 'lucide-react';
 
 function Header({ onNavClick }) {
@@ -18,4 +17,3 @@ function Header({ onNavClick }) {
 }
 
 export default Header;
-

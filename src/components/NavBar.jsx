@@ -1,5 +1,5 @@
 import React from "react";
-import "./MainView.css";
+import "./Layout.css";
 import chickens from "../../assets/images/icons/chickens.png";
 import NavBarRow from "./NavBarRow";
 import { Menu, Info, Phone, Calendar, X} from "lucide-react";

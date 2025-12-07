@@ -15,8 +15,10 @@ function NavBarRow({ icon, text, path, onClose }) {
   };
 
   return (
-    <div className="nav-item" onClick={handleClick}>
-      <img src={icon} alt={text} />
+    <div className="nav-item">
+      <div className="nav-icon">
+        {icon}
+      </div>
       <span>{text}</span>
     </div>
   );

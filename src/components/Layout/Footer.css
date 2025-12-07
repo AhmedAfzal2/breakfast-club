@@ -21,6 +21,7 @@
   transform: translateY(0);
 }
 
+
 .footer a {
   color: #fff;
   text-decoration: none;
@@ -32,8 +33,8 @@
   color: var(--jasmine); /* your gamboge color for hover */
   text-decoration: underline wavy var(--jasmine);
 }
-.footer h{
-    font: 1.5rem;
+.footer-heading {
+    font: 4rem;
 }
 
 .footer-top {
@@ -75,18 +76,51 @@
 }
 
 .tool-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   background-color: rgba(252, 229, 151, 0.601);
-  padding: 2rem 2rem;
+  padding: 1rem 1.5rem;
   border-radius: 12px;
   font-size: 0.9rem;
   width: 100%;
   justify-content: space-between;
   flex: 1;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.tool-card:hover {
+  background-color: rgba(252, 229, 151, 0.8);
+  transform: scale(1.02);
+}
+.tool-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 2;      /* bigger column */
+  font-size: 1.2rem;
+}
+.tool-text span {
+  font-size: larger;
+}
+.tool-text p {
+  font-size: smaller;
+  font-family: monospace;
+  font-weight: bold;
+  color:rgb(248, 239, 226)
+}
+.tool-image {
+  flex: 1;      /* smaller column */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0rem;
+}
+.tool-image img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
 
-}
-.tool-card span{
-    font-size: 1.2rem;
-}
 .footer-bottom {
   display: flex;
   justify-content: space-between;

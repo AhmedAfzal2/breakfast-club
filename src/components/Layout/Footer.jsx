@@ -1,7 +1,7 @@
 // src/components/Footer.jsx
 import React from "react";
 import "./Footer.css";
-import breakfastClubLogo from "../../assets/images/breakfast_club_logo.png";
+import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
 import { Instagram, Linkedin, Twitter, Youtube, Facebook, Github } from "lucide-react";
 
 function Footer() {
@@ -19,19 +19,34 @@ function Footer() {
           <a href="#reservations">Reservations</a>
         </div>
       </div>
-      <div><h>Explore our services!</h></div>
+      <div className="footer-heading"><h>EXPLORE OUR SERVICES!</h></div>
       <div className="footer-tools">
         <div className="tool-card">
-          <span><strong>ORDER</strong> now!</span>
-          <p>Check out our delicious menu with everything rangind from sweet to savoury breakfast items.</p>
+          <div className="tool-text">
+            <span><strong style={{color: "var(--china-rose)"}}>ORDER</strong> now!</span>
+            <p>Check out our delicious menu with everything ranging from sweet to savoury breakfast items.</p>
+          </div>
+          <div className="tool-image">
+            <img src="/assets/images/pancake.png" alt="Order Food" style={{ width: "100px", height: "100px" }}/>
+          </div>
         </div>
         <div className="tool-card">
-          <span><strong>BEVERAGES</strong> for yous</span>
-          <p>Enjoy our selection of fresh juices, aromatic coffees, and refreshing teas to complement your meal.</p>
+          <div className="tool-text">
+            <span><strong style={{color: "var(--china-rose)"}}>BEVERAGES</strong> for you</span>
+            <p>Enjoy our selection of fresh juices, aromatic coffees, and refreshing teas to complement your meal.</p>
+          </div>
+          <div className="tool-image">
+            <img src="/assets/images/sharbat.png" alt="Beverages" />
+          </div>
         </div>
         <div className="tool-card">
-          <span><strong>RESERVE</strong> now!</span>
-          <p>Book a table in advance to ensure you have a spot at the popular breakfast club.</p>
+          <div className="tool-text">
+            <span><strong style={{color: "var(--china-rose)"}}>RESERVE</strong> now!</span>
+            <p>Book a table in advance to ensure you have a spot at the popular breakfast club.</p>
+          </div>
+          <div className="tool-image">
+            <img src="/assets/images/hen.png" alt="Reserve Table" />
+          </div>
         </div>
       </div>
 

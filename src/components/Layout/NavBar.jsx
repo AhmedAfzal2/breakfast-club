@@ -1,19 +1,15 @@
 import React from "react";
 import "./Layout.css";
-import crossIcon from "../../../assets/images/icons/cross.png";
-import chickens from "../../../assets/images/icons/chickens.png";
-import menuIcon from "../../../assets/images/icons/menu.png";
-import aboutIcon from "../../../assets/images/icons/about.png";
-import contactIcon from "../../../assets/images/icons/contact.png";
-import reservationIcon from "../../../assets/images/icons/reservation.png";
+import chickens from "/assets/images/icons/chickens.png";
 import NavBarRow from "./NavBarRow";
+import { Menu, Info, Phone, Calendar, X} from "lucide-react";
 
 function NavBar({ isOpen, onClose }) {
   const navItems = [
-    { icon: menuIcon, text: "menu", path: "/" },
-    { icon: aboutIcon, text: "about us", path: "/" },
-    { icon: contactIcon, text: "contact us", path: "/" },
-    { icon: reservationIcon, text: "reservations", path: "/reservations" },
+    { icon: Menu, text: "menu" },
+    { icon: Info, text: "about us" },
+    { icon: Phone, text: "contact us" },
+    { icon: Calendar, text: "reservations" },
   ];
 
   return (
@@ -25,17 +21,11 @@ function NavBar({ isOpen, onClose }) {
       <nav className={`nav-bar ${isOpen ? "active" : ""}`}>
         <div className="nav-content">
           <div className="nav-close-button" onClick={onClose}>
-            <img src={crossIcon} alt="Close" />
+            <X className="pixel-icon" size={40} strokeWidth={3} />
           </div>
           <div className="nav-items">
             {navItems.map((item, index) => (
-              <NavBarRow 
-                key={index} 
-                icon={item.icon} 
-                text={item.text} 
-                path={item.path}
-                onClose={onClose}
-              />
+            <NavBarRow key={index} icon={<item.icon className="pixel-icon" />} text={item.text}/>
             ))}
           </div>
           <div className="nav-chickens">
@@ -48,4 +38,3 @@ function NavBar({ isOpen, onClose }) {
 }
 
 export default NavBar;
-
