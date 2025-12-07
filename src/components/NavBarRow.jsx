@@ -4,7 +4,9 @@ import "./MainView.css";
 function NavBarRow({ icon, text }) {
   return (
     <div className="nav-item">
-      <img src={icon} alt={text} />
+      <div className="nav-icon">
+        {icon}
+      </div>
       <span>{text}</span>
     </div>
   );

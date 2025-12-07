@@ -2,12 +2,13 @@ import React from "react";
 import "./MainView.css";
 import navBarImage from "../../assets/images/icons/nav-bar.png";
 import breakfastClubLogo from "../../assets/images/breakfast_club_logo.png";
+import { Menu } from 'lucide-react';
 
 function Header({ onNavClick }) {
   return (
     <header className="header">
       <div className="nav-bar-button" onClick={onNavClick}>
-        <img src={navBarImage} alt="Navigation" />
+        <Menu size={50}/>
       </div>
       <div className="logo-container">
         <img src={breakfastClubLogo} alt="Breakfast Club Logo" />
