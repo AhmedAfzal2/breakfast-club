@@ -8,6 +8,8 @@ import TimeSpinner from "../components/TimeSpinner";
 import ReservationForm from "../components/ReservationForm";
 import calendarIcon from "../../assets/images/icons/calendar.png";
 import clockIcon from "../../assets/images/icons/clock.png";
+import Game from "../components/reservation/game/Game";
+import tables from "../components/reservation/game/tables";
 import "../App.css";
 import "./ReservationPage.css";
 
@@ -20,12 +22,7 @@ function ReservationPage() {
   const [timeError, setTimeError] = useState("");
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
-  const [selectedTables, setSelectedTables] = useState([
-    { id: 1, capacity: 4 },
-    { id: 2, capacity: 4 },
-    { id: 3, capacity: 2 },
-    { id: 4, capacity: 2 },
-  ]);
+  const [selectedTables, setSelectedTables] = useState([]);
 
   // Calculate max guests based on selected tables
   const calculateMaxGuests = () => {
@@ -44,56 +41,53 @@ function ReservationPage() {
 
   // Dummy capacity mapping - will be replaced with database data later
   const getTableCapacity = (tableId) => {
-    // Dummy data: assign capacity based on table ID (only 2 or 4)
-    // In production, this will fetch from database
-    // Only tables 1-6 exist
-    const capacityMap = {
-      1: 4, 2: 4, 3: 2, 4: 2, 5: 4, 6: 4
-    };
-    return capacityMap[tableId] || 4; // Default to 4 if not in map
+    console.log(tables);
+    return tables.find((t) => t.id == tableId).capacity;
   };
 
   // Handle table selection - adds a table to the selectedTables list
   const handleTableSelect = (tableId) => {
     // Check if table is already selected
-    const isAlreadySelected = selectedTables.some(table => table.id === tableId);
-    
+    const isAlreadySelected = selectedTables.some(
+      (table) => table.id === tableId
+    );
+
     if (!isAlreadySelected) {
       // Add the table to the selected list with dummy capacity
       // Capacity will be fetched from database later
       const capacity = getTableCapacity(tableId);
-      setSelectedTables(prevTables => [
+      setSelectedTables((prevTables) => [
         ...prevTables,
-        { id: tableId, capacity: capacity }
+        { id: tableId, capacity: capacity },
       ]);
     }
   };
 
   // Handle table deselection - removes a table from the selectedTables list
   const handleTableDeselect = (tableId) => {
-    setSelectedTables(prevTables => 
-      prevTables.filter(table => table.id !== tableId)
+    setSelectedTables((prevTables) =>
+      prevTables.filter((table) => table.id !== tableId)
     );
   };
 
   // Validate date and time before opening reservation form
   const validateDateAndTime = () => {
     let isValid = true;
-    
+
     if (!selectedDate) {
       setDateError("Date is required");
       isValid = false;
     } else {
       setDateError("");
     }
-    
+
     if (!selectedTime) {
       setTimeError("Time is required");
       isValid = false;
     } else {
       setTimeError("");
     }
-    
+
     return isValid;
   };
 
@@ -234,14 +228,20 @@ function ReservationPage() {
             maxDate={currentMonthEnd}
             filterDate={(date) => {
               // Only allow dates in current month and not in the past
-              const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+              const dateOnly = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+              );
               return dateOnly >= today && dateOnly <= currentMonthEnd;
             }}
             openToDate={today}
             showMonthDropdown={false}
             showYearDropdown={false}
           />
-          {dateError && <span className="field-error-message">{dateError}</span>}
+          {dateError && (
+            <span className="field-error-message">{dateError}</span>
+          )}
         </div>
       ),
       sectionClassName: "form-section",
@@ -252,7 +252,9 @@ function ReservationPage() {
       component: (
         <div>
           <CustomTimeInput />
-          {timeError && <span className="field-error-message">{timeError}</span>}
+          {timeError && (
+            <span className="field-error-message">{timeError}</span>
+          )}
         </div>
       ),
       sectionClassName: "form-section",
@@ -274,9 +276,10 @@ function ReservationPage() {
               <span className="help-icon">?</span>
             </label>
             <div className="table-game-container">
-              {/* Game table will be added here */}
-              {/* Use handleTableSelect(tableId) to add selected tables */}
-              {/* Use handleTableDeselect(tableId) to remove selected tables */}
+              <Game
+                onSelect={handleTableSelect}
+                onUnselect={handleTableDeselect}
+              />
             </div>
           </div>
           <div className="details-section">
@@ -306,7 +309,9 @@ function ReservationPage() {
               <div className="slot-max">max guests: {maxGuests}</div>
             </div>
             <div className="reservation-details-section">
-              <h3 className="heading section-label">reservation details</h3>
+              <h3 className="heading section-label margin-top">
+                reservation details
+              </h3>
               <div className="slot-line" />
               <div className="reservation-info">
                 {selectedTables.length > 0 ? (
@@ -316,7 +321,9 @@ function ReservationPage() {
                       {selectedTables.map((table, index) => (
                         <React.Fragment key={table.id}>
                           <span>Table {table.id}</span>
-                          {index < selectedTables.length - 1 && <span className="bullet">•</span>}
+                          {index < selectedTables.length - 1 && (
+                            <span className="bullet">•</span>
+                          )}
                         </React.Fragment>
                       ))}
                     </span>
@@ -327,10 +334,7 @@ function ReservationPage() {
               </div>
             </div>
             <div className="reserve-button-section">
-              <Button 
-                text="reserve" 
-                onClick={handleReserveClick}
-              />
+              <Button text="reserve" onClick={handleReserveClick} />
             </div>
           </div>
         </div>
@@ -340,8 +344,8 @@ function ReservationPage() {
         onClose={() => setIsReservationFormOpen(false)}
         onSubmit={async (formData) => {
           // Extract table numbers as a list
-          const tableNumbers = selectedTables.map(table => table.id);
-          
+          const tableNumbers = selectedTables.map((table) => table.id);
+
           // Format reservation data with required and optional fields clearly marked
           const reservationData = {
             // Required fields
@@ -350,14 +354,14 @@ function ReservationPage() {
             tableNumbers: tableNumbers, // List of table IDs
             name: formData.name,
             contactNumber: formData.contactNumber,
-            
+
             // Optional fields
             occasion: formData.occasion || null,
             additionalNotes: formData.additionalNotes || null,
-            
+
             // Additional data
             maxGuests: maxGuests,
-            tables: selectedTables // Full table objects (for reference)
+            tables: selectedTables, // Full table objects (for reference)
           };
 
           // Print reservation data as JSON to console
@@ -366,18 +370,24 @@ function ReservationPage() {
           console.log("========================");
 
           try {
-            const response = await fetch('http://localhost:3001/api/reservations', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(reservationData),
-            });
+            const response = await fetch(
+              "http://localhost:3001/api/reservations",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(reservationData),
+              }
+            );
 
             const result = await response.json();
 
             if (response.ok) {
-              console.log("Reservation submitted successfully:", reservationData);
+              console.log(
+                "Reservation submitted successfully:",
+                reservationData
+              );
               setIsReservationFormOpen(false);
               // Optionally show a success message or redirect
             } else {
@@ -385,7 +395,7 @@ function ReservationPage() {
               // Optionally show an error message
             }
           } catch (error) {
-            console.error('Error submitting reservation:', error);
+            console.error("Error submitting reservation:", error);
             // Optionally show an error message
           }
         }}

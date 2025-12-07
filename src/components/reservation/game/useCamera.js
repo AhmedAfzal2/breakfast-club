@@ -34,7 +34,7 @@ function collisionCompare(char, table, highlight) {
     );
 }
 
-function detectCollision(cameraPos, charOffset, tables, nearTables) {
+function detectCollision(cameraPos, charOffset, tables, nearTableId) {
   // convert character position from viewport to world
   const charX = cameraPos.x + charOffset.x + view.width / 2;
   const charY = cameraPos.y + charOffset.y + view.height / 2;
@@ -42,19 +42,26 @@ function detectCollision(cameraPos, charOffset, tables, nearTables) {
   const charPos = new Pos(charX, charY, char);
 
   // check collision against every table
+  let nearAny = false;
   for (const table of tables) {
     const tablePos = new Pos(table.x, table.y, table);
 
     // for highlighting when close by
     if (collisionCompare(charPos, tablePos, true)) {
-      document.getElementById("table" + table.id).classList.add("highlighted");
-      nearTables.current[table.id] = true;
+      // only highlight one table near
+      if (!nearAny)
+        document
+          .getElementById("table" + table.id)
+          .classList.add("highlighted");
+      nearTableId.current = table.id;
+      nearAny = true;
     } else {
       document
         .getElementById("table" + table.id)
         .classList.remove("highlighted");
-      nearTables.current[table.id] = false;
     }
+
+    if (!nearAny) nearTableId.current = 0;
 
     if (collisionCompare(charPos, tablePos, false)) return true;
   }
@@ -71,13 +78,13 @@ function detectCollision(cameraPos, charOffset, tables, nearTables) {
   return false;
 }
 
-function applyCollisions(dx, dy, cameraPos, charOffset, tables, nearTables) {
+function applyCollisions(dx, dy, cameraPos, charOffset, tables, nearTableId) {
   // ----------- try X axis only -----------
   if (dx !== 0) {
     const nextX = charOffset.current.x + dx;
     const testPos = { x: nextX, y: charOffset.current.y };
 
-    if (detectCollision(cameraPos.current, testPos, tables, nearTables)) {
+    if (detectCollision(cameraPos.current, testPos, tables, nearTableId)) {
       dx = 0; // block X
     }
   }
@@ -87,7 +94,7 @@ function applyCollisions(dx, dy, cameraPos, charOffset, tables, nearTables) {
     const nextY = charOffset.current.y + dy;
     const testPos = { x: charOffset.current.x, y: nextY };
 
-    if (detectCollision(cameraPos.current, testPos, tables, nearTables)) {
+    if (detectCollision(cameraPos.current, testPos, tables, nearTableId)) {
       dy = 0; // block Y
     }
   }
@@ -105,9 +112,9 @@ function walkingDirection(keys) {
 }
 
 export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
-  const cameraPos = useRef({ x: 0, y: 0 });
-  const charOffset = useRef({ x: 400, y: 280 });
-  const nearTables = useRef({});
+  const cameraPos = useRef({ x: 0, y: world.height - view.height });
+  const charOffset = useRef({ x: 400, y: 200 });
+  const nearTableId = useRef(0);
   const pressedTables = useRef({});
   const keys = useKeyboard();
 
@@ -121,25 +128,40 @@ export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
   useEffect(() => {
     const animate = (time) => {
       // check for table select
-      for (const tableId of Object.keys(nearTables.current)) {
-        if (nearTables.current[tableId] && keys.current["e"]) {
-          if (!pressedTables.current[tableId]) {
-            document.getElementById("table" + tableId).src = tables.find(
-              (t) => t.id == tableId
-            ).reserved_src;
-            onSelect(t.id);
-            pressedTables.current[tableId] = true;
-          }
-        } else if (nearTables.current[tableId] && keys.current["f"]) {
-          if (pressedTables.current[tableId]) {
-            document.getElementById("table" + tableId).src = tables.find(
-              (t) => t.id == tableId
-            ).src;
-            onUnselect(t.id);
-            pressedTables.current[tableId] = false;
-          }
+      if (keys.current["e"] && nearTableId.current !== 0) {
+        if (!pressedTables.current[nearTableId.current]) {
+          document.getElementById("table" + nearTableId.current).src =
+            tables.find((t) => t.id == nearTableId.current).reserved_src;
+          onSelect(nearTableId.current);
+          pressedTables.current[nearTableId.current] = true;
+        }
+      } else if (nearTableId.current !== 0 && keys.current["f"]) {
+        if (pressedTables.current[nearTableId.current]) {
+          document.getElementById("table" + nearTableId.current).src =
+            tables.find((t) => t.id == nearTableId.current).src;
+          onUnselect(nearTableId.current);
+          pressedTables.current[nearTableId.current] = false;
         }
       }
+      // for (const tableId of Object.keys(nearTables.current)) {
+      //   if (tableId == nearTableId.current && keys.current["e"]) {
+      //     if (!pressedTables.current[tableId]) {
+      //       document.getElementById("table" + tableId).src = tables.find(
+      //         (t) => t.id == tableId
+      //       ).reserved_src;
+      //       onSelect(tableId);
+      //       pressedTables.current[tableId] = true;
+      //     }
+      //   } else if (nearTables.current[tableId] && keys.current["f"]) {
+      //     if (pressedTables.current[tableId]) {
+      //       document.getElementById("table" + tableId).src = tables.find(
+      //         (t) => t.id == tableId
+      //       ).src;
+      //       onUnselect(tableId);
+      //       pressedTables.current[tableId] = false;
+      //     }
+      //   }
+      // }
 
       // animate walking
       const direction = walkingDirection(keys);
@@ -175,7 +197,7 @@ export default function useCamera(bgRef, charRef, onSelect, onUnselect) {
         cameraPos,
         charOffset,
         tables,
-        nearTables
+        nearTableId
       );
       dx = result.dx;
       dy = result.dy;
