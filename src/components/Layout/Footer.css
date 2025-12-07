@@ -12,15 +12,61 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  transform: translateY(calc(100% - 8px)); /* small visible strip */
+  transform: translateY(calc(100% - 20px)); /* small visible strip */
   transition: transform 0.35s ease;
   z-index: 999; /* stay above everything */
+}
+/* Base chevron styling */
+.footer-indicator .chevron {
+  position: absolute;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  color: var(--china-rose);
+}
+
+/* When footer is closed: show Down, hide Up */
+.chevron-down {
+  opacity: 0;
+}
+.chevron-up {
+  opacity: 1;
+}
+
+/* When footer is hovered (opened): show Up, hide Down */
+.footer:hover .chevron-down {
+  opacity: 1;
+}
+.footer:hover .chevron-up {
+  opacity: 0;
+}
+
+.footer-indicator {
+  position: absolute;
+  top: -35px; /* pull it FAR above footer so you can see it */
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--jasmine);
+  border-radius: 50%;
+  border: 3px solid var(--china-rose);
+
+  cursor: pointer;
+  opacity: 1;
+  pointer-events: auto;
+
+  z-index: 999999; /* unbeatable */
 }
 
 .footer:hover {
   transform: translateY(0);
 }
-
 
 .footer a {
   color: #fff;

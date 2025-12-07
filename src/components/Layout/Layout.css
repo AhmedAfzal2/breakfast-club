@@ -1,13 +1,68 @@
 .header {
   width: 100%;
-  height: 80px;
-  background-color: var(--gamboge);
-  top:0px;
-  padding: 22px 23px;
-  position: fixed;
+  padding: 0.7rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Make middle nav truly centered */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  background-color: var(--jasmine);
+  padding: 15px 60px;
+  border-radius: 20px;
+}
+
+.logo-container img {
+  height: 55px;
+  object-fit: contain;
+}
+.nav-link {
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--china-rose);
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  position: relative;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Rounded hover box */
+.nav-link:hover {
+  background-color: rgba(193, 84, 128, 0.15);
+}
+
+/* Underline animation */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background-color: var(--china-rose);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link.active {
+  background-color: rgba(193, 84, 128, 0.18);
+}
+
+.nav-link.active::after {
+  width: 100%;
+  left: 0;
 }
 
 .pixel-icon {
@@ -37,7 +92,11 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  color: var(--jasmine);
+  color: var(--hunyadi-yellow);
+  transition: transform 0.5s ease;
+}
+.nav-bar-button svg:hover{
+  transform: scale(1.2);
 }
 
 .logo-container {
@@ -188,9 +247,9 @@
 .layout-content {
   flex: 1;
   min-height: 0;
-  padding: 35px 32px;
-  margin-top: 100px;
-  margin-bottom: 15px;
+  padding: 25px 40px;
+  margin-top: 30px;
+  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
 }

@@ -2,11 +2,16 @@
 import React from "react";
 import "./Footer.css";
 import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
-import { Instagram, Linkedin, Twitter, Youtube, Facebook, Github } from "lucide-react";
+import { Instagram, Linkedin, Twitter, Youtube, Facebook, Github} from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 function Footer() {
   return (
     <footer className="footer">
+      <div class="footer-indicator">
+        <ChevronUp className="chevron chevron-up" size={22} />
+          <ChevronDown className="chevron chevron-down" size={22} />
+      </div>
       <div className="footer-top">
         <div className="footer-logo">
           <img src={breakfastClubLogo} alt="Breakfast Club Logo" />
