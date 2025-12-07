@@ -44,7 +44,6 @@ function ReservationPage() {
     return counts;
   };
 
-  // Dummy capacity mapping - will be replaced with database data later
   const getTableCapacity = (tableId) => {
     return tables.find((t) => t.id == tableId).capacity;
   };
@@ -93,6 +92,21 @@ function ReservationPage() {
     }
 
     return isValid;
+  };
+
+  const getTotalSeats = () => {
+    let total = 0;
+    for (const table of tables)
+      if (!reservedTables.includes(table.id)) total += table.capacity;
+
+    return total;
+  };
+
+  const getFreeNSeaters = (n) => {
+    let total = 0;
+    for (const table of tables)
+      if (!reservedTables.includes(table.id) && table.capacity == n) total += 1;
+    return total;
   };
 
   // Handle reserve button click with validation
@@ -374,17 +388,16 @@ function ReservationPage() {
               <div className="slot-content">
                 {isDateAndTimeSelected() ? (
                   <>
-                    {/* Dummy data: 3x 4-seater and 3x 2-seater */}
-                    <span>3x 4-seater</span>
+                    <span>{getFreeNSeaters(4)} x 4-seaters</span>
                     <span className="bullet">•</span>
-                    <span>3x 2-seater</span>
+                    <span>{getFreeNSeaters(2)} x 2-seaters</span>
                   </>
                 ) : (
                   <span>Please select date and time</span>
                 )}
               </div>
               <div className="slot-max">
-                max guests: {isDateAndTimeSelected() ? 3 * 4 + 3 * 2 : 0}
+                max guests: {isDateAndTimeSelected() ? getTotalSeats() : 0}
               </div>
             </div>
             <div className="reservation-details-section">
