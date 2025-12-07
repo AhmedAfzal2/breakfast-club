@@ -1,9 +1,16 @@
 import React from "react";
-import MainView from "./components/MainView";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import ReservationPage from "./pages/ReservationPage";
 
 function App() {
   return (
-    <MainView />
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/reservations" element={<ReservationPage />} />
+      </Routes>
+    </Router>
   );
 }
 

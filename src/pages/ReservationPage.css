@@ -1,0 +1,331 @@
+.reservation-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-height: 0;
+}
+
+
+.table-selection-container {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+.reserve-button-section {
+  margin-top: auto;
+  width: 100%;
+}
+
+.reserve-button-section .custom-button {
+  width: 100%;
+}
+.date-time-form .form-section {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.date-time-form .form-section label {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.date-time-form .form-field-wrapper {
+  flex: 1;
+}
+
+.table-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  height: 100%;
+}
+
+.details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.slot-details-section,
+.reservation-details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.slot-details-section {
+  padding-top: calc(32px + 9px);
+}
+
+.table-selection label {
+  flex-shrink: 0;
+}
+
+.slot-details-section .heading.section-label,
+.reservation-details-section .heading.section-label {
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+}
+
+.slot-line {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.slot-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.bullet {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 1.5rem;
+}
+
+.slot-max {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.reservation-info {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.table-game-container {
+  flex: 1;
+  min-height: 0;
+  padding: 17px;
+  border: 2px solid var(--china-rose);
+  border-radius: 12px;
+  background-color: var(--hunyadi-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--china-rose);
+  color: white;
+  text-align: center;
+  line-height: 24px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  cursor: help;
+  vertical-align: middle;
+}
+
+
+.date-input-wrapper,
+.time-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.time-spinner-popup {
+  position: absolute;
+  top: 100%;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  background-color: var(--hunyadi-yellow);
+  border: 2px solid var(--china-rose);
+  border-radius: 12px;
+  z-index: 999;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.date-picker-wrapper,
+.time-picker-wrapper {
+  width: 100%;
+  flex: 1;
+}
+
+.date-input,
+.time-input {
+  width: 100%;
+  padding: 0.35rem 2rem 0.35rem 0.35rem;
+  border: 2px solid var(--china-rose);
+  border-radius: 12px;
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  background-color: white;
+  color: var(--china-rose);
+  cursor: pointer;
+}
+
+.date-input:focus,
+.time-input:focus {
+  outline: none;
+  border-color: var(--gamboge);
+}
+
+.calendar-icon-button,
+.clock-icon-button {
+  position: absolute;
+  right: 0.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.calendar-icon-button img,
+.clock-icon-button img {
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
+}
+
+/* React DatePicker Custom Styles */
+.react-datepicker {
+  font-family: 'Pixelify Sans', sans-serif;
+  border: 2px solid var(--china-rose);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.react-datepicker__header {
+  background-color: var(--hunyadi-yellow);
+  border-bottom: 2px solid var(--china-rose);
+  border-radius: 10px 10px 0 0;
+  padding-top: 0.75rem;
+}
+
+.react-datepicker__current-month {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-weight: 600;
+  color: var(--china-rose);
+  text-transform: lowercase;
+  font-size: 1rem;
+}
+
+.react-datepicker__day-names {
+  display: flex;
+  justify-content: space-around;
+  margin: 0.5rem 0;
+}
+
+.react-datepicker__day-name {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-weight: 600;
+  color: var(--china-rose);
+  text-transform: lowercase;
+  font-size: 0.75rem;
+  width: 2rem;
+  margin: 0.2rem;
+}
+
+.react-datepicker__day {
+  font-family: 'Roboto Slab', serif;
+  color: #333;
+  border-radius: 4px;
+  margin: 0.2rem;
+  width: 2rem;
+  line-height: 2rem;
+}
+
+.react-datepicker__day:hover {
+  background-color: var(--gamboge);
+  color: white;
+  border-radius: 4px;
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--china-rose);
+  color: white;
+  font-weight: 600;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: var(--gamboge);
+  color: white;
+}
+
+.react-datepicker__day--disabled {
+  color: #ccc;
+  opacity: 0.5;
+}
+
+.react-datepicker__navigation {
+  top: 0.75rem;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: var(--china-rose);
+}
+
+.react-datepicker__time-container {
+  border-left: 2px solid var(--china-rose);
+}
+
+.react-datepicker__time-container .react-datepicker__time {
+  background-color: var(--hunyadi-yellow);
+}
+
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
+  border-radius: 0 10px 10px 0;
+}
+
+.react-datepicker__time-list-item {
+  font-family: 'Roboto Slab', serif;
+  color: var(--china-rose);
+}
+
+.react-datepicker__time-list-item:hover {
+  background-color: var(--gamboge);
+  color: white;
+}
+
+.react-datepicker__time-list-item--selected {
+  background-color: var(--china-rose);
+  color: white;
+  font-weight: 600;
+}
+
+.react-datepicker__triangle {
+  border-bottom-color: var(--hunyadi-yellow) !important;
+}
+
+.react-datepicker__triangle::before {
+  border-bottom-color: var(--china-rose) !important;
+}
+
+.date-input:focus,
+.time-input:focus {
+  outline: none;
+  border-color: var(--gamboge);
+}
+
+

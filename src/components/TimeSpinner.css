@@ -1,0 +1,130 @@
+.time-spinner-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-spinner-container {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.time-spinner-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.time-spinner-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.spinner-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.spinner-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.spinner-button-up img {
+  transform: rotate(0deg);
+}
+
+.spinner-button-down img {
+  transform: rotate(180deg);
+}
+
+.spinner-value-wrapper {
+  background-color: var(--jasmine);
+  border-radius: 12px;
+  padding: 0.25rem 0.4rem;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-value {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.9rem;
+  color: var(--china-rose);
+  font-weight: 600;
+  text-align: center;
+}
+
+.time-spinner-separator {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.9rem;
+  color: var(--china-rose);
+  font-weight: 600;
+  padding: 0 0.25rem;
+  align-self: center;
+}
+
+.time-spinner-confirm-button {
+  background-color: var(--gamboge);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.time-spinner-confirm-button:hover {
+  background-color: var(--china-rose);
+}
+
+.time-spinner-confirm-button img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.time-spinner-error {
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background-color: rgba(178, 90, 104, 0.1);
+  border: 1px solid var(--china-rose);
+  border-radius: 8px;
+  color: var(--china-rose);
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.85rem;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
