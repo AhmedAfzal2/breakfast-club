@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./ReservationForm.css";
 import ConfirmationPopup from "./ConfirmationPopup";
 
@@ -14,6 +14,22 @@ function ReservationForm({ isOpen, onClose, onSubmit }) {
     name: "",
     contactNumber: ""
   });
+
+  const [showOccasionDropdown, setShowOccasionDropdown] = useState(false);
+  const [filteredOccasions, setFilteredOccasions] = useState([]);
+  const occasionInputRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const occasionOptions = [
+    "Birthday",
+    "Anniversary",
+    "Graduation",
+    "Engagement",
+    "Business Meeting",
+    "Family Gathering",
+    "Date Night",
+    "Celebration"
+  ];
 
   const validateName = (name) => {
     if (!name || name.trim() === "") {
@@ -42,6 +58,38 @@ function ReservationForm({ isOpen, onClose, onSubmit }) {
     return "";
   };
 
+  // Filter occasions based on input
+  useEffect(() => {
+    if (formData.occasion) {
+      const filtered = occasionOptions.filter(option =>
+        option.toLowerCase().includes(formData.occasion.toLowerCase())
+      );
+      setFilteredOccasions(filtered);
+    } else {
+      setFilteredOccasions(occasionOptions);
+    }
+    // Don't auto-close dropdown when typing, only when clicking outside
+  }, [formData.occasion]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        occasionInputRef.current &&
+        !occasionInputRef.current.contains(event.target)
+      ) {
+        setShowOccasionDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -56,6 +104,34 @@ function ReservationForm({ isOpen, onClose, onSubmit }) {
         [name]: ""
       }));
     }
+
+    // Show dropdown for occasion field
+    if (name === "occasion") {
+      setShowOccasionDropdown(true);
+    }
+  };
+
+  const handleOccasionSelect = (occasion) => {
+    setFormData(prev => ({
+      ...prev,
+      occasion: occasion
+    }));
+    setShowOccasionDropdown(false);
+    if (occasionInputRef.current) {
+      occasionInputRef.current.focus();
+    }
+  };
+
+  const handleOccasionFocus = () => {
+    if (!showOccasionDropdown) {
+      setFilteredOccasions(occasionOptions);
+      setShowOccasionDropdown(true);
+    }
+  };
+
+  const handleOccasionClick = () => {
+    setFilteredOccasions(occasionOptions);
+    setShowOccasionDropdown(true);
   };
 
   const handleSubmit = (e) => {
@@ -149,15 +225,34 @@ function ReservationForm({ isOpen, onClose, onSubmit }) {
             <label htmlFor="occasion" className="form-label">
               Occasion
             </label>
-            <input
-              type="text"
-              id="occasion"
-              name="occasion"
-              value={formData.occasion}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="e.g., Birthday, Anniversary"
-            />
+            <div className="occasion-input-wrapper">
+              <input
+                type="text"
+                id="occasion"
+                name="occasion"
+                ref={occasionInputRef}
+                value={formData.occasion}
+                onChange={handleChange}
+                onFocus={handleOccasionFocus}
+                onClick={handleOccasionClick}
+                className="form-input"
+                placeholder="Select or type your occasion"
+                autoComplete="off"
+              />
+              {showOccasionDropdown && filteredOccasions.length > 0 && (
+                <div className="occasion-dropdown" ref={dropdownRef}>
+                  {filteredOccasions.map((option, index) => (
+                    <div
+                      key={index}
+                      className="occasion-option"
+                      onClick={() => handleOccasionSelect(option)}
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="form-field">
