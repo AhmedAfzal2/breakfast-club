@@ -10,6 +10,7 @@ const tables = [
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
     reserved_src: "assets/images/table_2_reserved.png",
+    capacity: 2,
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ const tables = [
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
     reserved_src: "assets/images/table_2_reserved.png",
+    capacity: 2,
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ const tables = [
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
     reserved_src: "assets/images/table_4_reserved.png",
+    capacity: 4,
   },
   {
     id: 4,
@@ -37,6 +40,7 @@ const tables = [
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
     reserved_src: "assets/images/table_4_reserved.png",
+    capacity: 4,
   },
   {
     id: 5,
@@ -46,6 +50,7 @@ const tables = [
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
     reserved_src: "assets/images/table_2_reserved.png",
+    capacity: 2,
   },
   {
     id: 6,
@@ -55,6 +60,7 @@ const tables = [
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
     reserved_src: "assets/images/table_4_reserved.png",
+    capacity: 4,
   },
 ];
 
