@@ -16,6 +16,8 @@ function ReservationPage() {
   const [selectedTime, setSelectedTime] = useState(null);
   const [isTimeSpinnerOpen, setIsTimeSpinnerOpen] = useState(false);
   const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
+  const [dateError, setDateError] = useState("");
+  const [timeError, setTimeError] = useState("");
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([
@@ -38,6 +40,34 @@ function ReservationPage() {
       counts[table.capacity] = (counts[table.capacity] || 0) + 1;
     });
     return counts;
+  };
+
+  // Validate date and time before opening reservation form
+  const validateDateAndTime = () => {
+    let isValid = true;
+    
+    if (!selectedDate) {
+      setDateError("Date is required");
+      isValid = false;
+    } else {
+      setDateError("");
+    }
+    
+    if (!selectedTime) {
+      setTimeError("Time is required");
+      isValid = false;
+    } else {
+      setTimeError("");
+    }
+    
+    return isValid;
+  };
+
+  // Handle reserve button click with validation
+  const handleReserveClick = () => {
+    if (validateDateAndTime()) {
+      setIsReservationFormOpen(true);
+    }
   };
 
   const tableCounts = getTableCounts();
@@ -104,6 +134,9 @@ function ReservationPage() {
   const handleTimeChange = (time) => {
     setSelectedTime(time);
     setIsTimeSpinnerOpen(false);
+    if (time) {
+      setTimeError("");
+    }
   };
 
   // Popup only closes when tick button is clicked, not on outside click
@@ -151,34 +184,43 @@ function ReservationPage() {
     {
       label: "date",
       component: (
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="MM/dd/yyyy"
-          customInput={<CustomDateInput />}
-          wrapperClassName="date-picker-wrapper"
-          minDate={today}
-          maxDate={currentMonthEnd}
-          filterDate={(date) => {
-            // Only allow dates in current month and not in the past
-            const dateOnly = new Date(
-              date.getFullYear(),
-              date.getMonth(),
-              date.getDate()
-            );
-            return dateOnly >= today && dateOnly <= currentMonthEnd;
-          }}
-          openToDate={today}
-          showMonthDropdown={false}
-          showYearDropdown={false}
-        />
+        <div>
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => {
+              setSelectedDate(date);
+              if (date) {
+                setDateError("");
+              }
+            }}
+            dateFormat="MM/dd/yyyy"
+            customInput={<CustomDateInput />}
+            wrapperClassName="date-picker-wrapper"
+            minDate={today}
+            maxDate={currentMonthEnd}
+            filterDate={(date) => {
+              // Only allow dates in current month and not in the past
+              const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+              return dateOnly >= today && dateOnly <= currentMonthEnd;
+            }}
+            openToDate={today}
+            showMonthDropdown={false}
+            showYearDropdown={false}
+          />
+          {dateError && <span className="field-error-message">{dateError}</span>}
+        </div>
       ),
       sectionClassName: "form-section",
       wrapperClassName: "form-field-wrapper",
     },
     {
       label: "time",
-      component: <CustomTimeInput />,
+      component: (
+        <div>
+          <CustomTimeInput />
+          {timeError && <span className="field-error-message">{timeError}</span>}
+        </div>
+      ),
       sectionClassName: "form-section",
       wrapperClassName: "form-field-wrapper",
     },
@@ -235,9 +277,9 @@ function ReservationPage() {
               </div>
             </div>
             <div className="reserve-button-section">
-              <Button
-                text="reserve"
-                onClick={() => setIsReservationFormOpen(true)}
+              <Button 
+                text="reserve" 
+                onClick={handleReserveClick}
               />
             </div>
           </div>
@@ -246,15 +288,56 @@ function ReservationPage() {
       <ReservationForm
         isOpen={isReservationFormOpen}
         onClose={() => setIsReservationFormOpen(false)}
-        onSubmit={(formData) => {
-          console.log("Reservation submitted:", {
-            date: selectedDate,
-            time: selectedTime,
-            ...formData,
-          });
-          // Here you would typically send the data to your backend
-          setIsReservationFormOpen(false);
-          // Optionally show a success message or redirect
+        onSubmit={async (formData) => {
+          // Extract table numbers as a list
+          const tableNumbers = selectedTables.map(table => table.id);
+          
+          // Format reservation data with required and optional fields clearly marked
+          const reservationData = {
+            // Required fields
+            date: selectedDate ? selectedDate.toISOString() : null,
+            time: selectedTime ? selectedTime.toISOString() : null,
+            tableNumbers: tableNumbers, // List of table IDs
+            name: formData.name,
+            contactNumber: formData.contactNumber,
+            
+            // Optional fields
+            occasion: formData.occasion || null,
+            additionalNotes: formData.additionalNotes || null,
+            
+            // Additional data
+            maxGuests: maxGuests,
+            tables: selectedTables // Full table objects (for reference)
+          };
+
+          // Print reservation data as JSON to console
+          console.log("=== RESERVATION DATA ===");
+          console.log(JSON.stringify(reservationData, null, 2));
+          console.log("========================");
+
+          try {
+            const response = await fetch('http://localhost:3001/api/reservations', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(reservationData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              console.log("Reservation submitted successfully:", reservationData);
+              setIsReservationFormOpen(false);
+              // Optionally show a success message or redirect
+            } else {
+              console.error("Failed to submit reservation:", result.message);
+              // Optionally show an error message
+            }
+          } catch (error) {
+            console.error('Error submitting reservation:', error);
+            // Optionally show an error message
+          }
         }}
       />
     </Layout>
