@@ -20,6 +20,7 @@ function ReservationPage() {
   const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
   const [dateError, setDateError] = useState("");
   const [timeError, setTimeError] = useState("");
+  const [isHelpPopupOpen, setIsHelpPopupOpen] = useState(false);
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([]);
@@ -105,7 +106,7 @@ function ReservationPage() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
+  
   // Get minimum time (1 hour from now, rounded to next 30-minute interval)
   const getMinTime = () => {
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
@@ -159,12 +160,32 @@ function ReservationPage() {
     setIsTimeSpinnerOpen(true);
   };
 
-  const handleTimeChange = (time) => {
+  // Check if both date and time are selected
+  const isDateAndTimeSelected = () => {
+    return selectedDate && selectedTime;
+  };
+
+  // Handle date and time selection - unified function
+  const handleDateAndTimeSelection = (date, time) => {
+    if (date !== undefined) {
+      setSelectedDate(date);
+      if (date) {
+        setDateError("");
+      }
+    }
+    if (time !== undefined) {
     setSelectedTime(time);
     setIsTimeSpinnerOpen(false);
-    if (time) {
-      setTimeError("");
+      if (time) {
+        setTimeError("");
+      }
     }
+    // Slot details will automatically update via React re-render
+    // when both selectedDate and selectedTime are truthy
+  };
+
+  const handleTimeChange = (time) => {
+    handleDateAndTimeSelection(undefined, time);
   };
 
   // Popup only closes when tick button is clicked, not on outside click
@@ -187,7 +208,7 @@ function ReservationPage() {
         <img src={clockIcon} alt="Clock" />
       </button>
       {isTimeSpinnerOpen && (
-        <div
+        <div 
           className="time-spinner-popup"
           onClick={(e) => {
             e.preventDefault();
@@ -213,32 +234,29 @@ function ReservationPage() {
       label: "date",
       component: (
         <div>
-          <DatePicker
-            selected={selectedDate}
+        <DatePicker
+          selected={selectedDate}
             onChange={(date) => {
-              setSelectedDate(date);
-              if (date) {
-                setDateError("");
-              }
+              handleDateAndTimeSelection(date, undefined);
             }}
-            dateFormat="MM/dd/yyyy"
-            customInput={<CustomDateInput />}
-            wrapperClassName="date-picker-wrapper"
-            minDate={today}
-            maxDate={currentMonthEnd}
-            filterDate={(date) => {
-              // Only allow dates in current month and not in the past
+          dateFormat="MM/dd/yyyy"
+          customInput={<CustomDateInput />}
+          wrapperClassName="date-picker-wrapper"
+          minDate={today}
+          maxDate={currentMonthEnd}
+          filterDate={(date) => {
+            // Only allow dates in current month and not in the past
               const dateOnly = new Date(
                 date.getFullYear(),
                 date.getMonth(),
                 date.getDate()
               );
-              return dateOnly >= today && dateOnly <= currentMonthEnd;
-            }}
-            openToDate={today}
-            showMonthDropdown={false}
-            showYearDropdown={false}
-          />
+            return dateOnly >= today && dateOnly <= currentMonthEnd;
+          }}
+          openToDate={today}
+          showMonthDropdown={false}
+          showYearDropdown={false}
+        />
           {dateError && (
             <span className="field-error-message">{dateError}</span>
           )}
@@ -266,16 +284,41 @@ function ReservationPage() {
     <Layout>
       <div className="reservation-page">
         <h1 className="page-heading">RESERVE TABLES</h1>
-
+        
         <FormContainer fields={formFields} className="date-time-form" />
 
         <div className="table-selection-container">
           <div className="table-selection">
             <label className="heading section-label">
               select table
-              <span className="help-icon">?</span>
+              <span 
+                className="help-icon" 
+                onClick={() => setIsHelpPopupOpen(!isHelpPopupOpen)}
+                onMouseEnter={() => setIsHelpPopupOpen(true)}
+                onMouseLeave={() => setIsHelpPopupOpen(false)}
+              >
+                ?
+                {isHelpPopupOpen && (
+                  <div className="help-popup">
+                    <div className="help-popup-content">
+                      <h4 className="help-popup-title">Game Instructions</h4>
+                      <ul className="help-popup-list">
+                        <li><strong>WASD</strong> - Move character</li>
+                        <li><strong>E</strong> - Reserve table (when at table)</li>
+                        <li><strong>F</strong> - Unreserve table (when at table)</li>
+                        <li>Selected tables will appear in reservation details</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </span>
             </label>
-            <div className="table-game-container">
+            <div className={`table-game-container ${!isDateAndTimeSelected() ? 'disabled' : ''}`}>
+              {!isDateAndTimeSelected() && (
+                <div className="table-game-overlay">
+                  <span className="overlay-message">Please select date and time</span>
+                </div>
+              )}
               <Game
                 onSelect={handleTableSelect}
                 onUnselect={handleTableDeselect}
@@ -287,26 +330,20 @@ function ReservationPage() {
               <h3 className="heading section-label">slot details</h3>
               <div className="slot-line" />
               <div className="slot-content">
-                {selectedTables.length > 0 ? (
+                {isDateAndTimeSelected() ? (
                   <>
-                    {Object.entries(tableCounts)
-                      .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
-                      .map(([capacity, count], index, array) => (
-                        <React.Fragment key={capacity}>
-                          <span>
-                            {count}x {capacity}-seater
-                          </span>
-                          {index < array.length - 1 && (
-                            <span className="bullet">•</span>
-                          )}
-                        </React.Fragment>
-                      ))}
+                    {/* Dummy data: 3x 4-seater and 3x 2-seater */}
+                    <span>3x 4-seater</span>
+                    <span className="bullet">•</span>
+                    <span>3x 2-seater</span>
                   </>
                 ) : (
-                  <span>No tables selected</span>
+                  <span>Please select date and time</span>
                 )}
               </div>
-              <div className="slot-max">max guests: {maxGuests}</div>
+              <div className="slot-max">
+                max guests: {isDateAndTimeSelected() ? (3 * 4 + 3 * 2) : 0}
+              </div>
             </div>
             <div className="reservation-details-section">
               <h3 className="heading section-label margin-top">
@@ -388,8 +425,8 @@ function ReservationPage() {
                 "Reservation submitted successfully:",
                 reservationData
               );
-              setIsReservationFormOpen(false);
-              // Optionally show a success message or redirect
+          setIsReservationFormOpen(false);
+          // Optionally show a success message or redirect
             } else {
               console.error("Failed to submit reservation:", result.message);
               // Optionally show an error message

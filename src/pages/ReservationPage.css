@@ -151,6 +151,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  transition: filter 0.3s ease;
+}
+
+.table-game-container.disabled {
+  filter: grayscale(100%);
+  opacity: 0.7;
+}
+
+.table-game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 12px;
+}
+
+.overlay-message {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  background-color: rgba(178, 90, 104, 0.9);
+  border: 2px solid white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .help-icon {
@@ -167,6 +202,56 @@
   margin-left: 0.5rem;
   cursor: help;
   vertical-align: middle;
+  position: relative;
+}
+
+.help-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  z-index: 1000;
+  min-width: 280px;
+}
+
+.help-popup-content {
+  background-color: var(--jasmine);
+  border: 2px solid var(--china-rose);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.help-popup-title {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--china-rose);
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+}
+
+.help-popup-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.8);
+  line-height: 1.8;
+}
+
+.help-popup-list li {
+  margin-bottom: 0.5rem;
+}
+
+.help-popup-list li:last-child {
+  margin-bottom: 0;
+}
+
+.help-popup-list strong {
+  color: var(--china-rose);
+  font-weight: 600;
 }
 
 
