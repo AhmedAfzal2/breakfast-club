@@ -15,7 +15,7 @@ function NavBarRow({ icon, text, path, onClose }) {
   };
 
   return (
-    <div className="nav-item">
+    <div className="nav-item" onClick={handleClick}>
       <div className="nav-icon">
         {icon}
       </div>

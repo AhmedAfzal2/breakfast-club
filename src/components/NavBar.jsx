@@ -9,7 +9,7 @@ function NavBar({ isOpen, onClose }) {
     { icon: Menu, text: "menu" },
     { icon: Info, text: "about us" },
     { icon: Phone, text: "contact us" },
-    { icon: Calendar, text: "reservations" },
+    { icon: Calendar, text: "reservations", path: "/reservations" },
   ];
 
   return (
