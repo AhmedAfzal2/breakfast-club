@@ -5,6 +5,7 @@ import Layout from "../components/Layout/Layout";
 import Button from "../components/Button";
 import FormContainer from "../components/FormContainer";
 import TimeSpinner from "../components/TimeSpinner";
+import ReservationForm from "../components/ReservationForm";
 import calendarIcon from "../../assets/images/icons/calendar.png";
 import clockIcon from "../../assets/images/icons/clock.png";
 import "../App.css";
@@ -14,6 +15,7 @@ function ReservationPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [isTimeSpinnerOpen, setIsTimeSpinnerOpen] = useState(false);
+  const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([
@@ -229,11 +231,28 @@ function ReservationPage() {
               </div>
             </div>
             <div className="reserve-button-section">
-              <Button text="reserve" />
+              <Button 
+                text="reserve" 
+                onClick={() => setIsReservationFormOpen(true)}
+              />
             </div>
           </div>
         </div>
       </div>
+      <ReservationForm
+        isOpen={isReservationFormOpen}
+        onClose={() => setIsReservationFormOpen(false)}
+        onSubmit={(formData) => {
+          console.log("Reservation submitted:", {
+            date: selectedDate,
+            time: selectedTime,
+            ...formData
+          });
+          // Here you would typically send the data to your backend
+          setIsReservationFormOpen(false);
+          // Optionally show a success message or redirect
+        }}
+      />
     </Layout>
   );
 }
