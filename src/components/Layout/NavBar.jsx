@@ -12,7 +12,7 @@ function NavBar({ isOpen, onClose }) {
   const navItems = [
     { icon: menuIcon, text: "menu", path: "/" },
     { icon: aboutIcon, text: "about us", path: "/" },
-    { icon: contactIcon, text: "contact us", path: "/" },
+    { icon: contactIcon, text: "contact us", path: "/contact" },
     { icon: reservationIcon, text: "reservations", path: "/reservations" },
   ];
 

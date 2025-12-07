@@ -242,15 +242,38 @@ function ReservationPage() {
       <ReservationForm
         isOpen={isReservationFormOpen}
         onClose={() => setIsReservationFormOpen(false)}
-        onSubmit={(formData) => {
-          console.log("Reservation submitted:", {
-            date: selectedDate,
-            time: selectedTime,
+        onSubmit={async (formData) => {
+          const reservationData = {
+            date: selectedDate ? selectedDate.toISOString() : null,
+            time: selectedTime ? selectedTime.toISOString() : null,
+            tables: selectedTables,
+            maxGuests: maxGuests,
             ...formData
-          });
-          // Here you would typically send the data to your backend
-          setIsReservationFormOpen(false);
-          // Optionally show a success message or redirect
+          };
+
+          try {
+            const response = await fetch('http://localhost:3001/api/reservations', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(reservationData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              console.log("Reservation submitted successfully:", reservationData);
+              setIsReservationFormOpen(false);
+              // Optionally show a success message or redirect
+            } else {
+              console.error("Failed to submit reservation:", result.message);
+              // Optionally show an error message
+            }
+          } catch (error) {
+            console.error('Error submitting reservation:', error);
+            // Optionally show an error message
+          }
         }}
       />
     </Layout>

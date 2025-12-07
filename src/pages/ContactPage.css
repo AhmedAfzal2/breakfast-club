@@ -1,0 +1,140 @@
+.contact-page {
+  width: 100%;
+  min-height: calc(100vh - 137px);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.contact-page-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+
+.contact-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-details-section,
+.other-branches-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-section-title {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--china-rose);
+  margin: 0;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--china-rose);
+  padding-bottom: 0.5rem;
+}
+
+.contact-detail-item {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.contact-detail-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-detail-label {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--china-rose);
+  margin: 0;
+  text-transform: lowercase;
+  flex-shrink: 0;
+}
+
+.contact-detail-value {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.95rem;
+  color: rgba(0, 0, 0, 0.8);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.branch-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.branch-name {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gamboge);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.branch-address,
+.branch-phone {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.contact-form-section {
+  width: 100%;
+}
+
+.contact-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-input,
+.contact-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--china-rose);
+  border-radius: 8px;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: border-color 0.2s ease;
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+  outline: none;
+  border-color: var(--gamboge);
+}
+
+
+.contact-textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.contact-form-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.contact-form-actions .custom-button {
+  max-width: 100%;
+}
+
