@@ -6,7 +6,7 @@
   gap: 1rem;
   padding: 17px;
   border-radius: 12px;
-  background-color: var(--hunyadi-yellow);
+  /* background-color: var(--hunyadi-yellow); */
   box-sizing: border-box;
 }
 
