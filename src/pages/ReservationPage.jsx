@@ -112,6 +112,7 @@ function ReservationPage() {
   // Handle reserve button click with validation
   const handleReserveClick = () => {
     if (validateDateAndTime()) {
+      setGameEnable(false);
       setIsReservationFormOpen(true);
     }
   };
@@ -179,7 +180,8 @@ function ReservationPage() {
 
   // Check if both date and time are selected
   const isDateAndTimeSelected = () => {
-    if (selectedDate && selectedTime && !gameEnable) setGameEnable(true);
+    if (selectedDate && selectedTime && !gameEnable && !isReservationFormOpen)
+      setGameEnable(true);
     return selectedDate && selectedTime;
   };
 
@@ -433,7 +435,10 @@ function ReservationPage() {
       </div>
       <ReservationForm
         isOpen={isReservationFormOpen}
-        onClose={() => setIsReservationFormOpen(false)}
+        onClose={() => {
+          setIsReservationFormOpen(false);
+          setGameEnable(true);
+        }}
         onSubmit={async (formData) => {
           // Extract table numbers as a list
           setIsReservationFormOpen(false);

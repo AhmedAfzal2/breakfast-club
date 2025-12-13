@@ -133,9 +133,11 @@ export default function useCamera(
   let currentDirection = "top";
 
   useEffect(() => {
+    let frameId;
     const animate = (time) => {
+      console.log(enabled);
       if (!enabled) {
-        requestAnimationFrame(animate);
+        frameId = requestAnimationFrame(animate);
         return;
       }
       if (keys.current["e"] && nearTableId.current !== 0) {
@@ -261,10 +263,14 @@ export default function useCamera(
       )`;
 
       // call animate on next frame
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
     };
 
     // start the loop
-    requestAnimationFrame(animate);
+    frameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
   }, [enabled]);
 }

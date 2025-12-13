@@ -8,10 +8,10 @@ export default function useKeyboard() {
   // [] empty dependancy array so this runs only once on first render
   useEffect(() => {
     const down = (e) => {
-      keys.current[e.key.toLowerCase()] = true;
+      if (e.key) keys.current[e.key.toLowerCase()] = true;
     };
     const up = (e) => {
-      keys.current[e.key.toLowerCase()] = false;
+      if (e.key) keys.current[e.key.toLowerCase()] = false;
     };
 
     window.addEventListener("keydown", down);
