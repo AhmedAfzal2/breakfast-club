@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ReservationForm.css";
-import ConfirmationPopup from "./ConfirmationPopup";
+import ConfirmationPopup from "../ConfirmationPopup";
 
 function ReservationForm({ isOpen, onClose, onSubmit }) {
   const [formData, setFormData] = useState({

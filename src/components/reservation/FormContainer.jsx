@@ -1,6 +1,6 @@
 import React from "react";
 import "./FormContainer.css";
-import "../App.css";
+import "/src/App.css";
 
 function FormContainer({ fields = [], className = "" }) {
   return (
@@ -18,4 +18,3 @@ function FormContainer({ fields = [], className = "" }) {
 }
 
 export default FormContainer;
-
