@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 import MenuCategories from "../components/menu/MenuCategories";
 import MenuSubcategory from "../components/menu/MenuSubcategory";
@@ -23,6 +23,19 @@ function MenuPage() {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartBgRef = useRef();
+
+  // prevent scrolling when cart open
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartOpen]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -224,22 +237,16 @@ function MenuPage() {
           />
         </div>
       </Layout>
-      <div className="cart-container">
-        <Cart
-          items={cartItems}
-          onDelete={onDelete}
-          onBack={onBack}
-          updateQuantity={updateQuantity}
-          getItemQuantity={getItemQuantity}
-          onClear={onClear}
-          isOpen={isCartOpen}
-        />
-        <div
-          ref={cartBgRef}
-          className="cart-bg hidden"
-          onClick={closeCart}
-        ></div>
-      </div>
+      <Cart
+        items={cartItems}
+        onDelete={onDelete}
+        onBack={onBack}
+        updateQuantity={updateQuantity}
+        getItemQuantity={getItemQuantity}
+        onClear={onClear}
+        isOpen={isCartOpen}
+      />
+      <div ref={cartBgRef} className="cart-bg hidden" onClick={closeCart}></div>
     </>
   );
 }
