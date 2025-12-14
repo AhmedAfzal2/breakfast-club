@@ -2,8 +2,8 @@ import React from "react";
 import AddToBasketButton from "./AddToBasketButton";
 import "./MenuItem.css";
 
-function MenuItem({ title, price, imageSrc, description, toppings, onAddToBasket, onItemClick }) {
-  const item = { title, price, imageSrc, description, toppings };
+function MenuItem({ name, price, src, description, toppings, onAddToBasket, onItemClick }) {
+  const item = { name, price, src, description, toppings };
 
   const handleItemClick = (e) => {
     // Don't trigger if clicking the button
@@ -18,10 +18,10 @@ function MenuItem({ title, price, imageSrc, description, toppings, onAddToBasket
   return (
     <div className="menu-item" onClick={handleItemClick}>
       <div className="menu-item-image-container">
-        <img src={imageSrc} alt={title} className="menu-item-image" />
+        <img src={src} alt={name} className="menu-item-image" />
       </div>
       <div className="menu-item-content">
-        <h3 className="menu-item-title">{title}</h3>
+        <h3 className="menu-item-title">{name}</h3>
         <span className="menu-item-price">Rs. {price}</span>
         <AddToBasketButton onAddToBasket={onAddToBasket} item={item} />
       </div>

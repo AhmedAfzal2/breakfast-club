@@ -9,14 +9,14 @@ function ModalHeader({ item, onClose }) {
     <div className="modal-header">
       <div className="modal-header-image-container">
         <img 
-          src={item.imageSrc} 
-          alt={item.title} 
+          src={item.src} 
+          alt={item.name} 
           className="modal-header-image" 
         />
       </div>
       
       <div className="modal-header-info">
-        <h2 className="modal-header-title">{item.title}</h2>
+        <h2 className="modal-header-title">{item.name}</h2>
         <p className="modal-header-price">Rs. {item.price}</p>
       </div>
       
