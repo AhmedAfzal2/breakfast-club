@@ -16,9 +16,9 @@ function MenuItemList({ items, onAddToBasket, onItemClick }) {
       {items.map((item, index) => (
         <MenuItem
           key={item.id || index}
-          title={item.title}
+          name={item.name}
           price={item.price}
-          imageSrc={item.imageSrc}
+          src={item.src}
           description={item.description}
           toppings={item.toppings}
           onAddToBasket={onAddToBasket}

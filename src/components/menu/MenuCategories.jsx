@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./MenuCategories.css";
 
-function MenuCategories({ onCategorySelect }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+function MenuCategories({ onCategorySelect, selectedCategory: externalSelectedCategory }) {
+  const [internalSelectedCategory, setInternalSelectedCategory] = useState("BREAKFAST");
+  const selectedCategory = externalSelectedCategory !== undefined ? externalSelectedCategory : internalSelectedCategory;
 
   const categories = [
     "BREAKFAST",
@@ -11,7 +12,7 @@ function MenuCategories({ onCategorySelect }) {
   ];
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
+    setInternalSelectedCategory(category);
     if (onCategorySelect) {
       onCategorySelect(category);
     }
