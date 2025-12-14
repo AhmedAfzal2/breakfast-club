@@ -1,12 +1,9 @@
 import React from "react";
+import AddToBasketButton from "./AddToBasketButton";
 import "./MenuItem.css";
 
 function MenuItem({ title, price, imageSrc, onAddToBasket }) {
-  const handleAddToBasket = () => {
-    if (onAddToBasket) {
-      onAddToBasket({ title, price, imageSrc });
-    }
-  };
+  const item = { title, price, imageSrc };
 
   return (
     <div className="menu-item">
@@ -16,11 +13,9 @@ function MenuItem({ title, price, imageSrc, onAddToBasket }) {
       <div className="menu-item-content">
         <h3 className="menu-item-title">{title}</h3>
         <span className="menu-item-price">Rs. {price}</span>
-        <button className="menu-item-button" onClick={handleAddToBasket}>
-          Add to Basket
-        </button>
-        </div>
+        <AddToBasketButton onAddToBasket={onAddToBasket} item={item} />
       </div>
+    </div>
   );
 }
 
