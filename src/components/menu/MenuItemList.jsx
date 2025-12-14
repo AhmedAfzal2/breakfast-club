@@ -2,7 +2,7 @@ import React from "react";
 import MenuItem from "./MenuItem";
 import "./MenuItemList.css";
 
-function MenuItemList({ items, onAddToBasket }) {
+function MenuItemList({ items, onAddToBasket, onItemClick }) {
   if (!items || items.length === 0) {
     return (
       <div className="menu-item-list-empty">
@@ -19,7 +19,10 @@ function MenuItemList({ items, onAddToBasket }) {
           title={item.title}
           price={item.price}
           imageSrc={item.imageSrc}
+          description={item.description}
+          toppings={item.toppings}
           onAddToBasket={onAddToBasket}
+          onItemClick={onItemClick}
         />
       ))}
     </div>
