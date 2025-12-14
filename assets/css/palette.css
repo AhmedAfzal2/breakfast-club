@@ -1,10 +1,10 @@
 /* Color Palette */
 :root {
-    --jasmine: #FCE597ff;
-    --hunyadi-yellow: #FFC46Aff;
-    --gamboge: #ECA032ff;
-    --china-rose: #B25A68ff;
-    --cool-gray: #939CC7ff;
+    --jasmine: rgb(252, 229, 151);
+    --hunyadi-yellow: rgb(255, 196, 106);
+    --gamboge: rgb(236, 160, 50);
+    --china-rose: rgb(178, 90, 104);
+    --cool-gray: rgb(147, 156, 199);
     --font-pixel: 'Pixelify Sans', sans-serif;
     --font-roboto-slab: 'Roboto Slab', serif;
 }

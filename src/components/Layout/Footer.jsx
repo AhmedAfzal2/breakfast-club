@@ -9,8 +9,9 @@ import {
   Youtube,
   Facebook,
   Github,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
-import { ChevronUp, ChevronDown } from "lucide-react";
 
 function Footer() {
   return (

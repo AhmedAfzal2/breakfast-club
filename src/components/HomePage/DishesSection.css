@@ -1,0 +1,263 @@
+.dishes-section {
+    padding: 50px 5%;
+    background-color: white; 
+    text-align: center;
+    display: flex; 
+    align-items: flex-start; 
+    gap: 30px; 
+    max-width: 1400px; 
+    margin: 0 auto; 
+}
+
+/* --- Left Column: Text and Main CTA --- */
+.dishes-content-left {
+    flex: 1; 
+    max-width: 40%;
+    text-align: left; 
+    padding-top: 30px;
+}
+
+.section-title {
+    font-size: 2.5em;
+    color: black;
+    margin-bottom: 0.5em;
+    font-family: 'Pixelify Sans', sans-serif;
+    text-align: left; /* Aligns title in the left column */
+}
+
+.section-subtitle {
+    font-size: 1.1em;
+    color: black;
+    margin-bottom: 40px;
+    text-align: left; /* Aligns subtitle in the left column */
+}
+
+.dishes-footer-cta {
+    margin-top: 30px;
+}
+
+/* --- Right Column: Carousel --- */
+.dishes-carousel-column {
+    flex: 2; 
+    max-width: 60%;
+    padding-top: 20px; 
+}
+
+.btn-menu {
+    background-color: transparent;
+    border: none;
+    width: 30px;
+}
+.btn-menu img {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.btn-menu img:hover {
+    transform: scale(1.05);
+}
+
+/* --- Carousel Track and Controls --- */
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 2%;
+    border-radius: 10px;
+    overflow: hidden; /* Contains the entire carousel display */
+}
+
+.dishes-carousel {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* --- Navigation Container Below Carousel --- */
+.carousel-navigation {
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    gap: 40px; /* Space between left and right arrows */
+    margin-top: 10px; /* Space below the carousel */
+}
+
+
+/* --- Individual Dish Card Styling --- */
+.dish-card {
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+    flex: 0 0 calc(38% - 30px); 
+    opacity: 0.6;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    cursor: default;
+}
+
+/* Highlighted Card Style (Applied via JSX class 'highlighted') */
+.dish-card.highlighted {
+    opacity: 1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    background-color: var(--jasmine); 
+    border-radius: 12px;
+}
+
+
+/* Re-apply a subtle hover effect only to the highlighted card */
+.dish-card.highlighted:hover {
+    transform: translateY(-5px) scale(1.02); /* Slight lift and zoom for the center card */
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    background-color: var(--gamboge);
+}
+
+.dish-info .dish-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0 5px 0;
+    font-family: 'Pixelify Sans', sans-serif;
+}
+.dish-info .dish-description {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 10px;
+    padding:5px;
+}
+
+/* --- Image and Wrapper Centering --- */
+.dish-image-wrapper {
+    display: flex;
+    width: 70%;
+    height: 150px;
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+    padding: 5%;
+    margin: 0 auto; /* Center the 70% wide wrapper within the card */
+}
+
+.dish-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures the whole image is visible */
+    transition: transform 0.4s ease-in-out;
+}
+
+.btn-add.btn-img {
+    width: 35px; 
+    height: 35px;
+    padding: 10px; 
+    border-radius: 50%; 
+    background-color: var(--gamboge); 
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-add .btn-icon-add {
+    width: 20px; 
+    height: 20px;
+    object-fit: contain;
+}
+
+.carousel-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gamboge);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 40px;
+    height: 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex-shrink: 0; 
+}
+.carousel-nav-btn:hover:not(:disabled) {
+    background-color: var(--jasmine);
+}
+.carousel-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Ensure text/icon color remains white inside the button */
+.carousel-nav-btn .next, .chevron {
+    color: white;
+}
+
+@keyframes slideInFromLeft {
+    from {
+    opacity: 0;
+    transform: translateX(-50px);
+    }
+    to {
+    opacity: 1;
+    transform: translateX(0);
+    }
+}
+
+.load-animation {
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInFromLeft 0.6s forwards ease-out;
+}
+
+@media (max-width: 1000px) {
+    .dishes-section {
+        flex-direction: column;
+    }
+    .dishes-content-left, .dishes-carousel-column {
+        /* Ensure columns take up full width on tablets/mobile */
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .dishes-content-left, .section-title, .section-subtitle {
+        text-align: center;
+    }
+    
+    /* Revert to original 33.33% size for screens showing 3 cards (if width allows) */
+    .dish-card {
+        flex: 0 0 calc(33.333% - 20px); 
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-menu{
+        width: 100%;
+    }
+    .carousel-container {
+        padding: 20px 0; 
+        justify-content: flex-start; 
+    }
+    .dishes-carousel {
+        gap: 0; 
+    }
+    .dish-card {
+        flex: 0 0 100%; 
+    }
+    .carousel-navigation {
+        gap: 80px;
+    }
+    .dish-card {
+        opacity: 1;
+        transform: scale(1);
+    }
+    .dish-card.highlighted {
+        box-shadow: none; 
+        background-color: transparent;
+    }
+    .dish-card.highlighted {
+        background-color: var(--gamboge); 
+        transform: scale(1);
+        box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+    }
+    /* Remove hover effects that might interfere on touch devices */
+    .dish-card:hover, .dish-card.highlighted:hover {
+        transform: scale(1) !important;
+        box-shadow: none;
+    }
+}

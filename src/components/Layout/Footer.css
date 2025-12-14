@@ -1,6 +1,6 @@
 .footer {
   width: 100%;
-  background-color: var(--gamboge); /* dark purple like Toggl */
+  background-color: var(--gamboge);
   color: #fff;
   font-family: 'Pixelify Sans', sans-serif;
   padding: 2rem 1rem;
@@ -15,6 +15,23 @@
   transform: translateY(calc(100% - 20px)); /* small visible strip */
   transition: transform 0.35s ease;
   z-index: 999; /* stay above everything */
+}
+
+.footer-indicator {
+  position: absolute;
+  top: -35px; /* pull it FAR above footer so you can see it */
+  color: grey;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 999999; /* unbeatable */
 }
 /* Base chevron styling */
 .footer-indicator .chevron {
@@ -38,30 +55,6 @@
 }
 .footer:hover .chevron-up {
   opacity: 0;
-}
-
-.footer-indicator {
-  position: absolute;
-  top: -35px; /* pull it FAR above footer so you can see it */
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 42px;
-  height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: var(--jasmine);
-  border-radius: 50%;
-  border: 3px solid var(--china-rose);
-
-  cursor: pointer;
-  opacity: 1;
-  pointer-events: auto;
-
-  z-index: 999999; /* unbeatable */
 }
 
 .footer:hover {
