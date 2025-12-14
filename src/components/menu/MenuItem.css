@@ -50,30 +50,6 @@
   color: black;
 }
 
-.menu-item-button {
-  padding: 0.5rem 0.5rem;
-  background-color: var(--gamboge);
-  color: black;
-  border: none;
-  border-radius: 12px;
-  font-family: 'Pixelify Sans', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-transform: lowercase;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  white-space: nowrap;
-}
-
-.menu-item-button:hover {
-  background-color: var(--china-rose);
-}
-
-@media (max-width: 1024px) {
-  .menu-item-button {
-    font-size: 1.1rem;
-  }
-}
 
 @media (max-width: 768px) {
   .menu-item-title {
@@ -82,18 +58,6 @@
   
   .menu-item-price {
     font-size: 0.9rem;
-  }
-  
-  .menu-item-button {
-    font-size: 0.9rem;
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .menu-item-button {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.2rem;
   }
 }
 
