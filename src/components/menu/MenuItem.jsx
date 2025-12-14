@@ -1,0 +1,28 @@
+import React from "react";
+import "./MenuItem.css";
+
+function MenuItem({ title, price, imageSrc, onAddToBasket }) {
+  const handleAddToBasket = () => {
+    if (onAddToBasket) {
+      onAddToBasket({ title, price, imageSrc });
+    }
+  };
+
+  return (
+    <div className="menu-item">
+      <div className="menu-item-image-container">
+        <img src={imageSrc} alt={title} className="menu-item-image" />
+      </div>
+      <div className="menu-item-content">
+        <h3 className="menu-item-title">{title}</h3>
+        <span className="menu-item-price">Rs. {price}</span>
+        <button className="menu-item-button" onClick={handleAddToBasket}>
+          Add to Basket
+        </button>
+        </div>
+      </div>
+  );
+}
+
+export default MenuItem;
+

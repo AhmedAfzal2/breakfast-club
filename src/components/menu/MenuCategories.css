@@ -1,0 +1,43 @@
+.menu-categories {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.menu-category-button {
+  border: none;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 0.3rem 0.3rem;
+  background-color: white;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: black;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.menu-category-button:hover {
+  background-color: var(--gamboge);
+}
+
+.menu-category-button.active {
+  background-color: var(--gamboge);
+}
+
+@media (max-width: 768px) {
+  .menu-category-button {
+    font-size: 0.8rem;
+  }
+}
