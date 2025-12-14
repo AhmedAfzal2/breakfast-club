@@ -4,7 +4,7 @@ import CartRow from "./CartRow";
 const MIN_ROWS = 6;
 const CART_ROW_HEIGHT = 80;
 
-function Items({ items, onDelete, updateQuantity }) {
+function Items({ items, onDelete, updateQuantity, getItemQuantity }) {
   // extend the array with nulls if < min rows
   const newItems =
     items.length < MIN_ROWS
@@ -19,6 +19,7 @@ function Items({ items, onDelete, updateQuantity }) {
           item={item}
           onDelete={onDelete}
           updateQuantity={updateQuantity}
+          getItemQuantity={getItemQuantity}
         />
       ))}
     </div>

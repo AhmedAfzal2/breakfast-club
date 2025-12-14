@@ -2,11 +2,20 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: var(--hunyadi-yellow);
+    background-color: var(--gamboge);
     padding: 4px 6px;
+    height: 1.8rem;
     gap: 1rem;
     color: #444;
     border-radius: 1rem;
+    font-family: var(--font-pixel);
+    width: 100%;
+    border: none;
+}
+
+.add-to-basket:hover {
+    color: white;
+    cursor: pointer;
 }
 
 .plus-minus {
@@ -25,4 +34,12 @@
 .plus-minus:hover {
     cursor: pointer;
     color: white;
+}
+
+.quantity-text {
+    font-family: var(--font-roboto-slab);
+}
+
+.fixed {
+    width: 6rem;
 }

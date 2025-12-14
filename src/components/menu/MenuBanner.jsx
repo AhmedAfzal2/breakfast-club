@@ -1,5 +1,6 @@
 import React from "react";
 import "./MenuBanner.css";
+import CartIcon from "./CartIcon";
 
 function MenuBanner({ imageSrc, alt = "Banner" }) {
   return (
@@ -10,4 +11,3 @@ function MenuBanner({ imageSrc, alt = "Banner" }) {
 }
 
 export default MenuBanner;
-
