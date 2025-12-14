@@ -1,0 +1,122 @@
+
+:root {
+    --overlay-color: rgba(0, 0, 0, 0.4); /* 40% opaque black overlay */
+}
+
+.hero-section {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    min-height: 80vh; /* Make it vertically substantial */
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center; /* Center text inside the content box */
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-full-bg {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: overlay; 
+    border: 4px solid rgba(12, 12, 12, 0.645); /* Subtle border for definition */
+    border-radius: 10px;
+}
+
+/* Centered Content Styling */
+.hero-content-centered {
+    max-width: 600px;
+    padding: 10px;
+    z-index: 2; /* Ensure content is above the overlay */
+    margin-top: 10%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.hero-title {
+    font-size: 3.5em;
+    color: var(--jasmine);/* Ensure the title is white */
+    margin-top: 0.5em;
+    margin-bottom: 0.1em;
+    font-weight: 500;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6); 
+    font-family: 'Pixelify Sans', sans-serif;
+}
+
+.hero-subtitle {
+    font-size: 1.2em;
+    color: #eee;
+    margin-bottom: 1em;
+    line-height: 1.4;
+    font-family: 'Roboto Slab', serif;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap:20px;
+    background-color: transparent;
+    margin-bottom: 2em;
+}
+.btn{
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    width: 35%;
+    display: flex;
+    transition: transform 0.2s ease;
+}
+
+.btn-img {
+    padding:0;
+    margin:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+}
+
+.btn-icon {
+    /* Make the image fill the button, slightly smaller than the button size */
+    width: 100%; 
+    height: 100%;
+    object-fit: contain;
+}
+.btn :hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+/* Media Query remains important for smaller screens */
+@media (max-width: 768px) {
+    .hero-section {
+        /* Reduce the height for smaller screens, making the whole picture smaller */
+        min-height: 40vh; /* Now takes up 40% of the viewport height */
+    }
+    .hero-title {
+        /* This scales the font based on the viewport width (7% of viewport width) */
+        font-size: 7vw; 
+        line-height: 1.2;
+    }
+    .hero-subtitle {
+        font-size: 4vw;
+    }
+    .hero-actions {
+        /* Revert to stacking for mobile */
+        flex-direction: row; 
+        gap: 20px;
+    }
+    .btn-img {
+        width: 50px;
+        height: 50px;
+    }
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
