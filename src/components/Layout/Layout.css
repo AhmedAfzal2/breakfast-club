@@ -1,9 +1,10 @@
 .header {
   width: 100%;
-  padding: 0.7rem 2rem;
+  padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 /* Make middle nav truly centered */
@@ -13,10 +14,11 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 4rem;
+  gap: 1rem;
   background-color: var(--jasmine);
-  padding: 15px 60px;
+  padding: 10px 15px;
   border-radius: 20px;
+  flex-wrap: nowrap;
 }
 
 .logo-container img {
@@ -24,14 +26,15 @@
   object-fit: contain;
 }
 .nav-link {
-  font-size: 1.05rem;
+  font-size: 0.85rem;
   font-weight: 500;
   text-decoration: none;
   color: var(--china-rose);
-  padding: 0.3rem 0.8rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 8px;
   position: relative;
   transition: background-color 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
 }
 
 /* Rounded hover box */
@@ -100,10 +103,11 @@
 }
 
 .logo-container {
-  width: 182px;
-  height: 60px;
+  width: 120px;
+  height: 40px;
   position: relative;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 .logo-container img {
@@ -247,15 +251,73 @@
 .layout-content {
   flex: 1;
   min-height: 0;
-  padding: 25px 40px;
-  margin-top: 30px;
-  margin-bottom: 40px;
+  padding: 15px 1rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Responsive - expand on larger screens */
+/* Mobile responsive styles */
+@media (max-width: 767px) {
+  .header {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-links {
+    gap: 0.5rem;
+    padding: 8px 10px;
+  }
+  
+  .nav-link {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .logo-container {
+    width: 100px;
+    height: 35px;
+  }
+  
+  .layout-content {
+    padding: 15px 0.75rem;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .menu-category-button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.3rem;
+  }
+}
+
 @media (min-width: 768px) {
+  .header {
+    padding: 0.7rem 2rem;
+  }
+  
+  .nav-links {
+    gap: 2rem;
+    padding: 12px 40px;
+  }
+  
+  .nav-link {
+    font-size: 0.95rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .logo-container {
+    width: 150px;
+    height: 50px;
+  }
+  
+  .layout-content {
+    padding: 20px 30px;
+  }
+  
   .nav-bar {
     width: 350px;
   }
