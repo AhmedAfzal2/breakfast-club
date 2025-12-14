@@ -1,0 +1,28 @@
+.quantity-control {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--hunyadi-yellow);
+    padding: 4px 6px;
+    gap: 1rem;
+    color: #444;
+    border-radius: 1rem;
+}
+
+.plus-minus {
+    border: none;
+    background-color: var(--china-rose);
+    width: 1.1rem;
+    aspect-ratio: 1 / 1;
+    font-weight: bold;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+}
+
+.plus-minus:hover {
+    cursor: pointer;
+    color: white;
+}
