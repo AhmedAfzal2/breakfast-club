@@ -2,56 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ReservationPage from "./pages/ReservationPage";
-import Cart from "./components/cart/Cart";
-
-const dummyItems = [
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 200,
-    quantity: 2,
-  },
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 3000,
-    quantity: 3,
-  },
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 200,
-    quantity: 1,
-  },
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 200,
-    quantity: 1,
-  },
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 200,
-    quantity: 1,
-  },
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 200,
-    quantity: 1,
-  },
-  {
-    name: "coffee",
-    src: "/assets/images/coffee.png",
-    price: 200,
-    quantity: 1,
-  },
-];
-
-dummyItems.forEach((item, index) => {
-  item.id = index;
-});
+import MenuPage from "./pages/MenuPage";
 
 function App() {
   const [cartItems, setCartItems] = useState(dummyItems);
@@ -76,21 +27,13 @@ function App() {
   };
 
   return (
-    // <Router>
-    //   <Routes>
-    //     <Route path="/" element={<HomePage />} />
-    //     <Route path="/reservations" element={<ReservationPage />} />
-    //   </Routes>
-    // </Router>
-    <div style={{ height: "100vh", width: 420 }}>
-      <Cart
-        items={cartItems}
-        onDelete={onDelete}
-        onBack={onBack}
-        updateQuantity={updateQuantity}
-        onClear={onClear}
-      />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/reservations" element={<ReservationPage />} />
+      </Routes>
+    </Router>
   );
 }
 

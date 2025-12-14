@@ -1,0 +1,18 @@
+.menu-subcategory {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: black;
+  text-transform: lowercase;
+  margin: 10px 0 10px 0;
+  padding: 0;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .menu-subcategory {
+      font-size: 0.8rem;
+    }
+  }
