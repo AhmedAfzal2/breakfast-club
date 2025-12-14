@@ -4,6 +4,7 @@ import MenuCategories from "../components/menu/MenuCategories";
 import MenuSubcategory from "../components/menu/MenuSubcategory";
 import MenuBanner from "../components/menu/MenuBanner";
 import MenuItemList from "../components/menu/MenuItemList";
+import MenuItemModal from "../components/menu/modal/MenuItemModal";
 import "../App.css";
 import "./MenuPage.css";
 import hotBreakfastBanner from "/assets/images/banner-images/hotbreakfast.png";
@@ -15,6 +16,8 @@ import waffleImage from "/assets/images/menu-items/breakfast/hot-breakfast/waffl
 
 function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -23,6 +26,16 @@ function MenuPage() {
   const handleAddToBasket = (item) => {
     console.log("Added to basket:", item);
     // Handle adding to basket logic here
+  };
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
   };
 
   // Subcategories for each category
@@ -45,25 +58,33 @@ function MenuPage() {
         id: 1,
         title: "pancake",
         price: 300,
-        imageSrc: pancakeImage
+        imageSrc: pancakeImage,
+        description: "Fluffy, golden pancakes served with maple syrup and a pat of butter. Made fresh daily with our secret recipe that's been perfected over the years. A classic breakfast favorite that never disappoints.",
+        toppings: ["Maple Syrup", "Butter", "Fresh Berries", "Whipped Cream", "Chocolate Chips", "Banana Slices"]
       },
       {
         id: 2,
         title: "crepes",
         price: 300,
-        imageSrc: crepesImage
+        imageSrc: crepesImage,
+        description: "Delicate, paper-thin crepes filled with your choice of sweet or savory fillings. Light and airy, these French-style crepes are made to order and served warm. Perfect for a sophisticated breakfast experience.",
+        toppings: ["Nutella", "Strawberries", "Powdered Sugar", "Lemon & Sugar", "Ham & Cheese", "Spinach & Feta"]
       },
       {
         id: 3,
         title: "french toast",
         price: 300,
-        imageSrc: frenchToastImage
+        imageSrc: frenchToastImage,
+        description: "Thick slices of brioche bread soaked in a rich custard mixture, then pan-fried to golden perfection. Served with powdered sugar, fresh berries, and a drizzle of maple syrup. A decadent morning treat.",
+        toppings: ["Maple Syrup", "Powdered Sugar", "Fresh Berries", "Cinnamon", "Vanilla Ice Cream", "Bacon Strips"]
       },
       {
         id: 4,
         title: "waffle",
         price: 300,
-        imageSrc: waffleImage
+        imageSrc: waffleImage,
+        description: "Crispy on the outside, soft on the inside - our Belgian-style waffles are made fresh to order. Served with whipped cream, fresh fruit, and your choice of syrup. A breakfast classic that's always a crowd pleaser.",
+        toppings: ["Whipped Cream", "Fresh Fruit", "Maple Syrup", "Chocolate Sauce", "Ice Cream", "Nuts"]
       }
     ]
   };
@@ -96,10 +117,18 @@ function MenuPage() {
               <MenuItemList 
                 items={getSubcategoryItems(subcategory)}
                 onAddToBasket={handleAddToBasket}
+                onItemClick={handleItemClick}
               />
             )}
           </React.Fragment>
         ))}
+        
+        <MenuItemModal
+          item={selectedItem}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onAddToBasket={handleAddToBasket}
+        />
       </div>
     </Layout>
   );
