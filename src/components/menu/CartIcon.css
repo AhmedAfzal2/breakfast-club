@@ -1,0 +1,33 @@
+.container {
+    border-radius: 50%;
+    padding: 0.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.number {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--cool-gray);
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 0.8rem;
+    font-family: var(--font-roboto-slab);
+}
+
+img {
+    width: 3rem;
+    transition: transform 0.3s;
+}
+
+img:hover {
+    transform: scale(1.1);
+}

@@ -1,13 +1,26 @@
 import React, { useState } from "react";
 import "./QuantityControl.css";
 
-function QuantityControl({ updateQuantity, item }) {
-  return (
-    <div className="quantity-control">
+function QuantityControl({
+  updateQuantity,
+  getItemQuantity,
+  onAddToBasket,
+  item,
+  fixed,
+}) {
+  const quantity = getItemQuantity(item.id);
+  return quantity > 0 ? (
+    <div
+      className={`quantity-control ${fixed ? "fixed" : ""}`}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <button
         className="plus-minus"
-        onClick={() => {
-          updateQuantity(item.id, item.quantity - 1);
+        onClick={(e) => {
+          e.stopPropagation();
+          updateQuantity(item.id, quantity - 1);
         }}
       >
         <svg viewBox="0 0 10 10" width="50%" height="50%">
@@ -21,11 +34,12 @@ function QuantityControl({ updateQuantity, item }) {
           />
         </svg>
       </button>
-      <div className="quantity-text">{item.quantity}</div>
+      <div className="quantity-text">{quantity}</div>
       <button
         className="plus-minus"
-        onClick={() => {
-          updateQuantity(item.id, item.quantity + 1);
+        onClick={(e) => {
+          e.stopPropagation();
+          updateQuantity(item.id, quantity + 1);
         }}
       >
         <svg viewBox="0 0 10 10" width="60%" height="60%">
@@ -48,6 +62,16 @@ function QuantityControl({ updateQuantity, item }) {
         </svg>
       </button>
     </div>
+  ) : (
+    <button
+      className={`quantity-control add-to-basket ${fixed ? "fixed" : ""}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onAddToBasket(item);
+      }}
+    >
+      add to basket
+    </button>
   );
 }
 

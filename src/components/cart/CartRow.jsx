@@ -3,7 +3,7 @@ import "./Cart.css";
 import QuantityControl from "./QuantityControl";
 import { Trash2 } from "lucide-react";
 
-function CartRow({ id, item, onDelete, updateQuantity }) {
+function CartRow({ id, item, onDelete, updateQuantity, getItemQuantity }) {
   let colors = ["#fff", "#b25a68"];
   let primaryColor = colors[id % 2];
   let secondaryColor = colors[(id + 1) % 2];
@@ -13,7 +13,12 @@ function CartRow({ id, item, onDelete, updateQuantity }) {
       <div className="item-details">
         <div>
           <div style={{ fontSize: "1.35em" }}>{item.name}</div>
-          <QuantityControl updateQuantity={updateQuantity} item={item} />
+          <QuantityControl
+            updateQuantity={updateQuantity}
+            item={item}
+            getItemQuantity={getItemQuantity}
+            fixed={true}
+          />
         </div>
         <div style={{ alignItems: "flex-end" }}>
           <div>Rs. {item.price * item.quantity}</div>

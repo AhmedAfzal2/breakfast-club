@@ -1,9 +1,13 @@
 /* MAIN CART */
 #cart {
-    height: 100%;
-    display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: space-between;
+    transition: transform 1s ease;
+    position: fixed;
+    bottom: 0;
+    background-color: white;
+    z-index: 100;
 }   
 
 .cart-header {
@@ -32,7 +36,7 @@
 }
 
 .place-order {
-    margin: 0 1.2rem 1.2rem;
+    margin: 0 1.2rem 2.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,6 +50,16 @@
 .control-btn:hover {
     cursor: pointer;
     text-decoration: underline;
+}
+
+.closed {
+    transform: translateY(100%);
+    pointer-events: none;
+}
+
+.open {
+    transform: translateY(0);
+    display: flex;
 }
 
 /* CART ROW */

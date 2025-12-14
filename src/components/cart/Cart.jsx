@@ -1,15 +1,25 @@
 import React from "react";
 import Items from "./Items";
+import "./Cart.css";
 
-function Cart({ items, onClear, onBack, onDelete, updateQuantity }) {
+function Cart({
+  items,
+  onClear,
+  onBack,
+  onDelete,
+  updateQuantity,
+  isOpen,
+  getItemQuantity,
+}) {
   return (
-    <div id="cart">
+    <div id="cart" className={isOpen ? "open" : "closed"}>
       <div>
         <div className="cart-header">your cart</div>
         <Items
           items={items}
           onDelete={onDelete}
           updateQuantity={updateQuantity}
+          getItemQuantity={getItemQuantity}
         />
         <div className="control-row">
           <div className="control-btn" onClick={onBack}>
