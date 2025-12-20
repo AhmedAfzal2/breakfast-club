@@ -15,10 +15,6 @@ dist-ssr
 # Server data
 server/data/
 
-# Environment variables
-.env
-server/.env
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
