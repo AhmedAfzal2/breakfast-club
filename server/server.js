@@ -3,7 +3,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import reservationRoutes from './routes/reservations.js';
+<<<<<<< Updated upstream
 import menuItemRoutes from './routes/menuItems.js';
+=======
+import reviewRoutes from './routes/reviews.js';
+>>>>>>> Stashed changes
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -25,7 +29,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/reservations', reservationRoutes);
+<<<<<<< Updated upstream
 app.use('/api/menu-items', menuItemRoutes);
+=======
+app.use('/api/reviews', reviewRoutes);
+>>>>>>> Stashed changes
 
 // Health check route
 app.get('/api/health', (req, res) => {
