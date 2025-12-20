@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import "./ModalToppings.css";
 
-function ModalToppings({ toppings, selectedTopping, onToppingChange }) {
-  if (!toppings || toppings.length === 0) return null;
+function ModalToppings({ addOns, selectedAddOn, onAddOnChange }) {
+  if (!addOns || addOns.length === 0) return null;
 
   return (
     <div className="modal-toppings">
-      <h3 className="modal-toppings-heading">choose toppings</h3>
+      <h3 className="modal-toppings-heading">add-ons</h3>
       <div className="modal-toppings-list">
-        {toppings.map((topping, index) => (
+        {addOns.map((addOn, index) => (
           <label key={index} className="modal-topping-item">
             <input
               type="radio"
-              name="topping"
-              value={topping}
-              checked={selectedTopping === topping}
-              onChange={() => onToppingChange && onToppingChange(topping)}
+              name="addOn"
+              value={addOn}
+              checked={selectedAddOn === addOn}
+              onChange={() => onAddOnChange && onAddOnChange(addOn)}
               className="modal-topping-radio"
             />
-            <span className="modal-topping-name">{topping}</span>
+            <span className="modal-topping-name">{addOn}</span>
           </label>
         ))}
       </div>

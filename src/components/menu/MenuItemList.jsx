@@ -8,6 +8,7 @@ function MenuItemList({
   onItemClick,
   getItemQuantity,
   updateQuantity,
+  cardColor,
 }) {
   if (!items || items.length === 0) {
     return (
@@ -27,6 +28,7 @@ function MenuItemList({
           onItemClick={onItemClick}
           getItemQuantity={getItemQuantity}
           updateQuantity={updateQuantity}
+          cardColor={cardColor}
         />
       ))}
     </div>

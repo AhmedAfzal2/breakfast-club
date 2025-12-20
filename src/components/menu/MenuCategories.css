@@ -5,6 +5,14 @@
   width: 100%;
   flex-wrap: wrap;
   box-sizing: border-box;
+  margin-bottom: 10px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  padding: 10px 0;
+  margin-top: 0;
 }
 
 .menu-category-button {
