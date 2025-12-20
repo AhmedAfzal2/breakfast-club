@@ -6,12 +6,12 @@ import "./MenuItemModal.css";
 
 function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
   const [isClosing, setIsClosing] = useState(false);
-  const [selectedTopping, setSelectedTopping] = useState(null);
+  const [selectedAddOn, setSelectedAddOn] = useState(null);
 
   useEffect(() => {
     if (isOpen) {
       setIsClosing(false);
-      setSelectedTopping(null); // Reset topping selection when modal opens
+      setSelectedAddOn(null); // Reset add-on selection when modal opens
     }
   }, [isOpen]);
 
@@ -22,7 +22,7 @@ function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
     setTimeout(() => {
       onClose();
       setIsClosing(false);
-      setSelectedTopping(null);
+      setSelectedAddOn(null);
     }, 300); // Match animation duration
   };
 
@@ -32,17 +32,17 @@ function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
     }
   };
 
-  const handleToppingChange = (topping) => {
-    setSelectedTopping(topping);
+  const handleAddOnChange = (addOn) => {
+    setSelectedAddOn(addOn);
   };
 
   const handleAddToBasketClick = (itemData) => {
-    const itemWithTopping = {
+    const itemWithAddOn = {
       ...item,
-      selectedTopping: selectedTopping
+      selectedAddOn: selectedAddOn
     };
     if (onAddToBasket) {
-      onAddToBasket(itemWithTopping);
+      onAddToBasket(itemWithAddOn);
     }
     handleClose();
   };
@@ -53,9 +53,9 @@ function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
         <ModalHeader item={item} onClose={handleClose} />
         <ModalDescription description={item.description} />
         <ModalToppings 
-          toppings={item.toppings} 
-          selectedTopping={selectedTopping}
-          onToppingChange={handleToppingChange}
+          addOns={item.addOns} 
+          selectedAddOn={selectedAddOn}
+          onAddOnChange={handleAddOnChange}
         />
         <div className="modal-footer">
           <button 

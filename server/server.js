@@ -1,15 +1,22 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import connectDB from './config/database.js';
 import reservationRoutes from './routes/reservations.js';
-import contactRoutes from './routes/contacts.js';
+import menuItemRoutes from './routes/menuItems.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -18,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/reservations', reservationRoutes);
-app.use('/api/contacts', contactRoutes);
+app.use('/api/menu-items', menuItemRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
