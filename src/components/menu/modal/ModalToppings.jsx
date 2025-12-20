@@ -6,7 +6,7 @@ function ModalToppings({ toppings, selectedTopping, onToppingChange }) {
 
   return (
     <div className="modal-toppings">
-      <h3 className="modal-toppings-heading">choose toppings</h3>
+      <h3 className="modal-toppings-heading">add-ons</h3>
       <div className="modal-toppings-list">
         {toppings.map((topping, index) => (
           <label key={index} className="modal-topping-item">
