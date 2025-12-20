@@ -1,17 +1,14 @@
 import React from "react";
 import "./TextAreaField.css";
 
-function TextAreaField({ id, name, value, onChange, placeholder, required, rows = 5 }) {
+function TextAreaField({ id, placeholder, rows = 5, className, ...registerProps }) {
   return (
     <textarea
       id={id}
-      name={name}
-      value={value}
-      onChange={onChange}
       placeholder={placeholder}
-      required={required}
       rows={rows}
-      className="textarea-field"
+      className={`textarea-field ${className || ""}`}
+      {...registerProps}
     />
   );
 }

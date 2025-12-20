@@ -3,17 +3,17 @@
   flex-direction: column;
   gap: 0.4rem;
   align-items: center;
-  padding: 1rem;
+  padding: 1.3rem;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
 }
 
 .star-rating-label {
-  padding-bottom: 0.3rem;
+  padding-bottom: 0.5rem;
   font-family: var(--font-pixel);
   text-transform: lowercase;
   color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 .star-rating {
@@ -37,13 +37,13 @@
 
 @media (max-width: 768px) {
   .star-rating-container {
-    padding: 0.5rem;
+    padding: 0.7rem;
     gap: 0.25rem;
   }
 
   .star-rating-label {
-    font-size: 0.75rem;
-    padding-bottom: 0.25rem;
+    font-size: 1rem;
+    padding-bottom: 0.5rem;
   }
 
   .star-rating {
