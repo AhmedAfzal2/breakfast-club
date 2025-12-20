@@ -1,0 +1,31 @@
+.textarea-field {
+  width: 100%;
+  padding: 0.6rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-family: var(--font-roboto-slab);
+  font-size: 0.95rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.textarea-field:focus {
+  outline: none;
+  border-color: var(--china-rose);
+}
+
+.textarea-field::placeholder {
+  text-transform: lowercase;
+  color: #6b6b6b;
+}
+
+@media (max-width: 768px) {
+  .textarea-field {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 15px;
+  }
+}
+

@@ -1,0 +1,21 @@
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .contact-form {
+    gap: 0.75rem;
+  }
+
+  .form-group {
+    gap: 0.25rem;
+  }
+}
+

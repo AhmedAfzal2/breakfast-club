@@ -1,0 +1,34 @@
+.submit-button {
+  width: 100%;
+  padding: 0.8rem 2rem;
+  background-color: var(--china-rose);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 0.5rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: var(--gamboge);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .submit-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    border-radius: 15px;
+  }
+}
+
