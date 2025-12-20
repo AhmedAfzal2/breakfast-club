@@ -94,8 +94,11 @@ function ContactForm() {
       return;
     }
 
-    console.log("Form submitted:", formData);
-    // TODO: Add API call to submit form data
+    // Print JSON data to console
+    console.log("=== CONTACT FORM SUBMISSION ===");
+    console.log(JSON.stringify(formData, null, 2));
+    console.log("===============================");
+
     alert("Thank you for your feedback!");
     
     // Reset form
