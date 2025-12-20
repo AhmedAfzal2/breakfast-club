@@ -65,6 +65,16 @@ function Header({ onNavClick }) {
         >
           Contact
         </a>
+        <a 
+          href="/reviews" 
+          className={`nav-link ${isActive("/reviews") ? "active" : ""}`}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick("/reviews");
+          }}
+        >
+          Reviews
+        </a>
       </nav>
 
       {/* Right Side Logo */}
