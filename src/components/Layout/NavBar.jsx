@@ -2,14 +2,15 @@ import React from "react";
 import "./Layout.css";
 import chickens from "/assets/images/icons/chickens.png";
 import NavBarRow from "./NavBarRow";
-import { Menu, Info, Phone, Calendar, X} from "lucide-react";
+import { Menu, Info, Phone, Calendar, Star, X} from "lucide-react";
 
 function NavBar({ isOpen, onClose }) {
   const navItems = [
-    { icon: Menu, text: "menu", path: "/" },
+    { icon: Menu, text: "menu", path: "/menu" },
     { icon: Info, text: "about us", path: "/" },
     { icon: Phone, text: "contact us", path: "/contact" },
     { icon: Calendar, text: "reservations", path: "/reservations" },
+    { icon: Star, text: "reviews", path: "/reviews" },
   ];
 
   return (
