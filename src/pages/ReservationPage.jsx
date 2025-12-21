@@ -13,8 +13,16 @@ import tables from "../components/reservation/game/tables";
 import "../App.css";
 import "./ReservationPage.css";
 import ConfirmationPopup from "../components/ConfirmationPopup";
+import MobileReservationPage from "./mobile/ReservationPage";
 
 function ReservationPage() {
+  // Initialize with actual window width check
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 1000;
+    }
+    return false;
+  });
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [isTimeSpinnerOpen, setIsTimeSpinnerOpen] = useState(false);
@@ -28,6 +36,27 @@ function ReservationPage() {
   const [selectedTables, setSelectedTables] = useState([]);
   const [gameEnable, setGameEnable] = useState(false);
   const [reservedTables, setReservedTables] = useState([]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 1000;
+      setIsMobile(mobile);
+      console.log('Mobile check:', mobile, 'Width:', window.innerWidth);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Render mobile version on mobile devices
+  if (isMobile) {
+    console.log('Rendering mobile version');
+    return <MobileReservationPage />;
+  }
+  
+  console.log('Rendering desktop version');
 
   // Calculate max guests based on selected tables
   const calculateMaxGuests = () => {

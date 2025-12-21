@@ -1,0 +1,114 @@
+.mobile-calendar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-calendar-wrapper {
+  width: 100%;
+  background-color: var(--jasmine);
+  border-radius: 10px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.mobile-calendar-wrapper .react-datepicker {
+  width: 100% !important;
+  border: none;
+  font-family: 'Roboto Slab', serif;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.mobile-calendar-wrapper .react-datepicker__month-container {
+  width: 100%;
+}
+
+.mobile-calendar-wrapper .react-datepicker__month {
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.mobile-calendar-wrapper .react-datepicker__header {
+  padding: 0.5rem 0;
+  background-color:transparent;
+  border-bottom: 2px solid var(--china-rose);
+  border-radius: 0;
+}
+
+.mobile-calendar-wrapper .react-datepicker__current-month {
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-weight: 600;
+  color: var(--china-rose);
+  text-transform: lowercase;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day-names {
+  margin: 0.25rem 0;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day-name {
+  width: calc(100% / 7);
+  margin: 0.1rem;
+  line-height: 2rem;
+  font-size: 0.75rem;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-weight: 600;
+  color: var(--china-rose);
+  text-transform: lowercase;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day {
+  width: calc(100% / 7);
+  margin: 0.1rem;
+  line-height: 2rem;
+  font-size: 0.9rem;
+  font-family: 'Roboto Slab', serif;
+  color: #333;
+  border-radius: 4px;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day:hover {
+  background-color: var(--gamboge);
+  color: white;
+  border-radius: 4px;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day--selected {
+  background-color: var(--china-rose);
+  color: white;
+  font-weight: 600;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day--keyboard-selected {
+  background-color: var(--gamboge);
+  color: white;
+}
+
+.mobile-calendar-wrapper .react-datepicker__day--disabled {
+  color: #ccc;
+  opacity: 0.5;
+}
+
+.mobile-calendar-wrapper .react-datepicker__navigation {
+  top: 0.5rem;
+}
+
+.mobile-calendar-wrapper .react-datepicker__navigation-icon::before {
+  border-color: var(--china-rose);
+}
+
+.mobile-field-error-message {
+  display: block;
+  color: var(--china-rose);
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+

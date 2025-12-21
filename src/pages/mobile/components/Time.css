@@ -1,0 +1,78 @@
+.mobile-time-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-time-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-time-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+  border: 2px solid var(--china-rose);
+  border-radius: 12px;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: white;
+  color: var(--china-rose);
+  cursor: pointer;
+}
+
+.mobile-time-input:focus {
+  outline: none;
+  border-color: var(--gamboge);
+}
+
+.mobile-clock-icon-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.mobile-clock-icon-button img {
+  width: 1.2rem;
+  height: 1.2rem;
+  object-fit: contain;
+}
+
+.mobile-time-spinner-popup {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--jasmine);
+  border: 2px solid var(--china-rose);
+  border-radius: 12px 12px 0 0;
+  z-index: 1000;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.mobile-field-error-message {
+  display: block;
+  color: var(--china-rose);
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
