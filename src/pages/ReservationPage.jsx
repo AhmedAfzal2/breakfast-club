@@ -502,7 +502,6 @@ function ReservationPage() {
       <ConfirmationPopup
         isOpen={isConfirmationOpen}
         onClose={() => setIsConfirmationOpen(false)}
-        type="reservation"
       />
     </Layout>
   );
