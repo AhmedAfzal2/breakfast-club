@@ -3,6 +3,7 @@ import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { sendContactEmail, sendConfirmationEmail } from '../services/emailService.js';
+import Review from '../models/Review.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -60,6 +61,24 @@ router.post('/', async (req, res) => {
     data.contacts.push(submission);
     await writeContacts(data);
 
+    // If rating and comments are provided, also save as a review
+    let reviewCreated = false;
+    if (req.body.rating && req.body.rating > 0 && req.body.comments && req.body.comments.trim()) {
+      try {
+        const review = new Review({
+          name: req.body.name,
+          rating: Math.min(Math.max(parseInt(req.body.rating) || 1, 1), 5), // Ensure rating is between 1-5
+          quote: req.body.comments.trim()
+        });
+        await review.save();
+        reviewCreated = true;
+        console.log('✅ Review created from contact form submission');
+      } catch (error) {
+        console.warn('⚠️  Failed to create review from contact form:', error.message);
+        // Don't fail the request if review creation fails, just log it
+      }
+    }
+
     // Send email notification to restaurant owner
     const emailResult = await sendContactEmail(req.body);
     if (!emailResult.success) {
@@ -78,7 +97,8 @@ router.post('/', async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Contact form submitted successfully',
-      emailSent: emailResult.success
+      emailSent: emailResult.success,
+      reviewCreated: reviewCreated
     });
   } catch (error) {
     console.error('Error processing contact submission:', error);
