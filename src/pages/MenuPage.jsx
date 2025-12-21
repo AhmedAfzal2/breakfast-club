@@ -26,7 +26,54 @@ function MenuPage() {
     DESSERTS: useRef(null),
     BEVERAGES: useRef(null),
   };
+  const bannerRefs = {
+    BREAKFAST: useRef(null),
+    DESSERTS: useRef(null),
+    BEVERAGES: useRef(null),
+  };
   const isScrollingRef = useRef(false);
+  const lastScrollY = useRef(0);
+
+  // Menu items will be fetched from API
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Measure header and menu categories height and set CSS variables
+  useEffect(() => {
+    const updateHeights = () => {
+      const header = document.querySelector('.header');
+      const menuCategories = document.querySelector('.menu-categories');
+      
+      if (header) {
+        const headerHeight = header.offsetHeight;
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+      }
+      
+      if (menuCategories) {
+        const categoriesHeight = menuCategories.offsetHeight;
+        document.documentElement.style.setProperty('--menu-categories-height', `${categoriesHeight}px`);
+      }
+    };
+
+    // Initial measurement with multiple attempts to ensure elements are rendered
+    updateHeights();
+    
+    // Update on resize
+    window.addEventListener('resize', updateHeights);
+    
+    // Also update after delays to ensure elements are fully rendered
+    const timeoutId1 = setTimeout(updateHeights, 100);
+    const timeoutId2 = setTimeout(updateHeights, 300);
+    const timeoutId3 = setTimeout(updateHeights, 500);
+
+    return () => {
+      window.removeEventListener('resize', updateHeights);
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+      clearTimeout(timeoutId3);
+    };
+  }, [loading]);
 
   // prevent scrolling when cart open
   useEffect(() => {
@@ -39,53 +86,92 @@ function MenuPage() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isCartOpen]);
+}, [isCartOpen]);
 
-  // Intersection Observer to detect which category is in view
+  // Intersection Observer to detect which category banner is in view
   useEffect(() => {
-    const observers = [];
-    let timeoutId;
+    // Don't set up observer until menu items are loaded
+    if (loading) return;
+
+    let scrollTimeout;
+    let scrollHandler = null;
+
+    // Function to determine which category banner is in view
+    const updateActiveCategory = () => {
+      if (isScrollingRef.current) return;
+
+      const currentScrollY = window.scrollY || window.pageYOffset;
+      const isScrollingDown = currentScrollY > lastScrollY.current;
+      lastScrollY.current = currentScrollY;
+
+      const categories = ["BREAKFAST", "DESSERTS", "BEVERAGES"];
+      const viewportHeight = window.innerHeight;
+      
+      let activeCategory = null;
+      let closestDistance = Infinity;
+
+      // Check each banner to see if it's in the viewport
+      categories.forEach((category) => {
+        const bannerRef = bannerRefs[category];
+        if (!bannerRef?.current) return;
+
+        const rect = bannerRef.current.getBoundingClientRect();
+        
+        if (isScrollingDown) {
+          // When scrolling down: banner is active when its top enters the viewport
+          if (rect.top >= 0 && rect.top <= viewportHeight * 0.3 && rect.bottom > 0) {
+            const distance = rect.top;
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              activeCategory = category;
+            }
+          }
+        } else {
+          // When scrolling up: banner is active when we're past it or it's in the upper viewport
+          if (rect.top <= viewportHeight * 0.3 && rect.bottom > 0) {
+            const distance = Math.abs(rect.top - viewportHeight * 0.2);
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              activeCategory = category;
+            }
+          }
+        }
+      });
+
+      // Update category if found
+      if (activeCategory) {
+        setSelectedCategory((prevCategory) => {
+          return activeCategory !== prevCategory ? activeCategory : prevCategory;
+        });
+      }
+    };
 
     // Small delay to ensure refs are attached
-    timeoutId = setTimeout(() => {
-      const categories = ["BREAKFAST", "DESSERTS", "BEVERAGES"];
+    const timeoutId = setTimeout(() => {
+      // Listen to scroll events
+      scrollHandler = () => {
+        if (!isScrollingRef.current) {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            updateActiveCategory();
+          }, 50);
+        }
+      };
 
-      categories.forEach((category) => {
-        const ref = categoryRefs[category];
-        if (!ref?.current) return;
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && !isScrollingRef.current) {
-                const rect = entry.boundingClientRect;
-                // Check if the section is in the upper portion of the viewport
-                if (rect.top <= window.innerHeight * 0.4 && rect.top >= -100) {
-                  setSelectedCategory(category);
-                }
-              }
-            });
-          },
-          {
-            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5],
-            rootMargin: "-10% 0px -60% 0px",
-          }
-        );
-
-        observer.observe(ref.current);
-        observers.push({ observer, element: ref.current });
-      });
-    }, 100);
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+      
+      // Initial check
+      updateActiveCategory();
+    }, 300);
 
     return () => {
       clearTimeout(timeoutId);
-      observers.forEach(({ observer, element }) => {
-        if (element) {
-          observer.unobserve(element);
-        }
-      });
+      clearTimeout(scrollTimeout);
+      if (scrollHandler) {
+        window.removeEventListener('scroll', scrollHandler);
+      }
     };
-  }, []);
+  }, [loading, menuItems]);
 
   const handleCategorySelect = (category) => {
     isScrollingRef.current = true;
@@ -175,11 +261,6 @@ function MenuPage() {
     BEVERAGES: beveragesBanner,
   };
 
-  // Menu items will be fetched from API
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   // Fetch menu items from API
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -232,15 +313,15 @@ function MenuPage() {
         <div className="menu-page">
           <h1 className="page-heading">MENU</h1>
 
+          <MenuCategories
+            onCategorySelect={handleCategorySelect}
+            selectedCategory={selectedCategory}
+          />
+
           <CartIcon
             className="cart-icon"
             numberOfItems={cartItems.length}
             onClick={openCart}
-          />
-
-          <MenuCategories
-            onCategorySelect={handleCategorySelect}
-            selectedCategory={selectedCategory}
           />
 
           {loading && (
@@ -264,6 +345,7 @@ function MenuPage() {
             >
               {categoryBanners[category] && (
                 <MenuBanner
+                  ref={bannerRefs[category]}
                   imageSrc={categoryBanners[category]}
                   alt={`${category} banner`}
                 />

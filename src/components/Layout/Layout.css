@@ -4,18 +4,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--gamboge);
+  --header-height: calc(0.7rem * 2 + 55px);
 }
 
-/* Make middle nav truly centered */
 .nav-links {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   display: flex;
   align-items: center;
   gap: 1rem;
-  background-color: var(--jasmine);
   padding: 10px 15px;
   border-radius: 20px;
   flex-wrap: nowrap;
@@ -26,10 +27,13 @@
   object-fit: contain;
 }
 .nav-link {
+  
+  font-family: var(--font-pixel);
+  text-transform: uppercase;
   font-size: 0.85rem;
   font-weight: 500;
   text-decoration: none;
-  color: var(--china-rose);
+  color: var(--jasmine);
   padding: 0.3rem 0.5rem;
   border-radius: 8px;
   position: relative;
@@ -95,7 +99,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  color: var(--hunyadi-yellow);
+  color: black;
   transition: transform 0.5s ease;
 }
 .nav-bar-button svg:hover{
@@ -261,20 +265,19 @@
 }
 
 /* Responsive - expand on larger screens */
-/* Mobile responsive styles */
+/* Mobile and Tablet - show hamburger menu, hide nav links */
 @media (max-width: 767px) {
   .header {
     padding: 0.5rem 0.75rem;
+    --header-height: calc(0.5rem * 2 + 35px);
   }
   
   .nav-links {
-    gap: 0.5rem;
-    padding: 8px 10px;
+    display: none;
   }
   
-  .nav-link {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
+  .nav-bar-button {
+    display: flex;
   }
   
   .logo-container {
@@ -286,25 +289,26 @@
     padding: 15px 0.75rem;
     margin-bottom: 15px;
   }
-  
-  .menu-category-button {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.3rem;
-  }
 }
 
+/* Desktop - show nav links, hide hamburger menu */
 @media (min-width: 768px) {
   .header {
     padding: 0.7rem 2rem;
   }
   
+  .nav-bar-button {
+    display: none;
+  }
+  
   .nav-links {
+    display: flex;
     gap: 2rem;
     padding: 12px 40px;
   }
   
   .nav-link {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     padding: 0.3rem 0.6rem;
   }
   
@@ -319,6 +323,15 @@
   
   .nav-bar {
     width: 350px;
+  }
+  
+  .nav-item {
+    font-size: 1.5rem;
+  }
+  
+  .nav-item svg {
+    width: 28px;
+    height: 28px;
   }
   
   .nav-chickens {
