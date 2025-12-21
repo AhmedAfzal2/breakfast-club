@@ -48,7 +48,11 @@ function ReviewsPage() {
       try {
         setLoading(true);
         const data = await reviewsApi.getAllReviews();
-        setReviews(data);
+        // Filter reviews to only show those with comments (quote field)
+        const reviewsWithComments = data.filter(
+          (review) => review.quote && review.quote.trim().length > 0
+        );
+        setReviews(reviewsWithComments);
         setError(null);
       } catch (err) {
         setError(err.message);
