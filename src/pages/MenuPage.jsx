@@ -89,8 +89,9 @@ function MenuPage() {
   }, []);
 
   const onPlace = () => {
-    console.log("place");
+    console.log("place", ctx.cartItems);
     //USHAB DO
+    // u can access cart items by doing ctx.cartItems
     // also it should navigate to home page
 
     // leev this
