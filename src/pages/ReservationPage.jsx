@@ -155,8 +155,44 @@ function ReservationPage() {
   const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   // Get minimum time (1 hour from now, rounded to next 30-minute interval)
+  // If a future date is selected, use that date; otherwise use current date
   const getMinTime = () => {
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    
+    // If a date is selected and it's in the future, use that date
+    if (selectedDate) {
+      const selectedDateOnly = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate()
+      );
+      const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      // If selected date is today, use one hour from now
+      if (selectedDateOnly.getTime() === todayOnly.getTime()) {
+        const minutes = oneHourFromNow.getMinutes();
+        const roundedMinutes = minutes <= 30 ? 30 : 60;
+        const minTime = new Date(oneHourFromNow);
+        minTime.setMinutes(roundedMinutes === 60 ? 0 : roundedMinutes);
+        if (roundedMinutes === 60) {
+          minTime.setHours(minTime.getHours() + 1);
+        }
+        minTime.setSeconds(0);
+        minTime.setMilliseconds(0);
+        return minTime;
+      } else {
+        // If selected date is in the future, allow any time from that date
+        return new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          selectedDate.getDate(),
+          0,
+          0
+        );
+      }
+    }
+    
+    // No date selected, use one hour from now
     const minutes = oneHourFromNow.getMinutes();
     const roundedMinutes = minutes <= 30 ? 30 : 60;
     const minTime = new Date(oneHourFromNow);
@@ -234,9 +270,21 @@ function ReservationPage() {
       setSelectedDate(date);
       if (date) {
         setDateError("");
+        // Clear time error when date is selected
+        if (timeError === "please select date first") {
+          setTimeError("");
+        }
+      } else {
+        // If date is cleared, also clear time
+        setSelectedTime(null);
+        setTimeError("");
       }
     }
     if (time !== undefined) {
+      if (!selectedDate && date === undefined) {
+        setTimeError("please select date first");
+        return;
+      }
       setSelectedTime(time);
       setIsTimeSpinnerOpen(false);
       if (time) {
@@ -254,6 +302,13 @@ function ReservationPage() {
       setReservedTables(result);
     }
   }, [selectedDate, selectedTime]);
+
+  // Clear time if date is removed
+  useEffect(() => {
+    if (!selectedDate && selectedTime) {
+      setSelectedTime(null);
+    }
+  }, [selectedDate]);
 
   const handleTimeChange = (time) => {
     handleDateAndTimeSelection(undefined, time);
@@ -294,6 +349,9 @@ function ReservationPage() {
             selectedTime={selectedTime}
             onTimeChange={handleTimeChange}
             minTime={minTime}
+            requireDate={true}
+            isDateSelected={!!selectedDate}
+            selectedDate={selectedDate}
           />
         </div>
       )}
@@ -341,9 +399,6 @@ function ReservationPage() {
       component: (
         <div>
           <CustomTimeInput />
-          {timeError && (
-            <span className="field-error-message">{timeError}</span>
-          )}
         </div>
       ),
       sectionClassName: "form-section",

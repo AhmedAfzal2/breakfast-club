@@ -3,7 +3,7 @@ import arrowIcon from "/assets/images/icons/arrow.png";
 import tickIcon from "/assets/images/icons/tick.png";
 import "./TimeSpinner.css";
 
-function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
+function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateSelected, selectedDate }) {
   const [hours, setHours] = useState(() => {
     if (selectedTime) {
       let h = selectedTime.getHours();
@@ -131,25 +131,29 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
     callback();
   };
 
-  const validateTime = (timeToValidate) => {
+  const validateTime = (timeToValidate, dateToValidate) => {
     const now = new Date();
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
 
-    // Check if time is before current time
+    // Check if date+time combination is before current date+time
+    // Compare the full date+time, not just time
     if (timeToValidate < now) {
       return "Cannot select a time in the past";
     }
 
-    // Check if time is before one hour from now
+    // Check if date+time combination is before one hour from now
+    // This considers both the selected date and time
     if (timeToValidate < oneHourFromNow) {
       return "Reservations must be at least 1 hour from now";
     }
 
     // Check if time is within valid range (before 11:30 PM)
+    // Use the selected date or current date for max time
+    const dateForMax = dateToValidate || now;
     const maxTime = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
+      dateForMax.getFullYear(),
+      dateForMax.getMonth(),
+      dateForMax.getDate(),
       23,
       30
     );
@@ -163,20 +167,29 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
   const handleConfirm = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Check if date is required and selected - this check comes FIRST
+    if (requireDate && !isDateSelected) {
+      setError("please select date first");
+      return;
+    }
+    
     const now = new Date();
     let hour24 = hours;
     if (amPm === "PM" && hours !== 12) hour24 = hours + 12;
     if (amPm === "AM" && hours === 12) hour24 = 0;
 
+    // Use selectedDate if available, otherwise use current date
+    const dateToUse = selectedDate || now;
     const newTime = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
+      dateToUse.getFullYear(),
+      dateToUse.getMonth(),
+      dateToUse.getDate(),
       hour24,
       minutes
     );
 
-    const validationError = validateTime(newTime);
+    const validationError = validateTime(newTime, dateToUse);
     if (validationError) {
       setError(validationError);
       return;
@@ -215,7 +228,7 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
             <button
               type="button"
               className="spinner-button spinner-button-up"
-              onClick={(e) => handleButtonClick(e, incrementHours)}
+              onClick={(e) => handleButtonClick(e, decrementHours)}
             >
               <img src={arrowIcon} alt="Up" />
             </button>
@@ -227,7 +240,7 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
             <button
               type="button"
               className="spinner-button spinner-button-down"
-              onClick={(e) => handleButtonClick(e, decrementHours)}
+              onClick={(e) => handleButtonClick(e, incrementHours)}
             >
               <img src={arrowIcon} alt="Down" />
             </button>
@@ -237,7 +250,7 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
             <button
               type="button"
               className="spinner-button spinner-button-up"
-              onClick={(e) => handleButtonClick(e, incrementMinutes)}
+              onClick={(e) => handleButtonClick(e, decrementMinutes)}
             >
               <img src={arrowIcon} alt="Up" />
             </button>
@@ -249,7 +262,7 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime }) {
             <button
               type="button"
               className="spinner-button spinner-button-down"
-              onClick={(e) => handleButtonClick(e, decrementMinutes)}
+              onClick={(e) => handleButtonClick(e, incrementMinutes)}
             >
               <img src={arrowIcon} alt="Down" />
             </button>

@@ -55,9 +55,23 @@
 
 .spinner-button-up img {
   transform: rotate(0deg);
+  transition: none;
 }
 
 .spinner-button-down img {
+  transform: rotate(180deg);
+  transition: none;
+}
+
+.spinner-button:hover img {
+  transform: inherit;
+}
+
+.spinner-button-up:hover img {
+  transform: rotate(0deg);
+}
+
+.spinner-button-down:hover img {
   transform: rotate(180deg);
 }
 

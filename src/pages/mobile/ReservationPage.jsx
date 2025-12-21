@@ -15,6 +15,16 @@ function MobileReservationPage() {
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setDateError("");
+    // Clear time and time error when date is selected
+    if (date) {
+      if (timeError === "please select date first") {
+        setTimeError("");
+      }
+    } else {
+      // If date is cleared, also clear time
+      setSelectedTime(null);
+      setTimeError("");
+    }
   };
 
   const handleTimeChange = (time) => {
@@ -38,6 +48,7 @@ function MobileReservationPage() {
             selectedTime={selectedTime}
             onTimeChange={handleTimeChange}
             timeError={timeError}
+            selectedDate={selectedDate}
           />
           
           <SlotDetails
