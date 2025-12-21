@@ -5,18 +5,22 @@ import "./Cart.css";
 
 function Cart({ isOpen, onBack, onPlace }) {
   const ctx = useCart();
+  const isEmpty = ctx.cartItems.length === 0;
+  console.log(isEmpty);
   return (
     <div id="cart" className={isOpen ? "open" : "closed"}>
       <div style={{ flex: 1 }}>
-        <div className="cart-header">your cart</div>
+        <div className="cart-header">{!isEmpty ? "your cart" : "empty"}</div>
         <Items />
         <div className="control-row">
           <div className="control-btn" onClick={onBack}>
             back to menu
           </div>
-          <div className="control-btn" onClick={ctx.onClear}>
-            clear cart
-          </div>
+          {!isEmpty && (
+            <div className="control-btn" onClick={ctx.onClear}>
+              clear cart
+            </div>
+          )}
         </div>
       </div>
       <div>
