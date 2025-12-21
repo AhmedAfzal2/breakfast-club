@@ -5,6 +5,7 @@ import connectDB from './config/database.js';
 import reservationRoutes from './routes/reservations.js';
 import menuItemRoutes from './routes/menuItems.js';
 import reviewRoutes from './routes/reviews.js';
+import contactRoutes from './routes/contacts.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/menu-items', menuItemRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/contacts', contactRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {

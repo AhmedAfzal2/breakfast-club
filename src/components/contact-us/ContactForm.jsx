@@ -53,7 +53,7 @@ function ContactForm() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     const form = e.target;
@@ -94,18 +94,26 @@ function ContactForm() {
       return;
     }
 
-    // Print JSON data to console
-    console.log("=== CONTACT FORM SUBMISSION ===");
-    console.log(JSON.stringify(formData, null, 2));
-    console.log("===============================");
-
-    alert("Thank you for your feedback!");
-    
-    // Reset form
-    form.reset();
-    setRating(0);
-    setErrors({});
-    setShowErrors(false);
+    // Submit to API
+    try {
+      const { contactApi } = await import('../../services/contactApi');
+      const response = await contactApi.submitContactForm(formData);
+      
+      if (response.success) {
+        alert("Thank you for your feedback! We'll get back to you soon.");
+        
+        // Reset form
+        form.reset();
+        setRating(0);
+        setErrors({});
+        setShowErrors(false);
+      } else {
+        throw new Error(response.message || 'Failed to submit form');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert("There was an error submitting your form. Please try again later.");
+    }
   };
 
   return (

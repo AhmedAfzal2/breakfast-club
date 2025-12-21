@@ -2,6 +2,7 @@ import express from 'express';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { sendContactEmail, sendConfirmationEmail } from '../services/emailService.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -59,9 +60,25 @@ router.post('/', async (req, res) => {
     data.contacts.push(submission);
     await writeContacts(data);
 
+    // Send email notification to restaurant owner
+    const emailResult = await sendContactEmail(req.body);
+    if (!emailResult.success) {
+      console.warn('Email sending failed:', emailResult.message);
+      // Don't fail the request if email fails, just log it
+    }
+
+    // Optionally send confirmation email to customer
+    if (process.env.SEND_CONFIRMATION_EMAIL === 'true') {
+      const confirmationResult = await sendConfirmationEmail(req.body);
+      if (!confirmationResult.success) {
+        console.warn('Confirmation email sending failed:', confirmationResult.message);
+      }
+    }
+
     res.status(200).json({
       success: true,
-      message: 'Contact form submitted successfully'
+      message: 'Contact form submitted successfully',
+      emailSent: emailResult.success
     });
   } catch (error) {
     console.error('Error processing contact submission:', error);
