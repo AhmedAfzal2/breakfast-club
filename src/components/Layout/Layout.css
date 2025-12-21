@@ -14,9 +14,8 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  background-color: var(--jasmine);
-  padding: 10px 15px;
+  gap: 1.5rem;
+  padding: 5px;
   border-radius: 20px;
   flex-wrap: nowrap;
 }
@@ -26,69 +25,92 @@
   object-fit: contain;
 }
 .nav-link {
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-decoration: none;
-  color: var(--china-rose);
-  padding: 0.3rem 0.5rem;
-  border-radius: 8px;
-  position: relative;
-  transition: background-color 0.25s ease, color 0.25s ease;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px; /* Rectangular with slight rounding */
+  transition: transform 0.3s ease, background-color 0.2s ease;
+  background: none;
+}
+
+.nav-link img {
+  width: 8rem;  /* Bigger buttons */
+  height: auto;
+  object-fit: contain;
+  display: block;
+  image-rendering: pixelated; /* For game-like look */
+  transition: filter 0.2s ease;
 }
 
 /* Rounded hover box */
 .nav-link:hover {
-  background-color: rgba(193, 84, 128, 0.15);
+  background-color: transparent;
+  transform: scale(1.1);
 }
 
-/* Underline animation */
+.nav-link:hover img {
+  filter: brightness(1.1); /* Lighter on hover */
+}
+
+/* Remove underline animation for image buttons */
 .nav-link::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
-  width: 0;
-  height: 2px;
-  background-color: var(--china-rose);
-  transition: width 0.3s ease, left 0.3s ease;
-}
-
-.nav-link:hover::after {
-  width: 100%;
-  left: 0;
+  display: none;
 }
 
 .nav-link.active {
-  background-color: rgba(193, 84, 128, 0.18);
+  background-color: transparent;
+  transform: scale(1.1);
+  position: relative;
 }
 
 .nav-link.active::after {
-  width: 100%;
-  left: 0;
+  display: block;
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 60%;
+  height: 4px;
+  background-color: var(--jasmine);
+  border-radius: 2px;
 }
 
-.pixel-icon {
-  width: 26px;               /* fixed size in pixels */
-  height: 26px;
-  image-rendering: pixelated; /* blocky rendering */
+.nav-link.active img {
+  filter: brightness(1.1); /* Lighter when active */
 }
 
-.pixel-icon svg,
-.pixel-icon > * {
-  shape-rendering: crispEdges;       /* sharp edges */
-  stroke-width: 2.5;                 /* thick enough for pixel look */
-  stroke-linecap: square;
-  stroke-linejoin: miter;
-}
-
+/* Hide nav-bar-button by default (desktop) */
 .nav-bar-button {
-  width: auto;       /* let icon define the size */
+  display: none;
+  width: auto;
   height: auto;
   cursor: pointer;
-  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Desktop Home Button */
+.desktop-home-button {
+  display: block;
+  transition: transform 0.3s ease;
+}
+.desktop-home-button :hover{
+  transform: scale(1.05);
+}
+
+/* Specific override for Home button when active */
+.desktop-home-button .nav-link.active {
+  transform: none;
+}
+
+.desktop-home-button .nav-link.active::after {
+  display: none;
+}
+
+.desktop-home-button .nav-link img {
+  width: 2.5rem; /* Smaller home button */
 }
 
 .nav-bar-button svg {
@@ -262,19 +284,19 @@
 
 /* Responsive - expand on larger screens */
 /* Mobile responsive styles */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .header {
     padding: 0.5rem 0.75rem;
   }
   
-  .nav-links {
-    gap: 0.5rem;
-    padding: 8px 10px;
+  /* Hide image buttons on mobile */
+  .nav-links, .desktop-home-button {
+    display: none;
   }
-  
-  .nav-link {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
+
+  /* Show hamburger menu on mobile */
+  .nav-bar-button {
+    display: flex;
   }
   
   .logo-container {
@@ -293,19 +315,28 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .header {
     padding: 0.7rem 2rem;
   }
   
+  /* Show image buttons on desktop */
   .nav-links {
-    gap: 2rem;
-    padding: 12px 40px;
+    display: flex;
+  }
+  
+  .desktop-home-button {
+    display: block;
+  }
+
+  /* Hide hamburger menu on desktop */
+  .nav-bar-button {
+    display: none;
   }
   
   .nav-link {
-    font-size: 0.95rem;
-    padding: 0.3rem 0.6rem;
+    /* font-size: 0.95rem;  Removed as we use images */
+    padding: 0.5rem;
   }
   
   .logo-container {

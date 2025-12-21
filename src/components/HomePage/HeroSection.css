@@ -4,7 +4,7 @@
 }
 
 .hero-section {
-    padding: 0;
+    padding: 20px; /* Ensure content never touches the edges */
     border-radius: 0;
     box-shadow: none;
     background-color: transparent;
@@ -16,6 +16,7 @@
     text-align: center; /* Center text inside the content box */
     position: relative;
     overflow: hidden;
+    box-sizing: border-box; /* Include padding in width/height calculations */
 }
 
 .hero-full-bg {
@@ -29,18 +30,21 @@
 
 /* Centered Content Styling */
 .hero-content-centered {
+    width: auto;
     max-width: 600px;
-    padding: 10px;
+    margin: 2rem auto; /* Center horizontally if flex fails */
+    padding: 2rem;
     z-index: 2; /* Ensure content is above the overlay */
-    margin-top: 10%;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    backdrop-filter: blur(3px); /* Adds a nice glass effect */
+    box-sizing: border-box;
 }
 
 .hero-title {
     font-size: 3.5em;
     color: var(--jasmine);/* Ensure the title is white */
-    margin-top: 0.5em;
+    margin-top: 0.2em;
     margin-bottom: 0.1em;
     font-weight: 500;
     text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6); 
@@ -50,7 +54,7 @@
 .hero-subtitle {
     font-size: 1.2em;
     color: #eee;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
     line-height: 1.4;
     font-family: 'Roboto Slab', serif;
 }
@@ -60,7 +64,7 @@
     justify-content: center;
     gap:20px;
     background-color: transparent;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 .btn{
     background-color: transparent;
@@ -92,31 +96,76 @@
     transform: scale(1.05);
 }
 
-/* Media Query remains important for smaller screens */
+/* Responsive Design */
+
+/* Tablet and smaller desktops */
+@media (max-width: 1024px) {
+    .hero-section {
+        min-height: 50vh;
+        padding: 20px;
+    }
+    
+    .hero-content-centered {
+        max-width: 70%; /* More breathing room */
+    }
+}
+
+/* Mobile devices */
 @media (max-width: 768px) {
     .hero-section {
-        /* Reduce the height for smaller screens, making the whole picture smaller */
-        min-height: 40vh; /* Now takes up 40% of the viewport height */
+        /* Smaller height as requested */
+        min-height: 40vh; 
+        padding: 15px; /* Ensure gap from edges */
     }
+
+    .hero-content-centered {
+        /* Smaller box relative to the image */
+        max-width: 85%; 
+        padding: 15px;
+    }
+
     .hero-title {
-        /* This scales the font based on the viewport width (7% of viewport width) */
-        font-size: 7vw; 
-        line-height: 1.2;
+        font-size: 1.8rem;
     }
+
     .hero-subtitle {
-        font-size: 4vw;
+        font-size: 0.9rem;
+        margin-bottom: 1em;
     }
+
     .hero-actions {
-        /* Revert to stacking for mobile */
-        flex-direction: row; 
-        gap: 20px;
+        gap: 10px;
+        width: 100%;
+        justify-content: center;
     }
-    .btn-img {
-        width: 50px;
-        height: 50px;
+
+    .btn {
+        width: 30%;
     }
-    .btn-icon {
-        width: 28px;
-        height: 28px;
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .hero-section {
+        min-height: 35vh; /* Even smaller */
+        padding: 10px;
+    }
+
+    .hero-content-centered {
+        max-width: 95%; /* Can go wider because parent padding protects edges */
+        padding: 10px;
+    }
+
+    .hero-title {
+        font-size: 1.4rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.75rem;
+        margin-bottom: 0.8em;
+    }
+    
+    .btn {
+        width: 35%;
     }
 }

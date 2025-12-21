@@ -103,7 +103,10 @@ const DishesSection = forwardRef((props, ref) => {
             
             {/* --- RIGHT COLUMN: Carousel --- */}
             <div className="dishes-carousel-column">
-                <div className="carousel-container">
+                <div 
+                    className="carousel-container"
+                    style={{ '--progress-width': `${((startIndex + 1) / dummyDishes.length) * 100}%` }}
+                >
                     {/* Dishes Carousel Track: Transform applied for sliding effect */}
                     <div 
                         className="dishes-carousel" 

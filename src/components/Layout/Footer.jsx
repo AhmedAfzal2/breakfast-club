@@ -1,5 +1,6 @@
 // src/components/Footer.jsx
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
 import {
@@ -14,29 +15,57 @@ import {
 } from "lucide-react";
 
 function Footer() {
+  const [isOpen, setIsOpen] = useState(false);
+  const footerRef = useRef(null);
+
+  const toggleFooter = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (footerRef.current && !footerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <footer className="footer">
-      <div className="footer-indicator">
-        <ChevronUp className="chevron chevron-up" size={22} />
-        <ChevronDown className="chevron chevron-down" size={22} />
-      </div>
-      <div className="footer-top">
+    <>
+      {isOpen && (
+        <div className="footer-backdrop" onClick={() => setIsOpen(false)}></div>
+      )}
+      <footer className={`footer ${isOpen ? "open" : ""}`} ref={footerRef}>
+        <div className="footer-indicator" onClick={toggleFooter}>
+          <ChevronUp className="chevron chevron-up" size={22} />
+          <ChevronDown className="chevron chevron-down" size={22} />
+        </div>
+        <div className="footer-content">
+          <div className="footer-top">
         <div className="footer-logo">
           <img src={breakfastClubLogo} alt="Breakfast Club Logo" />
         </div>
         <div className="footer-line"></div>
         <div className="footer-links">
-          <a href="#menu">Menu</a>
-          <a href="#about">About us</a>
-          <a href="#contact">Contact</a>
-          <a href="#reservations">Reservations</a>
+          <Link to="/menu">Menu</Link>
+          <Link to="/">About us</Link>
+          <Link to="/contact">Contact</Link>
+          <Link to="/reservations">Reservations</Link>
         </div>
       </div>
       <div className="footer-heading">
         <h1>EXPLORE OUR SERVICES!</h1>
       </div>
       <div className="footer-tools">
-        <div className="tool-card">
+        <Link to="/menu" className="tool-card">
           <div className="tool-text">
             <span>
               <strong style={{ color: "var(--china-rose)" }}>ORDER</strong> now!
@@ -48,13 +77,12 @@ function Footer() {
           </div>
           <div className="tool-image">
             <img
-              src="/assets/images/pancake.png"
+              src="assets/images/menu-items/breakfast/hot-breakfast/pancake.png"
               alt="Order Food"
-              style={{ width: "100px", height: "100px" }}
             />
           </div>
-        </div>
-        <div className="tool-card">
+        </Link>
+        <Link to="/menu" className="tool-card">
           <div className="tool-text">
             <span>
               <strong style={{ color: "var(--china-rose)" }}>BEVERAGES</strong>{" "}
@@ -66,10 +94,10 @@ function Footer() {
             </p>
           </div>
           <div className="tool-image">
-            <img src="/assets/images/sharbat.png" alt="Beverages" />
+            <img src="assets\images\menu-items\drinks\Cold\sharbat.png" alt="Beverages" />
           </div>
-        </div>
-        <div className="tool-card">
+        </Link>
+        <Link to="/reservations" className="tool-card">
           <div className="tool-text">
             <span>
               <strong style={{ color: "var(--china-rose)" }}>RESERVE</strong>{" "}
@@ -83,7 +111,7 @@ function Footer() {
           <div className="tool-image">
             <img src="/assets/images/hen.png" alt="Reserve Table" />
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="footer-bottom">
@@ -101,7 +129,9 @@ function Footer() {
           <Github size={20} />
         </div>
       </div>
+      </div>
     </footer>
+    </>
   );
 }
 
