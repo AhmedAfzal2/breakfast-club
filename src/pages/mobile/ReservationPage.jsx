@@ -5,6 +5,10 @@ import "./ReservationPage.css";
 import Calendar from "./components/Calendar";
 import Time from "./components/Time";
 import SlotDetails from "./components/SlotDetails";
+import Button from "../../components/Button";
+import ConfirmationPopup from "../../components/ConfirmationPopup";
+import SelectTablePopup from "./components/SelectTablePopup";
+import ContactInfoPopup from "./components/ContactInfoPopup";
 import tables from "../../components/reservation/game/tables";
 
 function MobileReservationPage() {
@@ -13,6 +17,11 @@ function MobileReservationPage() {
   const [dateError, setDateError] = useState("");
   const [timeError, setTimeError] = useState("");
   const [reservedTables, setReservedTables] = useState([]);
+  const [showValidationPopup, setShowValidationPopup] = useState(false);
+  const [showSelectTablePopup, setShowSelectTablePopup] = useState(false);
+  const [showContactInfoPopup, setShowContactInfoPopup] = useState(false);
+  const [selectedTables, setSelectedTables] = useState([]);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
   // Fetch reserved tables from database for the given date and time
   const getReservedTables = async (date, time) => {
@@ -69,6 +78,103 @@ function MobileReservationPage() {
     setTimeError("");
   };
 
+  const handleContinueClick = () => {
+    // Validate that both date and time are selected
+    if (!selectedDate || !selectedTime) {
+      setShowValidationPopup(true);
+      return;
+    }
+    
+    // If both are selected, show the select table popup
+    setShowSelectTablePopup(true);
+  };
+
+  const getTableCapacity = (tableId) => {
+    return tables.find((t) => t.id === tableId)?.capacity || 0;
+  };
+
+  const handleTableSelect = (tableId) => {
+    // Check if table is already selected
+    const isAlreadySelected = selectedTables.some(
+      (table) => table.id === tableId
+    );
+
+    if (!isAlreadySelected) {
+      // Add the table to the selected list with capacity from tables configuration
+      const capacity = getTableCapacity(tableId);
+      setSelectedTables((prevTables) => [
+        ...prevTables,
+        { id: tableId, capacity: capacity },
+      ]);
+    }
+  };
+
+  const handleTableDeselect = (tableId) => {
+    setSelectedTables((prevTables) =>
+      prevTables.filter((table) => table.id !== tableId)
+    );
+  };
+
+  const handleTableContinue = () => {
+    // Open contact info popup without closing select table popup
+    setShowContactInfoPopup(true);
+  };
+
+  const calculateMaxGuests = () => {
+    if (selectedTables.length === 0) return 0;
+    return selectedTables.reduce((total, table) => total + table.capacity, 0);
+  };
+
+  const handleContactFormSubmit = async (formData) => {
+    const tableNumbers = selectedTables.map((table) => table.id);
+    const maxGuests = calculateMaxGuests();
+
+    const reservationData = {
+      date: selectedDate ? selectedDate.toISOString() : null,
+      time: selectedTime ? selectedTime.toISOString() : null,
+      tableNumbers: tableNumbers,
+      name: formData.name,
+      contactNumber: formData.contactNumber,
+      occasion: formData.occasion || null,
+      additionalNotes: formData.additionalNotes || null,
+      maxGuests: maxGuests,
+      tables: selectedTables,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/reservations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Reservation submitted successfully:", reservationData);
+        // Close all popups
+        setShowSelectTablePopup(false);
+        setShowContactInfoPopup(false);
+        // Clear all reservation state after successful submission
+        setSelectedDate(null);
+        setSelectedTime(null);
+        setSelectedTables([]);
+        setReservedTables([]);
+        // Show confirmation popup
+        setIsConfirmationOpen(true);
+      } else {
+        console.error("Failed to submit reservation:", result.message);
+      }
+    } catch (error) {
+      console.error("Error submitting reservation:", error);
+    }
+  };
+
   return (
     <Layout>
       <div className="mobile-reservation-page">
@@ -95,7 +201,45 @@ function MobileReservationPage() {
             tables={tables}
           />
         </div>
+        <div className="mobile-reservation-button-section">
+          <Button text="continue" onClick={handleContinueClick} />
+        </div>
       </div>
+      <ConfirmationPopup
+        isOpen={showValidationPopup}
+        onClose={() => setShowValidationPopup(false)}
+        type="error"
+      />
+      <SelectTablePopup
+        isOpen={showSelectTablePopup}
+        onClose={() => setShowSelectTablePopup(false)}
+        selectedDate={selectedDate}
+        selectedTime={selectedTime}
+        reservedTables={reservedTables}
+        selectedTables={selectedTables}
+        onTableSelect={handleTableSelect}
+        onTableDeselect={handleTableDeselect}
+        onContinue={handleTableContinue}
+      />
+      <ContactInfoPopup
+        isOpen={showContactInfoPopup}
+        onClose={() => setShowContactInfoPopup(false)}
+        onSubmit={handleContactFormSubmit}
+      />
+      <ConfirmationPopup
+        isOpen={isConfirmationOpen}
+        onClose={() => {
+          setIsConfirmationOpen(false);
+          // Ensure all popups are closed and state is cleared
+          setShowSelectTablePopup(false);
+          setShowContactInfoPopup(false);
+          setSelectedDate(null);
+          setSelectedTime(null);
+          setSelectedTables([]);
+          setReservedTables([]);
+        }}
+        type="reservation"
+      />
     </Layout>
   );
 }

@@ -14,6 +14,14 @@ function ConfirmationPopup({ isOpen, onClose, type = "contact" }) {
     reservation: {
       title: "Reservation Received!",
       text: "Your reservation has been confirmed. We're looking forward to seeing you!"
+    },
+    error: {
+      title: "Please Select Date and Time",
+      text: "You need to select both date and time before continuing."
+    },
+    "error-table": {
+      title: "Please Select a Table",
+      text: "You need to select at least one table before continuing."
     }
   };
 

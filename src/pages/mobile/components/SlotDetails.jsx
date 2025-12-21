@@ -2,27 +2,6 @@ import React from "react";
 import "./SlotDetails.css";
 
 function SlotDetails({ selectedDate, selectedTime, reservedTables = [], tables = [] }) {
-  const formatDate = (date) => {
-    if (!date) return "--";
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (time) => {
-    if (!time) return "--";
-    const h = time.getHours();
-    const m = time.getMinutes();
-    const hour12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
-    const ampm = h >= 12 ? "PM" : "AM";
-    return `${hour12.toString().padStart(2, "0")}:${m
-      .toString()
-      .padStart(2, "0")} ${ampm}`;
-  };
-
   // Calculate free tables and total seats from MongoDB data
   const getFreeNSeaters = (n) => {
     let total = 0;
@@ -48,31 +27,21 @@ function SlotDetails({ selectedDate, selectedTime, reservedTables = [], tables =
 
   return (
     <div className="mobile-slot-details-container">
-      <h3 className="heading section-label">slot details</h3>
+      <h3 className="heading section-label mobile-slot-heading">slot details</h3>
       <div className="mobile-slot-line" />
       <div className="mobile-slot-content">
-        <div className="mobile-slot-item">
-          <span className="mobile-slot-label">Date:</span>
-          <span className="mobile-slot-value">{formatDate(selectedDate)}</span>
-        </div>
-        <div className="mobile-slot-item">
-          <span className="mobile-slot-label">Time:</span>
-          <span className="mobile-slot-value">{formatTime(selectedTime)}</span>
-        </div>
-        {isDateAndTimeSelected && (
+        {isDateAndTimeSelected ? (
           <>
-            <div className="mobile-slot-item">
-              <span className="mobile-slot-label">Available Tables:</span>
-              <span className="mobile-slot-value">
-                {getFreeNSeaters(4)} x 4-seaters • {getFreeNSeaters(2)} x 2-seaters
-              </span>
-            </div>
-            <div className="mobile-slot-item">
-              <span className="mobile-slot-label">Max Guests:</span>
-              <span className="mobile-slot-value">{getTotalSeats()}</span>
-            </div>
+            <span>{getFreeNSeaters(4)} x 4-seaters</span>
+            <span className="bullet">•</span>
+            <span>{getFreeNSeaters(2)} x 2-seaters</span>
           </>
+        ) : (
+          <span>Please select date and time</span>
         )}
+      </div>
+      <div className="mobile-slot-max">
+        max guests: {isDateAndTimeSelected ? getTotalSeats() : 0}
       </div>
     </div>
   );

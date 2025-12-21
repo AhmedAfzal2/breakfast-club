@@ -138,13 +138,13 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateS
     // Check if date+time combination is before current date+time
     // Compare the full date+time, not just time
     if (timeToValidate < now) {
-      return "Cannot select a time in the past";
+      return "cannot select a time in the past";
     }
 
     // Check if date+time combination is before one hour from now
     // This considers both the selected date and time
     if (timeToValidate < oneHourFromNow) {
-      return "Reservations must be at least 1 hour from now";
+      return "reservations must be at least 1 hour from now";
     }
 
     // Check if time is within valid range (before 11:30 PM)
@@ -158,7 +158,7 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateS
       30
     );
     if (timeToValidate > maxTime) {
-      return "Reservations must be before 11:30 PM";
+      return "reservations must be before 11:30 pm";
     }
 
     return null; // Valid time
