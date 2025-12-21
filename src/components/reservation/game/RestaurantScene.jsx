@@ -30,7 +30,10 @@ const RestaurantScene = forwardRef((props, ref) => {
         ...style.scene,
         width: props.size.width,
         height: props.size.height,
+        transform: "scale(1)",
+        transformOrigin: "top left",
       }}
+      className="restaurant-scene"
     >
       <img src="/assets/images/bar.png" style={{ ...style.bar }} />
       {tables.map((t) => {
