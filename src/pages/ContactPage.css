@@ -3,23 +3,48 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 0;
   min-height: calc(100vh - 200px);
 }
 
 .contact-page .page-heading {
-  margin-bottom: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  align-items: start;
+}
+
+.contact-form-column {
+  width: 100%;
+}
+
+.contact-sidebar-column {
+  width: 100%;
 }
 
 @media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
   .contact-page {
     padding: 0;
     min-height: calc(100vh - 150px);
   }
 
   .contact-page .page-heading {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-grid {
+    gap: 1rem;
   }
 }
 
