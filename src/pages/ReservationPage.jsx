@@ -85,8 +85,7 @@ function ReservationPage() {
     );
 
     if (!isAlreadySelected) {
-      // Add the table to the selected list with dummy capacity
-      // Capacity will be fetched from database later
+      // Add the table to the selected list with capacity from tables configuration
       const capacity = getTableCapacity(tableId);
       setSelectedTables((prevTables) => [
         ...prevTables,
@@ -250,18 +249,28 @@ function ReservationPage() {
     return selectedDate && selectedTime;
   };
 
-  // dummy function which should lookup database to see already reserved tables
-  // for the given time and return a list of table ids for that
-  const getReservedTables = (date, time) => {
-    // 2 random tables as dummy data
-    let a = Math.floor(Math.random() * 6) + 1;
-    let b;
+  // Fetch reserved tables from database for the given date and time
+  const getReservedTables = async (date, time) => {
+    try {
+      if (!date || !time) {
+        return [];
+      }
 
-    do {
-      b = Math.floor(Math.random() * 6) + 1;
-    } while (b === a);
+      const response = await fetch(
+        `http://localhost:3001/api/reservations/reserved-tables?date=${encodeURIComponent(date.toISOString())}&time=${encodeURIComponent(time.toISOString())}`
+      );
 
-    return [a, b];
+      if (response.ok) {
+        const result = await response.json();
+        return result.reservedTableIds || [];
+      } else {
+        console.error('Error fetching reserved tables:', response.statusText);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error fetching reserved tables:', error);
+      return [];
+    }
   };
 
   // Handle date and time selection - unified function
@@ -298,8 +307,11 @@ function ReservationPage() {
   // sets reserved tables whenever time and date are selected
   useEffect(() => {
     if (selectedDate && selectedTime) {
-      const result = getReservedTables(selectedDate, selectedTime);
-      setReservedTables(result);
+      getReservedTables(selectedDate, selectedTime).then(result => {
+        setReservedTables(result);
+      });
+    } else {
+      setReservedTables([]);
     }
   }, [selectedDate, selectedTime]);
 
@@ -493,19 +505,38 @@ function ReservationPage() {
               <div className="slot-line" />
               <div className="reservation-info">
                 {selectedTables.length > 0 ? (
-                  <div className="table-numbers">
-                    <span className="reservation-label">Selected Tables: </span>
-                    <span className="table-ids">
-                      {selectedTables.map((table, index) => (
-                        <React.Fragment key={table.id}>
-                          <span>Table {table.id}</span>
-                          {index < selectedTables.length - 1 && (
-                            <span className="bullet">•</span>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </span>
-                  </div>
+                  <>
+                    <div className="table-numbers">
+                      <span className="reservation-label">Selected Tables: </span>
+                      <span className="table-ids">
+                        {selectedTables.map((table, index) => (
+                          <React.Fragment key={table.id}>
+                            <span>Table {table.id} ({table.capacity}-seater)</span>
+                            {index < selectedTables.length - 1 && (
+                              <span className="bullet">•</span>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </span>
+                    </div>
+                    <div className="table-summary">
+                      <span className="reservation-label">Total Guests: </span>
+                      <span>{maxGuests}</span>
+                    </div>
+                    <div className="table-breakdown">
+                      {(() => {
+                        const counts = getTableCounts();
+                        const breakdown = [];
+                        if (counts[2]) {
+                          breakdown.push(`${counts[2]} x 2-seater${counts[2] > 1 ? 's' : ''}`);
+                        }
+                        if (counts[4]) {
+                          breakdown.push(`${counts[4]} x 4-seater${counts[4] > 1 ? 's' : ''}`);
+                        }
+                        return breakdown.length > 0 ? breakdown.join(' • ') : '';
+                      })()}
+                    </div>
+                  </>
                 ) : (
                   <span>No tables selected</span>
                 )}
@@ -572,6 +603,16 @@ function ReservationPage() {
                 reservationData
               );
               setIsReservationFormOpen(false);
+              
+              // Clear all reservation state after successful submission
+              setSelectedDate(null);
+              setSelectedTime(null);
+              setSelectedTables([]);
+              setReservedTables([]);
+              setGameEnable(false);
+              setDateError("");
+              setTimeError("");
+              
               // Optionally show a success message or redirect
             } else {
               console.error("Failed to submit reservation:", result.message);
@@ -585,7 +626,17 @@ function ReservationPage() {
       />
       <ConfirmationPopup
         isOpen={isConfirmationOpen}
-        onClose={() => setIsConfirmationOpen(false)}
+        onClose={() => {
+          setIsConfirmationOpen(false);
+          // Ensure state is cleared when popup is closed (in case it wasn't cleared on submit)
+          setSelectedDate(null);
+          setSelectedTime(null);
+          setSelectedTables([]);
+          setReservedTables([]);
+          setGameEnable(false);
+          setDateError("");
+          setTimeError("");
+        }}
         type="reservation"
       />
     </Layout>
