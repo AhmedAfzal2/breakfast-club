@@ -27,6 +27,7 @@
 }
 
 .cute-close-btn {
+  text-transform: lowercase;
   position: absolute;
   top: 8px;
   right: 10px;
@@ -37,7 +38,7 @@
 }
 
 .cute-confirm-title {
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: var(--font-pixel);
   font-size: 1.2rem;
   margin: 10px 0;
   color: #333;

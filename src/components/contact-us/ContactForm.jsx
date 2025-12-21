@@ -6,12 +6,14 @@ import StarRating from "./StarRating";
 import TextAreaField from "./TextAreaField";
 import SubmitButton from "./SubmitButton";
 import ValidationMessage from "./ValidationMessage";
+import ConfirmationPopup from "../ConfirmationPopup";
 import "./ContactForm.css";
 
 function ContactForm() {
   const [rating, setRating] = useState(0);
   const [errors, setErrors] = useState({});
   const [showErrors, setShowErrors] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const nameInputRef = useRef(null);
   const emailInputRef = useRef(null);
 
@@ -100,7 +102,8 @@ function ContactForm() {
       const response = await contactApi.submitContactForm(formData);
       
       if (response.success) {
-        alert("Thank you for your feedback! We'll get back to you soon.");
+        // Show confirmation popup immediately
+        setShowConfirmation(true);
         
         // Reset form
         form.reset();
@@ -186,6 +189,12 @@ function ContactForm() {
 
         <SubmitButton type="submit">Submit</SubmitButton>
       </form>
+      
+      <ConfirmationPopup 
+        isOpen={showConfirmation} 
+        onClose={() => setShowConfirmation(false)}
+        type="contact"
+      />
     </FormCard>
   );
 }

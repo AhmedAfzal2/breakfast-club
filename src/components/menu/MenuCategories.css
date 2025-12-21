@@ -8,8 +8,8 @@
   margin-bottom: 10px;
   position: -webkit-sticky;
   position: sticky;
-  top: 0;
-  z-index: 100;
+  top: var(--header-height, 77px);
+  z-index: 999;
   background-color: white;
   padding: 10px 0;
   margin-top: 0;
@@ -45,6 +45,10 @@
 }
 
 @media (max-width: 768px) {
+  .menu-categories {
+    top: var(--header-height, 51px);
+  }
+  
   .menu-category-button {
     font-size: 0.8rem;
   }
