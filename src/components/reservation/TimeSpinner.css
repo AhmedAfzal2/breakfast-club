@@ -55,9 +55,23 @@
 
 .spinner-button-up img {
   transform: rotate(0deg);
+  transition: none;
 }
 
 .spinner-button-down img {
+  transform: rotate(180deg);
+  transition: none;
+}
+
+.spinner-button:hover img {
+  transform: inherit;
+}
+
+.spinner-button-up:hover img {
+  transform: rotate(0deg);
+}
+
+.spinner-button-down:hover img {
   transform: rotate(180deg);
 }
 
@@ -126,5 +140,15 @@
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+  text-transform: lowercase;
+}
+
+/* Reduce error message size for mobile */
+@media (max-width: 768px) {
+  .time-spinner-error {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+    margin-top: 0.5rem;
+  }
 }
 

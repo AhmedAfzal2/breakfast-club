@@ -1,0 +1,152 @@
+.mobile-calendar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.mobile-calendar-container .heading.section-label {
+  font-size: 1.1rem;
+}
+
+.calendar {
+  width: 100%;
+  height: 100%;
+  padding: 0.75rem;
+  background-color: var(--jasmine);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  border-radius:10px;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+.calendar-month-year {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: lowercase;
+  color: var(--china-rose);
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  color: var(--china-rose);
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  align-content: stretch;
+  overflow: hidden;
+  background-color: var(--jasmine);
+}
+
+.calendar-day {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-right: 1px solid var(--china-rose);
+  border-bottom: 1px solid var(--china-rose);
+  background-color: white;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Add borders to edge cells (excluding empty cells) */
+/* Add top and left border to day cells that immediately follow empty cells - this has higher specificity */
+.calendar-days > .calendar-day.empty + .calendar-day:not(.empty) {
+  border-top: 1px solid var(--china-rose);
+  border-left: 1px solid var(--china-rose);
+}
+
+/* Add top border to remaining first row cells (those not following empty cells) */
+.calendar-days > .calendar-day:not(.empty):nth-child(-n+7) {
+  border-top: 1px solid var(--china-rose);
+}
+
+/* Left column - add left border to first column cells (those not following empty cells) */
+.calendar-day:not(.empty):nth-child(7n+1) {
+  border-left: 1px solid var(--china-rose);
+}
+
+/* Right column - keep right border (already set by default) */
+.calendar-day:not(.empty):nth-child(7n) {
+  border-right: 1px solid var(--china-rose);
+}
+
+/* Bottom row - keep bottom border (already set by default) */
+.calendar-days > .calendar-day:not(.empty):nth-last-child(-n+7) {
+  border-bottom: 1px solid var(--china-rose);
+}
+
+.calendar-day:hover:not(.past):not(.empty):not(.future) {
+  background-color: var(--gamboge);
+  color: white;
+}
+
+.calendar-day.selected {
+  background-color: var(--china-rose);
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.past {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+}
+
+.calendar-day.future {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+}
+
+.calendar-day.empty {
+  background-color: var(--jasmine);
+  border: none;
+  cursor: default;
+}
+
+.mobile-field-error-message {
+  display: block;
+  color: var(--china-rose);
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}

@@ -1,0 +1,39 @@
+.mobile-time-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.mobile-time-container .heading.section-label {
+  font-size: 1.1rem;
+}
+
+.mobile-time-disabled-message {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--jasmine);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.mobile-time-spinner-wrapper {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--jasmine);
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-field-error-message {
+  display: block;
+  color: var(--china-rose);
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
