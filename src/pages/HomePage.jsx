@@ -1,4 +1,5 @@
 import React from "react";
+import "./HomePage.css";
 import Layout from "../components/Layout/Layout";
 import HeroSection from "../components/HomePage/HeroSection";
 import DishesSection from "../components/HomePage/DishesSection";

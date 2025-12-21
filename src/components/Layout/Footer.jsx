@@ -1,5 +1,5 @@
 // src/components/Footer.jsx
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
@@ -15,13 +15,41 @@ import {
 } from "lucide-react";
 
 function Footer() {
+  const [isOpen, setIsOpen] = useState(false);
+  const footerRef = useRef(null);
+
+  const toggleFooter = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (footerRef.current && !footerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <footer className="footer">
-      <div className="footer-indicator">
-        <ChevronUp className="chevron chevron-up" size={22} />
-        <ChevronDown className="chevron chevron-down" size={22} />
-      </div>
-      <div className="footer-top">
+    <>
+      {isOpen && (
+        <div className="footer-backdrop" onClick={() => setIsOpen(false)}></div>
+      )}
+      <footer className={`footer ${isOpen ? "open" : ""}`} ref={footerRef}>
+        <div className="footer-indicator" onClick={toggleFooter}>
+          <ChevronUp className="chevron chevron-up" size={22} />
+          <ChevronDown className="chevron chevron-down" size={22} />
+        </div>
+        <div className="footer-content">
+          <div className="footer-top">
         <div className="footer-logo">
           <img src={breakfastClubLogo} alt="Breakfast Club Logo" />
         </div>
@@ -101,7 +129,9 @@ function Footer() {
           <Github size={20} />
         </div>
       </div>
+      </div>
     </footer>
+    </>
   );
 }
 

@@ -50,7 +50,7 @@
 }
 
 .nav-link:hover img {
-  filter: brightness(1.15); /* Lighter on hover */
+  filter: brightness(1.1); /* Lighter on hover */
 }
 
 /* Remove underline animation for image buttons */
@@ -60,7 +60,7 @@
 
 .nav-link.active {
   background-color: transparent;
-  transform: scale(1.15);
+  transform: scale(1.1);
   position: relative;
 }
 
