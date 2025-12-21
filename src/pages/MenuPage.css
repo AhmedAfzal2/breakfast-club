@@ -16,16 +16,9 @@
 .cart-icon {
   position: fixed;
   width: fit-content;
-  top: calc(var(--header-height, 77px) + var(--menu-categories-height, 60px) + 10px);
+  top: 3rem;
   right: 1rem;
-  z-index: 1000;
-  pointer-events: auto;
-}
-
-.cart-container {
-  position: absolute;
-  width: 100%;
-  padding: 0px;
+  z-index: 10;
 }
 
 .cart-bg {
@@ -33,7 +26,7 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   opacity: 100%;
   transition: opacity 1s;
 }
@@ -41,4 +34,15 @@
 .hidden {
   opacity: 0%;
   pointer-events: none;
+}
+
+/* remove scrollbar */
+html {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }

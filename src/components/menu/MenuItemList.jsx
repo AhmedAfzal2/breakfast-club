@@ -2,14 +2,7 @@ import React from "react";
 import MenuItem from "./MenuItem";
 import "./MenuItemList.css";
 
-function MenuItemList({
-  items,
-  onAddToBasket,
-  onItemClick,
-  getItemQuantity,
-  updateQuantity,
-  cardColor,
-}) {
+function MenuItemList({ items, onItemClick, cardColor }) {
   if (!items || items.length === 0) {
     return (
       <div className="menu-item-list-empty">
@@ -24,10 +17,7 @@ function MenuItemList({
         <MenuItem
           key={item.id || index}
           item={item}
-          onAddToBasket={onAddToBasket}
           onItemClick={onItemClick}
-          getItemQuantity={getItemQuantity}
-          updateQuantity={updateQuantity}
           cardColor={cardColor}
         />
       ))}

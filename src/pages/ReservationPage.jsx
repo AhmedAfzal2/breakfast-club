@@ -626,18 +626,7 @@ function ReservationPage() {
       />
       <ConfirmationPopup
         isOpen={isConfirmationOpen}
-        onClose={() => {
-          setIsConfirmationOpen(false);
-          // Ensure state is cleared when popup is closed (in case it wasn't cleared on submit)
-          setSelectedDate(null);
-          setSelectedTime(null);
-          setSelectedTables([]);
-          setReservedTables([]);
-          setGameEnable(false);
-          setDateError("");
-          setTimeError("");
-        }}
-        type="reservation"
+        onClose={() => setIsConfirmationOpen(false)}
       />
     </Layout>
   );

@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import "./QuantityControl.css";
+import { useCart } from "../menu/CartContext";
 
-function QuantityControl({
-  updateQuantity,
-  getItemQuantity,
-  onAddToBasket,
-  item,
-  fixed,
-}) {
-  const quantity = getItemQuantity(item.id);
+function QuantityControl({ item, fixed }) {
+  const ctx = useCart();
+  const quantity = ctx.getItemQuantity(item.id);
   return quantity > 0 ? (
     <div
       className={`quantity-control ${fixed ? "fixed" : ""}`}
@@ -20,7 +16,7 @@ function QuantityControl({
         className="plus-minus"
         onClick={(e) => {
           e.stopPropagation();
-          updateQuantity(item.id, quantity - 1);
+          ctx.updateQuantity(item.id, quantity - 1);
         }}
       >
         <svg viewBox="0 0 10 10" width="50%" height="50%">
@@ -39,7 +35,7 @@ function QuantityControl({
         className="plus-minus"
         onClick={(e) => {
           e.stopPropagation();
-          updateQuantity(item.id, quantity + 1);
+          ctx.updateQuantity(item.id, quantity + 1);
         }}
       >
         <svg viewBox="0 0 10 10" width="60%" height="60%">
@@ -67,7 +63,7 @@ function QuantityControl({
       className={`quantity-control add-to-basket ${fixed ? "fixed" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
-        onAddToBasket(item);
+        ctx.onAdd(item);
       }}
     >
       add to basket

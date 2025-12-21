@@ -4,20 +4,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: var(--gamboge);
-  --header-height: calc(0.7rem * 2 + 55px);
+  position: relative;
 }
 
+/* Make middle nav truly centered */
 .nav-links {
   position: absolute;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 10px 15px;
+  gap: 1.5rem;
+  padding: 5px;
   border-radius: 20px;
   flex-wrap: nowrap;
 }
@@ -27,79 +25,99 @@
   object-fit: contain;
 }
 .nav-link {
-  
-  font-family: var(--font-pixel);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-decoration: none;
-  color: var(--jasmine);
-  padding: 0.3rem 0.5rem;
-  border-radius: 8px;
-  position: relative;
-  transition: background-color 0.25s ease, color 0.25s ease;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px; /* Rectangular with slight rounding */
+  transition: transform 0.3s ease, background-color 0.2s ease;
+  background: none;
+}
+
+.nav-link img {
+  width: 8rem;  /* Bigger buttons */
+  height: auto;
+  object-fit: contain;
+  display: block;
+  image-rendering: pixelated; /* For game-like look */
+  transition: filter 0.2s ease;
 }
 
 /* Rounded hover box */
 .nav-link:hover {
-  background-color: rgba(193, 84, 128, 0.15);
+  background-color: transparent;
+  transform: scale(1.1);
 }
 
-/* Underline animation */
+.nav-link:hover img {
+  filter: brightness(1.1); /* Lighter on hover */
+}
+
+/* Remove underline animation for image buttons */
 .nav-link::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
-  width: 0;
-  height: 2px;
-  background-color: var(--china-rose);
-  transition: width 0.3s ease, left 0.3s ease;
-}
-
-.nav-link:hover::after {
-  width: 100%;
-  left: 0;
+  display: none;
 }
 
 .nav-link.active {
-  background-color: rgba(193, 84, 128, 0.18);
+  background-color: transparent;
+  transform: scale(1.1);
+  position: relative;
 }
 
 .nav-link.active::after {
-  width: 100%;
-  left: 0;
+  display: block;
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 60%;
+  height: 4px;
+  background-color: var(--jasmine);
+  border-radius: 2px;
 }
 
-.pixel-icon {
-  width: 26px;               /* fixed size in pixels */
-  height: 26px;
-  image-rendering: pixelated; /* blocky rendering */
+.nav-link.active img {
+  filter: brightness(1.1); /* Lighter when active */
 }
 
-.pixel-icon svg,
-.pixel-icon > * {
-  shape-rendering: crispEdges;       /* sharp edges */
-  stroke-width: 2.5;                 /* thick enough for pixel look */
-  stroke-linecap: square;
-  stroke-linejoin: miter;
-}
-
+/* Hide nav-bar-button by default (desktop) */
 .nav-bar-button {
-  width: auto;       /* let icon define the size */
+  display: none;
+  width: auto;
   height: auto;
   cursor: pointer;
-  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Desktop Home Button */
+.desktop-home-button {
+  display: block;
+  transition: transform 0.3s ease;
+}
+.desktop-home-button :hover{
+  transform: scale(1.05);
+}
+
+/* Specific override for Home button when active */
+.desktop-home-button .nav-link.active {
+  transform: none;
+}
+
+.desktop-home-button .nav-link.active::after {
+  display: none;
+}
+
+.desktop-home-button .nav-link img {
+  width: 2.5rem; /* Smaller home button */
 }
 
 .nav-bar-button svg {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  color: black;
+  color: var(--hunyadi-yellow);
   transition: transform 0.5s ease;
 }
 .nav-bar-button svg:hover{
@@ -127,7 +145,7 @@
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1001;
+  z-index: 998;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -142,13 +160,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 75vw;
-  max-width: 300px;
-  min-width: 200px;
+  width: 282px;
   height: 100vh;
   padding: 8px;
   background-color: var(--jasmine);
-  z-index: 1002;
+  z-index: 999;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   overflow-y: auto;
@@ -170,7 +186,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1003;
+  z-index: 1000;
 }
 .nav-close-button :hover{
   background-color: rgba(236, 160, 50, 0.6);
@@ -267,41 +283,20 @@
 }
 
 /* Responsive - expand on larger screens */
-/* Mobile and Tablet - show hamburger menu, hide nav links */
-@media (max-width: 767px) {
+/* Mobile responsive styles */
+@media (max-width: 768px) {
   .header {
     padding: 0.5rem 0.75rem;
-    --header-height: calc(0.5rem * 2 + 35px);
   }
   
-  .nav-links {
+  /* Hide image buttons on mobile */
+  .nav-links, .desktop-home-button {
     display: none;
   }
-  
+
+  /* Show hamburger menu on mobile */
   .nav-bar-button {
     display: flex;
-  }
-  
-  .nav-bar {
-    width: 70vw;
-    max-width: 250px;
-    min-width: 180px;
-  }
-  
-  .nav-item {
-    font-size: 1rem;
-    padding: 0.4rem 0.8rem;
-  }
-  
-  .nav-item svg {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .nav-chickens {
-    width: calc(100% - 20px);
-    max-width: 200px;
-    height: 40px;
   }
   
   .logo-container {
@@ -313,27 +308,35 @@
     padding: 15px 0.75rem;
     margin-bottom: 15px;
   }
+  
+  .menu-category-button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.3rem;
+  }
 }
 
-/* Desktop - show nav links, hide hamburger menu */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .header {
     padding: 0.7rem 2rem;
   }
   
+  /* Show image buttons on desktop */
+  .nav-links {
+    display: flex;
+  }
+  
+  .desktop-home-button {
+    display: block;
+  }
+
+  /* Hide hamburger menu on desktop */
   .nav-bar-button {
     display: none;
   }
   
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    padding: 12px 40px;
-  }
-  
   .nav-link {
-    font-size: 1.2rem;
-    padding: 0.3rem 0.6rem;
+    /* font-size: 0.95rem;  Removed as we use images */
+    padding: 0.5rem;
   }
   
   .logo-container {
@@ -346,51 +349,33 @@
   }
   
   .nav-bar {
-    width: 30vw;
-    max-width: 350px;
-    min-width: 280px;
-  }
-  
-  .nav-item {
-    font-size: 1.5rem;
-  }
-  
-  .nav-item svg {
-    width: 28px;
-    height: 28px;
+    width: 350px;
   }
   
   .nav-chickens {
-    width: calc(100% - 40px);
-    max-width: 300px;
+    width: 300px;
     height: 60px;
   }
 }
 
 @media (min-width: 1024px) {
   .nav-bar {
-    width: 28vw;
-    max-width: 380px;
-    min-width: 320px;
+    width: 400px;
   }
   
   .nav-chickens {
-    width: calc(100% - 50px);
-    max-width: 350px;
+    width: 350px;
     height: 70px;
   }
 }
 
 @media (min-width: 1440px) {
   .nav-bar {
-    width: 25vw;
-    max-width: 420px;
-    min-width: 360px;
+    width: 450px;
   }
   
   .nav-chickens {
-    width: calc(100% - 60px);
-    max-width: 400px;
+    width: 400px;
     height: 80px;
   }
 }

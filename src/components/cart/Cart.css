@@ -1,126 +1,135 @@
 /* MAIN CART */
 #cart {
-    width: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 1s ease;
-    position: fixed;
-    bottom: 0;
-    background-color: white;
-    z-index: 100;
-}   
-
-.cart-header {
-    font-family: var(--font-pixel);
-    font-weight: bold;
-    font-size: 1.2rem;
-    padding: 8px;
-    width: 100%;
-    border-top: 3px dashed #ad9b9e;
-    border-bottom: 3px dashed var(--china-rose);
-    text-align: center;
+  width: 100%;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 1s ease;
+  position: fixed;
+  bottom: 0;
+  background-color: white;
+  z-index: 200;
 }
 
-.control-row, .price {
-    font-family: var(--font-pixel);
-    font-size: 1.05rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 1.2rem;
+.cart-header {
+  font-family: var(--font-pixel);
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 8px;
+  width: 100%;
+  border-top: 3px dashed #ad9b9e;
+  border-bottom: 3px dashed var(--china-rose);
+  text-align: center;
+}
+
+.control-row,
+.price {
+  font-family: var(--font-pixel);
+  font-size: 1.05rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 1.2rem;
 }
 
 .price {
-    border-bottom: 1px solid var(--china-rose);
-    padding-bottom: 8px;
+  border-bottom: 1px solid var(--china-rose);
+  padding-bottom: 8px;
 }
 
 .place-order {
-    margin: 0 1.2rem 2.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-pixel);
-    background-color: var(--gamboge);
-    color: white;
-    border-radius: 16px;
-    height: 3rem;
+  margin: 0 1.2rem 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  background-color: var(--gamboge);
+  color: white;
+  border-radius: 16px;
+  height: 3rem;
+  transition: filter 0.4s;
+}
+
+.place-order:hover {
+  cursor: pointer;
+  filter: brightness(1.1);
 }
 
 .control-btn:hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .closed {
-    transform: translateY(100%);
-    pointer-events: none;
+  transform: translateY(100%);
+  pointer-events: none;
 }
 
 .open {
-    transform: translateY(0);
-    display: flex;
+  transform: translateY(0);
 }
 
 /* CART ROW */
 .cart-row {
-    width: 100%;
-    height: 80px;
-    display: flex;
-    font-family: var(--font-pixel);
+  width: 100%;
+  height: 16.7%;
+  display: flex;
+  font-family: var(--font-pixel);
 }
 
 .image-container {
-    height: 100%;
-    aspect-ratio: 1 / 1;
-    border-right: 2px dashed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-right: 2px dashed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-img {
-    height: 85%;
+.cart-row img {
+  height: 70%;
+  width: 70%;
 }
 
 .quantity-text {
-    font-weight: bold;
-    line-height: 1;
-    overflow: hidden;
-    font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1;
+  overflow: hidden;
+  font-size: 1.1rem;
 }
 
 .item-details {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
 }
 
 .item-details > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .delete {
-    transition: transform 0.3s;
+  transition: transform 0.3s;
 }
 
 .delete:hover {
-    transform: scale(1.1);
-    cursor: pointer;
+  transform: scale(1.1);
+  cursor: pointer;
 }
 
 /* ITEMS LIST */
 .items-list {
-    overflow: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .items-list::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .items-list::after {
@@ -133,7 +142,26 @@ img {
     to bottom,
     transparent,
     rgba(255, 255, 255, 0.8),
-    rgba(255, 255, 255, 1.0)
+    rgba(255, 255, 255, 1)
   );
   pointer-events: none;
+}
+
+/* for tablets and desktops */
+@media (min-width: 768px) {
+  #cart {
+    transition-duration: 0.5s;
+    width: 30%;
+    height: 100%;
+    right: 0;
+  }
+
+  .closed {
+    transform: translateX(100%);
+    pointer-events: none;
+  }
+
+  .open {
+    transform: translateX(0);
+  }
 }

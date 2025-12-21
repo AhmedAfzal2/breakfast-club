@@ -7,6 +7,7 @@ import MenuItemList from "../components/menu/MenuItemList";
 import MenuItemModal from "../components/menu/modal/MenuItemModal";
 import CartIcon from "../components/menu/CartIcon";
 import Cart from "../components/cart/Cart";
+import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
 import "../App.css";
 import "./MenuPage.css";
@@ -15,10 +16,10 @@ import dessertBanner from "/assets/images/banner-images/dessert.png";
 import beveragesBanner from "/assets/images/banner-images/beverages.png";
 
 function MenuPage() {
+  const ctx = useCart();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartBgRef = useRef();
   const categoryRefs = {
@@ -26,54 +27,7 @@ function MenuPage() {
     DESSERTS: useRef(null),
     BEVERAGES: useRef(null),
   };
-  const bannerRefs = {
-    BREAKFAST: useRef(null),
-    DESSERTS: useRef(null),
-    BEVERAGES: useRef(null),
-  };
   const isScrollingRef = useRef(false);
-  const lastScrollY = useRef(0);
-
-  // Menu items will be fetched from API
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Measure header and menu categories height and set CSS variables
-  useEffect(() => {
-    const updateHeights = () => {
-      const header = document.querySelector('.header');
-      const menuCategories = document.querySelector('.menu-categories');
-      
-      if (header) {
-        const headerHeight = header.offsetHeight;
-        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-      }
-      
-      if (menuCategories) {
-        const categoriesHeight = menuCategories.offsetHeight;
-        document.documentElement.style.setProperty('--menu-categories-height', `${categoriesHeight}px`);
-      }
-    };
-
-    // Initial measurement with multiple attempts to ensure elements are rendered
-    updateHeights();
-    
-    // Update on resize
-    window.addEventListener('resize', updateHeights);
-    
-    // Also update after delays to ensure elements are fully rendered
-    const timeoutId1 = setTimeout(updateHeights, 100);
-    const timeoutId2 = setTimeout(updateHeights, 300);
-    const timeoutId3 = setTimeout(updateHeights, 500);
-
-    return () => {
-      window.removeEventListener('resize', updateHeights);
-      clearTimeout(timeoutId1);
-      clearTimeout(timeoutId2);
-      clearTimeout(timeoutId3);
-    };
-  }, [loading]);
 
   // prevent scrolling when cart open
   useEffect(() => {
@@ -86,129 +40,81 @@ function MenuPage() {
     return () => {
       document.body.style.overflow = "";
     };
-}, [isCartOpen]);
+  }, [isCartOpen]);
 
-  // Intersection Observer to detect which category banner is in view
+  // Intersection Observer to detect which category is in view
   useEffect(() => {
-    // Don't set up observer until menu items are loaded
-    if (loading) return;
-
-    let scrollTimeout;
-    let scrollHandler = null;
-
-    // Function to determine which category banner is in view
-    const updateActiveCategory = () => {
-      if (isScrollingRef.current) return;
-
-      const currentScrollY = window.scrollY || window.pageYOffset;
-      const isScrollingDown = currentScrollY > lastScrollY.current;
-      lastScrollY.current = currentScrollY;
-
-      const categories = ["BREAKFAST", "DESSERTS", "BEVERAGES"];
-      const viewportHeight = window.innerHeight;
-      
-      let activeCategory = null;
-      let closestDistance = Infinity;
-
-      // Check each banner to see if it's in the viewport
-      categories.forEach((category) => {
-        const bannerRef = bannerRefs[category];
-        if (!bannerRef?.current) return;
-
-        const rect = bannerRef.current.getBoundingClientRect();
-        
-        if (isScrollingDown) {
-          // When scrolling down: banner is active when its top enters the viewport
-          if (rect.top >= 0 && rect.top <= viewportHeight * 0.3 && rect.bottom > 0) {
-            const distance = rect.top;
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              activeCategory = category;
-            }
-          }
-        } else {
-          // When scrolling up: banner is active when we're past it or it's in the upper viewport
-          if (rect.top <= viewportHeight * 0.3 && rect.bottom > 0) {
-            const distance = Math.abs(rect.top - viewportHeight * 0.2);
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              activeCategory = category;
-            }
-          }
-        }
-      });
-
-      // Update category if found
-      if (activeCategory) {
-        setSelectedCategory((prevCategory) => {
-          return activeCategory !== prevCategory ? activeCategory : prevCategory;
-        });
-      }
-    };
+    const observers = [];
+    let timeoutId;
 
     // Small delay to ensure refs are attached
-    const timeoutId = setTimeout(() => {
-      // Listen to scroll events
-      scrollHandler = () => {
-        if (!isScrollingRef.current) {
-          clearTimeout(scrollTimeout);
-          scrollTimeout = setTimeout(() => {
-            updateActiveCategory();
-          }, 50);
-        }
-      };
+    timeoutId = setTimeout(() => {
+      const categories = ["BREAKFAST", "DESSERTS", "BEVERAGES"];
 
-      window.addEventListener('scroll', scrollHandler, { passive: true });
-      
-      // Initial check
-      updateActiveCategory();
-    }, 300);
+      categories.forEach((category) => {
+        const ref = categoryRefs[category];
+        if (!ref?.current) return;
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !isScrollingRef.current) {
+                const rect = entry.boundingClientRect;
+                // Check if the section is in the upper portion of the viewport
+                if (rect.top <= window.innerHeight * 0.4 && rect.top >= -100) {
+                  setSelectedCategory(category);
+                }
+              }
+            });
+          },
+          {
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+            rootMargin: "-10% 0px -60% 0px",
+          }
+        );
+
+        observer.observe(ref.current);
+        observers.push({ observer, element: ref.current });
+      });
+    }, 100);
 
     return () => {
       clearTimeout(timeoutId);
-      clearTimeout(scrollTimeout);
-      if (scrollHandler) {
-        window.removeEventListener('scroll', scrollHandler);
-      }
+      observers.forEach(({ observer, element }) => {
+        if (element) {
+          observer.unobserve(element);
+        }
+      });
     };
-  }, [loading, menuItems]);
+  }, []);
+
+  const onPlace = () => {
+    console.log("place", ctx.cartItems);
+    //USHAB DO
+    // u can access cart items by doing ctx.cartItems
+    // also it should navigate to home page
+
+    // leev this
+    ctx.onClear();
+    closeCart();
+  };
 
   const handleCategorySelect = (category) => {
     isScrollingRef.current = true;
     setSelectedCategory(category);
-    
+
     // Scroll to the selected category section
     if (categoryRefs[category]?.current) {
       categoryRefs[category].current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-      
+
       // Reset scrolling flag after scroll completes
       setTimeout(() => {
         isScrollingRef.current = false;
       }, 1000);
     }
-  };
-
-  const onClear = () => {
-    setCartItems([]);
-  };
-
-  const onDelete = (id) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
-
-  const updateQuantity = (id, quantity) => {
-    if (quantity === 0) onDelete(id);
-    else
-      setCartItems((items) =>
-        items.map((item) => (item.id === id ? { ...item, quantity } : item))
-      );
-  };
-
-  const onBack = () => {
-    closeCart();
   };
 
   const openCart = () => {
@@ -219,19 +125,6 @@ function MenuPage() {
   const closeCart = () => {
     setIsCartOpen(false);
     cartBgRef.current.classList.add("hidden");
-  };
-
-  const handleAddToBasket = (item) => {
-    setCartItems((items) => [
-      ...items,
-      {
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        src: item.src,
-        quantity: 1,
-      },
-    ]);
   };
 
   const handleItemClick = (item) => {
@@ -261,6 +154,11 @@ function MenuPage() {
     BEVERAGES: beveragesBanner,
   };
 
+  // Menu items will be fetched from API
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // Fetch menu items from API
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -276,7 +174,7 @@ function MenuPage() {
         setError(null);
       } catch (err) {
         setError(err.message);
-        console.error('Error fetching menu items:', err);
+        console.error("Error fetching menu items:", err);
       } finally {
         setLoading(false);
       }
@@ -287,11 +185,6 @@ function MenuPage() {
 
   const getSubcategoryItems = (subcategory) => {
     return menuItems.filter((item) => item.subcategory === subcategory);
-  };
-
-  const getItemQuantity = (id) => {
-    const item = cartItems.find((item) => item.id === id);
-    return item ? item.quantity : 0;
   };
 
   const getCategoryColor = (category) => {
@@ -313,15 +206,11 @@ function MenuPage() {
         <div className="menu-page">
           <h1 className="page-heading">MENU</h1>
 
+          <CartIcon className="cart-icon" onClick={openCart} />
+
           <MenuCategories
             onCategorySelect={handleCategorySelect}
             selectedCategory={selectedCategory}
-          />
-
-          <CartIcon
-            className="cart-icon"
-            numberOfItems={cartItems.length}
-            onClick={openCart}
           />
 
           {loading && (
@@ -337,56 +226,45 @@ function MenuPage() {
             </div>
           )}
 
-          {!loading && !error && allCategories.map((category) => (
-            <div
-              key={category}
-              ref={categoryRefs[category]}
-              className="category-section"
-            >
-              {categoryBanners[category] && (
-                <MenuBanner
-                  ref={bannerRefs[category]}
-                  imageSrc={categoryBanners[category]}
-                  alt={`${category} banner`}
-                />
-              )}
+          {!loading &&
+            !error &&
+            allCategories.map((category) => (
+              <div
+                key={category}
+                ref={categoryRefs[category]}
+                className="category-section"
+              >
+                {categoryBanners[category] && (
+                  <MenuBanner
+                    imageSrc={categoryBanners[category]}
+                    alt={`${category} banner`}
+                  />
+                )}
 
-              {subcategories[category] &&
-                subcategories[category].map((subcategory, index) => (
-                  <React.Fragment key={index}>
-                    <MenuSubcategory text={subcategory} />
-                    {getSubcategoryItems(subcategory).length > 0 && (
-                      <MenuItemList
-                        items={getSubcategoryItems(subcategory)}
-                        getItemQuantity={getItemQuantity}
-                        onAddToBasket={handleAddToBasket}
-                        onItemClick={handleItemClick}
-                        updateQuantity={updateQuantity}
-                        cardColor={getCategoryColor(category)}
-                      />
-                    )}
-                  </React.Fragment>
-                ))}
-            </div>
-          ))}
+                {subcategories[category] &&
+                  subcategories[category].map((subcategory, index) => (
+                    <React.Fragment key={index}>
+                      <MenuSubcategory text={subcategory} />
+                      {getSubcategoryItems(subcategory).length > 0 && (
+                        <MenuItemList
+                          items={getSubcategoryItems(subcategory)}
+                          onItemClick={handleItemClick}
+                          cardColor={getCategoryColor(category)}
+                        />
+                      )}
+                    </React.Fragment>
+                  ))}
+              </div>
+            ))}
 
           <MenuItemModal
             item={selectedItem}
             isOpen={isModalOpen}
             onClose={handleCloseModal}
-            onAddToBasket={handleAddToBasket}
           />
         </div>
       </Layout>
-      <Cart
-        items={cartItems}
-        onDelete={onDelete}
-        onBack={onBack}
-        updateQuantity={updateQuantity}
-        getItemQuantity={getItemQuantity}
-        onClear={onClear}
-        isOpen={isCartOpen}
-      />
+      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} />
       <div ref={cartBgRef} className="cart-bg hidden" onClick={closeCart}></div>
     </>
   );

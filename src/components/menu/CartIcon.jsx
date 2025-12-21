@@ -1,7 +1,9 @@
 import React from "react";
+import { useCart } from "./CartContext";
 import "./CartIcon.css";
 
-function CartIcon({ className, numberOfItems, onClick }) {
+function CartIcon({ className, onClick }) {
+  const numberOfItems = useCart().cartItems.length;
   return (
     <div className={`container ${className}`} onClick={onClick}>
       <img

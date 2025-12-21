@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import ModalHeader from "./ModalHeader";
 import ModalDescription from "./ModalDescription";
 import ModalToppings from "./ModalToppings";
+import { useCart } from "../CartContext";
 import "./MenuItemModal.css";
 
-function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
+function MenuItemModal({ item, isOpen, onClose }) {
+  const onAdd = useCart().onAdd;
   const [isClosing, setIsClosing] = useState(false);
   const [selectedAddOn, setSelectedAddOn] = useState(null);
 
@@ -39,26 +41,24 @@ function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
   const handleAddToBasketClick = (itemData) => {
     const itemWithAddOn = {
       ...item,
-      selectedAddOn: selectedAddOn
+      selectedAddOn: selectedAddOn,
     };
-    if (onAddToBasket) {
-      onAddToBasket(itemWithAddOn);
-    }
+    onAdd(itemWithAddOn);
     handleClose();
   };
 
   return (
     <div className="menu-item-modal-overlay" onClick={handleOverlayClick}>
-      <div className={`menu-item-modal ${isClosing ? 'closing' : ''}`}>
+      <div className={`menu-item-modal ${isClosing ? "closing" : ""}`}>
         <ModalHeader item={item} onClose={handleClose} />
         <ModalDescription description={item.description} />
-        <ModalToppings 
-          addOns={item.addOns} 
+        <ModalToppings
+          addOns={item.addOns}
           selectedAddOn={selectedAddOn}
           onAddOnChange={handleAddOnChange}
         />
         <div className="modal-footer">
-          <button 
+          <button
             className="modal-add-to-basket-button"
             onClick={handleAddToBasketClick}
           >
@@ -71,4 +71,3 @@ function MenuItemModal({ item, isOpen, onClose, onAddToBasket }) {
 }
 
 export default MenuItemModal;
-
