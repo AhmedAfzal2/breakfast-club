@@ -7,6 +7,7 @@ import MenuItemList from "../components/menu/MenuItemList";
 import MenuItemModal from "../components/menu/modal/MenuItemModal";
 import CartIcon from "../components/menu/CartIcon";
 import Cart from "../components/cart/Cart";
+import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
 import "../App.css";
 import "./MenuPage.css";
@@ -15,10 +16,10 @@ import dessertBanner from "/assets/images/banner-images/dessert.png";
 import beveragesBanner from "/assets/images/banner-images/beverages.png";
 
 function MenuPage() {
+  const ctx = useCart();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartBgRef = useRef();
   const categoryRefs = {
@@ -87,42 +88,32 @@ function MenuPage() {
     };
   }, []);
 
+  const onPlace = () => {
+    console.log("place");
+    //USHAB DO
+    // also it should navigate to home page
+
+    // leev this
+    ctx.onClear();
+    closeCart();
+  };
+
   const handleCategorySelect = (category) => {
     isScrollingRef.current = true;
     setSelectedCategory(category);
-    
+
     // Scroll to the selected category section
     if (categoryRefs[category]?.current) {
       categoryRefs[category].current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-      
+
       // Reset scrolling flag after scroll completes
       setTimeout(() => {
         isScrollingRef.current = false;
       }, 1000);
     }
-  };
-
-  const onClear = () => {
-    setCartItems([]);
-  };
-
-  const onDelete = (id) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
-
-  const updateQuantity = (id, quantity) => {
-    if (quantity === 0) onDelete(id);
-    else
-      setCartItems((items) =>
-        items.map((item) => (item.id === id ? { ...item, quantity } : item))
-      );
-  };
-
-  const onBack = () => {
-    closeCart();
   };
 
   const openCart = () => {
@@ -133,19 +124,6 @@ function MenuPage() {
   const closeCart = () => {
     setIsCartOpen(false);
     cartBgRef.current.classList.add("hidden");
-  };
-
-  const handleAddToBasket = (item) => {
-    setCartItems((items) => [
-      ...items,
-      {
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        src: item.src,
-        quantity: 1,
-      },
-    ]);
   };
 
   const handleItemClick = (item) => {
@@ -195,7 +173,7 @@ function MenuPage() {
         setError(null);
       } catch (err) {
         setError(err.message);
-        console.error('Error fetching menu items:', err);
+        console.error("Error fetching menu items:", err);
       } finally {
         setLoading(false);
       }
@@ -206,11 +184,6 @@ function MenuPage() {
 
   const getSubcategoryItems = (subcategory) => {
     return menuItems.filter((item) => item.subcategory === subcategory);
-  };
-
-  const getItemQuantity = (id) => {
-    const item = cartItems.find((item) => item.id === id);
-    return item ? item.quantity : 0;
   };
 
   const getCategoryColor = (category) => {
@@ -232,11 +205,7 @@ function MenuPage() {
         <div className="menu-page">
           <h1 className="page-heading">MENU</h1>
 
-          <CartIcon
-            className="cart-icon"
-            numberOfItems={cartItems.length}
-            onClick={openCart}
-          />
+          <CartIcon className="cart-icon" onClick={openCart} />
 
           <MenuCategories
             onCategorySelect={handleCategorySelect}
@@ -256,55 +225,45 @@ function MenuPage() {
             </div>
           )}
 
-          {!loading && !error && allCategories.map((category) => (
-            <div
-              key={category}
-              ref={categoryRefs[category]}
-              className="category-section"
-            >
-              {categoryBanners[category] && (
-                <MenuBanner
-                  imageSrc={categoryBanners[category]}
-                  alt={`${category} banner`}
-                />
-              )}
+          {!loading &&
+            !error &&
+            allCategories.map((category) => (
+              <div
+                key={category}
+                ref={categoryRefs[category]}
+                className="category-section"
+              >
+                {categoryBanners[category] && (
+                  <MenuBanner
+                    imageSrc={categoryBanners[category]}
+                    alt={`${category} banner`}
+                  />
+                )}
 
-              {subcategories[category] &&
-                subcategories[category].map((subcategory, index) => (
-                  <React.Fragment key={index}>
-                    <MenuSubcategory text={subcategory} />
-                    {getSubcategoryItems(subcategory).length > 0 && (
-                      <MenuItemList
-                        items={getSubcategoryItems(subcategory)}
-                        getItemQuantity={getItemQuantity}
-                        onAddToBasket={handleAddToBasket}
-                        onItemClick={handleItemClick}
-                        updateQuantity={updateQuantity}
-                        cardColor={getCategoryColor(category)}
-                      />
-                    )}
-                  </React.Fragment>
-                ))}
-            </div>
-          ))}
+                {subcategories[category] &&
+                  subcategories[category].map((subcategory, index) => (
+                    <React.Fragment key={index}>
+                      <MenuSubcategory text={subcategory} />
+                      {getSubcategoryItems(subcategory).length > 0 && (
+                        <MenuItemList
+                          items={getSubcategoryItems(subcategory)}
+                          onItemClick={handleItemClick}
+                          cardColor={getCategoryColor(category)}
+                        />
+                      )}
+                    </React.Fragment>
+                  ))}
+              </div>
+            ))}
 
           <MenuItemModal
             item={selectedItem}
             isOpen={isModalOpen}
             onClose={handleCloseModal}
-            onAddToBasket={handleAddToBasket}
           />
         </div>
       </Layout>
-      <Cart
-        items={cartItems}
-        onDelete={onDelete}
-        onBack={onBack}
-        updateQuantity={updateQuantity}
-        getItemQuantity={getItemQuantity}
-        onClear={onClear}
-        isOpen={isCartOpen}
-      />
+      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} />
       <div ref={cartBgRef} className="cart-bg hidden" onClick={closeCart}></div>
     </>
   );

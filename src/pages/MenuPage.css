@@ -18,7 +18,7 @@
   width: fit-content;
   top: 3rem;
   right: 1rem;
-  z-index: 101;
+  z-index: 10;
 }
 
 .cart-container {
@@ -32,7 +32,7 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   opacity: 100%;
   transition: opacity 1s;
 }
