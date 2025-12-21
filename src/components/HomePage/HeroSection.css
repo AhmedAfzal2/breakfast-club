@@ -4,19 +4,17 @@
 }
 
 .hero-section {
-    padding: 20px; /* Ensure content never touches the edges */
-    border-radius: 0;
-    box-shadow: none;
-    background-color: transparent;
-    min-height: 80vh; /* Make it vertically substantial */
     width: 100%;
+    aspect-ratio: 3/1;
+    min-height: 0; /* Remove fixed height constraints */
+    padding: 2%; /* Relative padding */
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     text-align: center; /* Center text inside the content box */
     position: relative;
     overflow: hidden;
-    box-sizing: border-box; /* Include padding in width/height calculations */
+    box-sizing: border-box;
 }
 
 .hero-full-bg {
@@ -24,35 +22,35 @@
     background-position: center;
     background-repeat: no-repeat;
     background-blend-mode: overlay; 
-    border: 4px solid rgba(12, 12, 12, 0.645); /* Subtle border for definition */
-    border-radius: 10px;
+    border: 0.3vw solid rgba(12, 12, 12, 0.645); /* Scale border with viewport */
+    border-radius: 1vw; /* Scale radius with viewport */
 }
 
 /* Centered Content Styling */
 .hero-content-centered {
-    width: auto;
-    max-width: 600px;
-    margin: 2rem auto; /* Center horizontally if flex fails */
-    padding: 2rem;
-    z-index: 2; /* Ensure content is above the overlay */
+    width: 50%; /* Keep width relative to container width */
+    max-width: none;
+    margin: 0 auto;
+    padding: 1.5vw;
+    z-index: 2;
     background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 15px;
-    backdrop-filter: blur(3px); /* Adds a nice glass effect */
+    border-radius: 1.5vw;
+    backdrop-filter: blur(0.3vw); /* Scale blur */
     box-sizing: border-box;
 }
 
 .hero-title {
-    font-size: 3.5em;
+    font-size: 4vw; /* Scale font size with viewport */
     color: var(--jasmine);/* Ensure the title is white */
     margin-top: 0.2em;
     margin-bottom: 0.1em;
     font-weight: 500;
-    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6); 
+    text-shadow: 0.3vw 0.3vw 0.3vw rgba(0, 0, 0, 0.6); /* Scale shadow */
     font-family: 'Pixelify Sans', sans-serif;
 }
 
 .hero-subtitle {
-    font-size: 1.2em;
+    font-size: 1.4vw; /* Scale font size with viewport */
     color: #eee;
     margin-bottom: 1.5em;
     line-height: 1.4;
@@ -62,11 +60,12 @@
 .hero-actions {
     display: flex;
     justify-content: center;
-    gap:20px;
+    gap: 1.5vw;
     background-color: transparent;
     margin-bottom: 1em;
 }
-.btn{
+
+.btn {
     background-color: transparent;
     border: none;
     padding: 0;
@@ -76,8 +75,8 @@
 }
 
 .btn-img {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -91,81 +90,10 @@
     height: 100%;
     object-fit: contain;
 }
-.btn :hover{
+
+.btn:hover {
     cursor: pointer;
     transform: scale(1.05);
 }
 
-/* Responsive Design */
-
-/* Tablet and smaller desktops */
-@media (max-width: 1024px) {
-    .hero-section {
-        min-height: 50vh;
-        padding: 20px;
-    }
-    
-    .hero-content-centered {
-        max-width: 70%; /* More breathing room */
-    }
-}
-
-/* Mobile devices */
-@media (max-width: 768px) {
-    .hero-section {
-        /* Smaller height as requested */
-        min-height: 40vh; 
-        padding: 15px; /* Ensure gap from edges */
-    }
-
-    .hero-content-centered {
-        /* Smaller box relative to the image */
-        max-width: 85%; 
-        padding: 15px;
-    }
-
-    .hero-title {
-        font-size: 1.8rem;
-    }
-
-    .hero-subtitle {
-        font-size: 0.9rem;
-        margin-bottom: 1em;
-    }
-
-    .hero-actions {
-        gap: 10px;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .btn {
-        width: 30%;
-    }
-}
-
-/* Small mobile devices */
-@media (max-width: 480px) {
-    .hero-section {
-        min-height: 35vh; /* Even smaller */
-        padding: 10px;
-    }
-
-    .hero-content-centered {
-        max-width: 95%; /* Can go wider because parent padding protects edges */
-        padding: 10px;
-    }
-
-    .hero-title {
-        font-size: 1.4rem;
-    }
-
-    .hero-subtitle {
-        font-size: 0.75rem;
-        margin-bottom: 0.8em;
-    }
-    
-    .btn {
-        width: 35%;
-    }
-}
+/* No media queries needed as everything scales with viewport width (vw) */

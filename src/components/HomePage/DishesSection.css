@@ -1,10 +1,10 @@
 .dishes-section {
-    padding: 50px 5%;
+    padding: 3rem 5%;
     background-color: white; 
     text-align: center;
     display: flex; 
     align-items: flex-start; 
-    gap: 30px; 
+    gap: 2rem; 
     max-width: 1400px; 
     margin: 0 auto; 
 }
@@ -14,7 +14,7 @@
     flex: 1; 
     max-width: 40%;
     text-align: left; 
-    padding-top: 30px;
+    padding-top: 2rem;
 }
 
 .section-title {
@@ -28,28 +28,28 @@
 .section-subtitle {
     font-size: 1.1em;
     color: black;
-    margin-bottom: 40px;
+    margin-bottom: 2.5rem;
     text-align: left; /* Aligns subtitle in the left column */
 }
 
 .dishes-footer-cta {
-    margin-top: 30px;
+    margin-top: 2rem;
 }
 
 /* --- Right Column: Carousel --- */
 .dishes-carousel-column {
     flex: 2; 
     max-width: 60%;
-    padding-top: 20px; 
+    padding-top: 1.5rem; 
 }
 
 .btn-menu {
     background-color: transparent;
     border: none;
-    width: 30px;
+    width: 2rem;
 }
 .btn-menu img {
-    width: 200px;
+    width: 12.5rem;
     height: auto;
     object-fit: contain;
     cursor: pointer;
@@ -64,10 +64,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 30px 2%;
-    border-radius: 24px;
+    padding: 2rem 2%;
+    border-radius: 1.5rem;
     overflow: hidden; /* Contains the entire carousel display */
     position: relative;
+    /* Fade effect on edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 0.5%, black 99.5%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 0.5%, black 99.5%, transparent);
 }
 
 /* Bottom progress bar */
@@ -77,15 +80,15 @@
     bottom: 0;
     left: 10%;
     width: calc(var(--progress-width, 0%) * 0.8);
-    height: 5px;
+    height: 0.3rem;
     background-color: var(--hunyadi-yellow);
     transition: width 0.5s ease-in-out;
-    border-radius: 3px 3px 0 0;
+    border-radius: 0.2rem 0.2rem 0 0;
 }
 
 .dishes-carousel {
     display: flex;
-    gap: 30px;
+    gap: 2rem;
     width: 100%;
     transition: transform 0.5s ease-in-out;
 }
@@ -94,55 +97,62 @@
 .carousel-navigation {
     display: flex;
     justify-content: center; /* Center the buttons */
-    gap: 40px; /* Space between left and right arrows */
-    margin-top: 10px; /* Space below the carousel */
+    gap: 2.5rem; /* Space between left and right arrows */
+    margin-top: 1rem; /* Space below the carousel */
 }
 
 
 /* --- Individual Dish Card Styling --- */
 .dish-card {
     transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
-    flex: 0 0 calc(38% - 30px); 
+    flex: 0 0 calc(38% - 2rem); 
     opacity: 0.6;
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
+    border-radius: 0.75rem;
     cursor: default;
+}
+
+/* Hover effect for unselected (grey) cards */
+.dish-card:not(.highlighted):hover {
+    background-color: rgba(0, 0, 0, 0.25); /* Slightly darker grey */
+    opacity: 0.8; /* Slightly more visible */
+    transform: scale(1.02); /* Subtle scale */
 }
 
 /* Highlighted Card Style (Applied via JSX class 'highlighted') */
 .dish-card.highlighted {
     opacity: 1;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
     background-color: var(--jasmine); 
-    border-radius: 12px;
+    border-radius: 0.75rem;
 }
 
 
 /* Re-apply a subtle hover effect only to the highlighted card */
 .dish-card.highlighted:hover {
-    transform: translateY(-5px) scale(1.02); /* Slight lift and zoom for the center card */
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(-0.3rem) scale(1.02); /* Slight lift and zoom for the center card */
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.3);
     background-color: var(--gamboge);
 }
 
 .dish-info .dish-name {
     font-size: 1.2rem;
     font-weight: 600;
-    margin: 10px 0 5px 0;
+    margin: 0.6rem 0 0.3rem 0;
     font-family: 'Pixelify Sans', sans-serif;
 }
 .dish-info .dish-description {
     font-size: 0.9rem;
     color: #333;
-    margin-bottom: 10px;
-    padding:5px;
+    margin-bottom: 0.6rem;
+    padding: 0.3rem;
 }
 
 /* --- Image and Wrapper Centering --- */
 .dish-image-wrapper {
     display: flex;
     width: 70%;
-    height: 150px;
+    height: 9rem;
     justify-content: center; /* Center horizontally */
     align-items: center;
     padding: 5%;

@@ -12,7 +12,7 @@ const dummyDishes = [
     { id: 0, name: "Fluffy Buttermilk Pancakes", description: "Our classic stack with fresh berries and maple syrup.", image: "/assets/images/menu-items/breakfast/hot-breakfast/pancake.png" },
     { id: 1, name: "Sweet Strawberrry Milkshake", description: "Creamy, sweet strawberry milkshake with whipped cream and cherry add-ons", image: "/assets/images/menu-items/Drinks/Cold/strawberry_milkshake.png" },
     { id: 2, name: "Waffles", description: "Hot waffles with authentic maple syrup add-on", image: "/assets/images/menu-items/breakfast/hot-breakfast/waffle.png" },
-    { id: 3, name: "Hot Chocolate" , description: "Rich hot chocolate topped with whipped cream and marshmallows", image: "/assets/images/plant.png" },
+    { id: 3, name: "Hot Chocolate" , description: "Rich hot chocolate topped with whipped cream and marshmallows", image: "/assets/images/menu-items/drinks/Hot/hot_chocolate.png" },
     { id: 4, name: "Cinammon Rolls", description: "Freshly baked cinnamon rolls with icing drizzle", image: "/assets/images/menu-items/dessert/cinnamon_rolls.png"},
     { id: 5, name: "hen", description: "hen image", image: "/assets/images/hen.png" },
 ]
