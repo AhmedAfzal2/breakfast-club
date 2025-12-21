@@ -4,6 +4,13 @@ import "./Layout.css";
 import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
 import { Menu } from "lucide-react";
 
+// Import icons
+import homeIcon from "/assets/images/icons/home.png";
+import menuIcon from "/assets/HomePage/menu.png";
+import reservationIcon from "/assets/HomePage/reservations.png";
+import contactIcon from "/assets/HomePage/contactus.png";
+import reviewsIcon from "/assets/HomePage/reviews.png";
+
 function Header({ onNavClick }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,13 +25,13 @@ function Header({ onNavClick }) {
 
   return (
     <header className="header">
-      {/* Left Side Menu Button */}
+      {/* Left Side Menu Button - Visible on Mobile */}
       <div className="nav-bar-button" onClick={onNavClick}>
         <Menu size={40} />
       </div>
 
-      {/* Center Navigation */}
-      <nav className="nav-links">
+      {/* Left Side Home Button - Visible on Desktop */}
+      <div className="desktop-home-button">
         <a 
           href="/" 
           className={`nav-link ${isActive("/") ? "active" : ""}`}
@@ -32,9 +39,14 @@ function Header({ onNavClick }) {
             e.preventDefault();
             handleNavClick("/");
           }}
+          title="Home"
         >
-          Home
+          <img src={homeIcon} alt="Home" />
         </a>
+      </div>
+
+      {/* Center Navigation - Visible on Desktop */}
+      <nav className="nav-links">
         <a 
           href="/menu" 
           className={`nav-link ${isActive("/menu") ? "active" : ""}`}
@@ -42,8 +54,9 @@ function Header({ onNavClick }) {
             e.preventDefault();
             handleNavClick("/menu");
           }}
+          title="Menu"
         >
-          Menu
+          <img src={menuIcon} alt="Menu" />
         </a>
         <a 
           href="/reservations" 
@@ -52,8 +65,9 @@ function Header({ onNavClick }) {
             e.preventDefault();
             handleNavClick("/reservations");
           }}
+          title="Reservations"
         >
-          Reservations
+          <img src={reservationIcon} alt="Reservations" />
         </a>
         <a 
           href="/contact" 
@@ -62,8 +76,9 @@ function Header({ onNavClick }) {
             e.preventDefault();
             handleNavClick("/contact");
           }}
+          title="Contact"
         >
-          Contact
+          <img src={contactIcon} alt="Contact" />
         </a>
         <a 
           href="/reviews" 
@@ -72,8 +87,9 @@ function Header({ onNavClick }) {
             e.preventDefault();
             handleNavClick("/reviews");
           }}
+          title="Reviews"
         >
-          Reviews
+          <img src={reviewsIcon} alt="Reviews" />
         </a>
       </nav>
 
