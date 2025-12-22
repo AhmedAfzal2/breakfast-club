@@ -53,12 +53,20 @@
   height: min-content;
 }
 
-.menu-category-button:hover {
+.breakfast:hover,
+.breakfast.active {
   background-color: var(--gamboge);
 }
 
-.menu-category-button.active {
-  background-color: var(--gamboge);
+.desserts:hover,
+.desserts.active {
+  background-color: var(--china-rose);
+  color: white;
+}
+
+.beverages:hover,
+.beverages.active {
+  background-color: var(--cool-gray);
 }
 
 @media (max-width: 768px) {
