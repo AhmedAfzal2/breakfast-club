@@ -7,7 +7,7 @@ import { Menu, Info, Phone, Calendar, Star, X} from "lucide-react";
 function NavBar({ isOpen, onClose }) {
   const navItems = [
     { icon: Menu, text: "menu", path: "/menu" },
-    { icon: Info, text: "about us", path: "/" },
+    { icon: Info, text: "about us", path: "/about" },
     { icon: Phone, text: "contact us", path: "/contact" },
     { icon: Calendar, text: "reservations", path: "/reservations" },
     { icon: Star, text: "reviews", path: "/reviews" },

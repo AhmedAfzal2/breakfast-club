@@ -1,29 +1,51 @@
 .menu-item {
   display: flex;
   flex-direction: column;
-  background-color: var(--jasmine);
+  background-color: var(--pastel-pink);
   border-radius: 10px;
   overflow: hidden;
   width: 100%;
   max-width: 100%;
   padding: 20px;
   cursor: pointer;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+}
+
+.menu-item.beverages {
+  background-color: var(--pastel-blue);
+}
+
+.menu-item.desserts {
+  background-color: var(--jasmine);
 }
 
 .menu-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.02);
+}
+
+/* Darker hover colors for each category - only background changes */
+.menu-item:not(.beverages):not(.desserts):hover {
+  background-color: #e8b3b8; /* Darker pastel-pink */
+}
+
+.menu-item.beverages:hover {
+  background-color: #a8c5d9; /* Darker pastel-blue */
+}
+
+.menu-item.desserts:hover {
+  background-color: #fad869; /* Darker jasmine */
 }
 .menu-item-image-container {
-    width: 50%;
-    height: 50%;
-    aspect-ratio: 1 / 1;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 150px;
-    max-height: 200px;
+  width: 50%;
+  height: 50%;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  max-height: 200px;
 }
 
 .menu-item-image {
@@ -44,7 +66,7 @@
 }
 
 .menu-item-title {
-  font-family: 'Pixelify Sans', sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
   font-size: 1.2rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid black;
@@ -55,12 +77,11 @@
 }
 
 .menu-item-price {
-  font-family: 'Roboto Slab', serif;
+  font-family: "Roboto Slab", serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: black;
 }
-
 
 @media (max-width: 768px) {
   .menu-item {
@@ -69,8 +90,7 @@
 
   .menu-item-image-container {
     width: 60%;
-    height: 150px;
-    min-height: 150px;
+    min-height: 100px;
     max-height: 150px;
     aspect-ratio: 1 / 1;
   }
@@ -84,9 +104,8 @@
   .menu-item-title {
     font-size: 0.9rem;
   }
-  
+
   .menu-item-price {
     font-size: 0.9rem;
   }
 }
-

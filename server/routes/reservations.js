@@ -86,7 +86,7 @@ router.get('/reserved-tables', async (req, res) => {
       success: false,
       message: 'Error fetching reserved tables'
     });
-  }
+}
 });
 
 // POST /api/reservations - Handle reservation form submission
@@ -172,6 +172,41 @@ router.post('/', async (req, res) => {
       success: false,
       message: 'Error processing submission'
     });
+  }
+});
+
+// GET /api/reservations - Get all reservations (for admin)
+router.get('/', async (req, res) => {
+  try {
+    const reservations = await Reservation.find().sort({ time: -1 });
+    res.json(reservations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// PATCH /api/reservations/:id/status - Update reservation status
+router.patch('/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const updatedReservation = await Reservation.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    res.json(updatedReservation);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// DELETE /api/reservations/:id - Delete reservation
+router.delete('/:id', async (req, res) => {
+  try {
+    await Reservation.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Reservation deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

@@ -56,6 +56,18 @@
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.branch-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.branch-item.active {
+  background-color: var(--jasmine);
+  border: 1px solid var(--gamboge);
 }
 
 .branch-icon {
@@ -103,7 +115,7 @@
 }
 
 .social-link:hover {
-  background-color: var(--dark-green);
+  background-color: var(--hunyadi-yellow);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

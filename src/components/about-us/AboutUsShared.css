@@ -1,0 +1,52 @@
+/* Shared styles for About Us components */
+
+.about-section {
+  background-color: var(--jasmine);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.section-heading {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--china-rose);
+  text-transform: lowercase;
+  padding-bottom: 0.5rem;
+}
+
+.section-content {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: black;
+}
+
+.section-content p {
+  margin-bottom: 1rem;
+}
+
+.section-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .section-heading {
+    font-size: 1.5rem;
+  }
+  
+  .section-content {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-heading {
+    font-size: 1.7rem;
+  }
+  
+  .section-content {
+    font-size: 1rem;
+  }
+}
+

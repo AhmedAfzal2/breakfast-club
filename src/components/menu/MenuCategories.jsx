@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import "./MenuCategories.css";
+import CartIcon from "./CartIcon";
 
-function MenuCategories({ onCategorySelect, selectedCategory: externalSelectedCategory }) {
-  const [internalSelectedCategory, setInternalSelectedCategory] = useState("BREAKFAST");
-  const selectedCategory = externalSelectedCategory !== undefined ? externalSelectedCategory : internalSelectedCategory;
+function MenuCategories({
+  onCategorySelect,
+  onClick,
+  selectedCategory: externalSelectedCategory,
+}) {
+  const [internalSelectedCategory, setInternalSelectedCategory] =
+    useState("BREAKFAST");
+  const selectedCategory =
+    externalSelectedCategory !== undefined
+      ? externalSelectedCategory
+      : internalSelectedCategory;
 
-  const categories = [
-    "BREAKFAST",
-    "DESSERTS",
-    "BEVERAGES",
-  ];
+  const categories = ["BREAKFAST", "DESSERTS", "BEVERAGES"];
 
   const handleCategoryClick = (category) => {
     setInternalSelectedCategory(category);
@@ -23,15 +28,17 @@ function MenuCategories({ onCategorySelect, selectedCategory: externalSelectedCa
       {categories.map((category, index) => (
         <button
           key={index}
-          className={`menu-category-button ${selectedCategory === category ? 'active' : ''}`}
+          className={`menu-category-button ${
+            selectedCategory === category ? "active" : ""
+          } ${category.toLowerCase()}`}
           onClick={() => handleCategoryClick(category)}
         >
           {category}
         </button>
       ))}
+      <CartIcon className="cart-icon" onClick={onClick}></CartIcon>
     </div>
   );
 }
 
 export default MenuCategories;
-
