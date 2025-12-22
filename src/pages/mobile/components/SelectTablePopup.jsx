@@ -32,12 +32,12 @@ function SelectTablePopup({
       gameCtx.setSizes((sizes) => ({
         ...sizes,
         char: {
-          width: 20,
-          height: 41,
+          width: 26,
+          height: (26 * 82) / 40,
         },
         world: {
           width: rect.width * 2,
-          height: rect.height * 2,
+          height: (rect.width * 2 * 720) / 1200,
         },
         view: {
           width: rect.width,
@@ -138,6 +138,8 @@ function SelectTablePopup({
             onUnselect={onTableDeselect}
             enabled={gameEnable}
             reservedTables={reservedTables}
+            selectedTables={selectedTables}
+            showController={true}
           />
         </div>
 

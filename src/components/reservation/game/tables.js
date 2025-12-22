@@ -1,11 +1,11 @@
-const TWO_TABLE_SIZE = { width: 225, height: 150 };
-const FOUR_TABLE_SIZE = { width: 260, height: 180 };
+const TWO_TABLE_SIZE = { width: 225 / 1200, height: 150 / 720 };
+const FOUR_TABLE_SIZE = { width: 260 / 1200, height: 180 / 720 };
 
 const tables = [
   {
     id: 1,
-    x: 360,
-    y: 560,
+    x: 360 / 1200,
+    y: 560 / 720,
     width: TWO_TABLE_SIZE.width,
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
@@ -15,8 +15,8 @@ const tables = [
   },
   {
     id: 2,
-    x: 360,
-    y: 40,
+    x: 360 / 1200,
+    y: 40 / 720,
     width: TWO_TABLE_SIZE.width,
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
@@ -27,7 +27,7 @@ const tables = [
   {
     id: 3,
     x: 0,
-    y: 8,
+    y: 8 / 720,
     width: FOUR_TABLE_SIZE.width,
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
@@ -38,7 +38,7 @@ const tables = [
   {
     id: 4,
     x: 0,
-    y: 540,
+    y: 540 / 720,
     width: FOUR_TABLE_SIZE.width,
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
@@ -48,8 +48,8 @@ const tables = [
   },
   {
     id: 5,
-    x: 360,
-    y: 300,
+    x: 360 / 1200,
+    y: 300 / 720,
     width: TWO_TABLE_SIZE.width,
     height: TWO_TABLE_SIZE.height,
     src: "/assets/images/table_2.png",
@@ -60,7 +60,7 @@ const tables = [
   {
     id: 6,
     x: 0,
-    y: 274,
+    y: 274 / 720,
     width: FOUR_TABLE_SIZE.width,
     height: FOUR_TABLE_SIZE.height,
     src: "/assets/images/table_4.png",
