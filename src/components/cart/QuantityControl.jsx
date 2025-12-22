@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import "./QuantityControl.css";
 import { useCart } from "../menu/CartContext";
 
-function QuantityControl({ item, fixed }) {
+function QuantityControl({ item, fixed, category }) {
   const ctx = useCart();
   const quantity = ctx.getItemQuantity(item.id);
   return quantity > 0 ? (
     <div
-      className={`quantity-control ${fixed ? "fixed" : ""}`}
+      className={`quantity-control ${category ? category : ""} ${
+        fixed ? "fixed" : ""
+      }`}
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -60,7 +62,9 @@ function QuantityControl({ item, fixed }) {
     </div>
   ) : (
     <button
-      className={`quantity-control add-to-basket ${fixed ? "fixed" : ""}`}
+      className={`quantity-control add-to-basket ${category ? category : ""} ${
+        fixed ? "fixed" : ""
+      }`}
       onClick={(e) => {
         e.stopPropagation();
         ctx.onAdd(item);
