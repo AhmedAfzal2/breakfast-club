@@ -12,7 +12,7 @@
   top: var(--header-height, 77px);
   z-index: 200;
   background-color: white;
-  padding: 8px;
+  padding: 8px 4px;
   box-sizing: content-box;
 }
 
@@ -53,12 +53,20 @@
   height: min-content;
 }
 
-.menu-category-button:hover {
+.breakfast:hover,
+.breakfast.active {
   background-color: var(--gamboge);
 }
 
-.menu-category-button.active {
-  background-color: var(--gamboge);
+.desserts:hover,
+.desserts.active {
+  background-color: var(--china-rose);
+  color: white;
+}
+
+.beverages:hover,
+.beverages.active {
+  background-color: var(--cool-gray);
 }
 
 @media (max-width: 768px) {

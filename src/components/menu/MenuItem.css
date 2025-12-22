@@ -1,7 +1,7 @@
 .menu-item {
   display: flex;
   flex-direction: column;
-  background-color: var(--jasmine);
+  background-color: var(--pastel-pink);
   border-radius: 10px;
   overflow: hidden;
   width: 100%;
@@ -9,6 +9,14 @@
   padding: 20px;
   cursor: pointer;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.menu-item.beverages {
+  background-color: var(--pastel-blue);
+}
+
+.menu-item.desserts {
+  background-color: var(--jasmine);
 }
 
 .menu-item:hover {
