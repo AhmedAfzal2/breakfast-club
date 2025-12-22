@@ -3,6 +3,7 @@ import Layout from "../components/Layout/Layout";
 import { Quote } from "lucide-react";
 import { reviewsApi } from "../services/reviewsApi";
 import "../App.css";
+import "./ReviewsPage.css";
 import "../components/HomePage/ReviewsSection.css";
 
 const StarRating = ({ rating }) => {
