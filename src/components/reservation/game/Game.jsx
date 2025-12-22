@@ -76,8 +76,8 @@ function Game({ onSelect, onUnselect, enabled, reservedTables }) {
           marginLeft: `-${view.width / 2}px`,
         }}
       >
-        <RestaurantScene ref={bgRef} size={world} />
-        <Character ref={charRef} size={char} />
+      <RestaurantScene ref={bgRef} size={world} />
+      <Character ref={charRef} size={char} />
       </div>
     </div>
   );

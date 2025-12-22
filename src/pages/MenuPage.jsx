@@ -157,14 +157,14 @@ function MenuPage() {
   const handleCategorySelect = (category) => {
     isScrollingRef.current = true;
     setSelectedCategory(category);
-
+    
     // Scroll to the selected category section
     if (categoryRefs[category]?.current) {
       categoryRefs[category].current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-
+      
       // Reset scrolling flag after scroll completes
       setTimeout(() => {
         isScrollingRef.current = false;
@@ -299,32 +299,32 @@ function MenuPage() {
           {!loading &&
             !error &&
             allCategories.map((category) => (
-              <div
-                key={category}
-                ref={categoryRefs[category]}
-                className="category-section"
-              >
-                {categoryBanners[category] && (
-                  <MenuBanner
-                    imageSrc={categoryBanners[category]}
-                    alt={`${category} banner`}
-                  />
-                )}
+            <div
+              key={category}
+              ref={categoryRefs[category]}
+              className="category-section"
+            >
+              {categoryBanners[category] && (
+                <MenuBanner
+                  imageSrc={categoryBanners[category]}
+                  alt={`${category} banner`}
+                />
+              )}
 
-                {subcategories[category] &&
-                  subcategories[category].map((subcategory, index) => (
-                    <React.Fragment key={index}>
-                      <MenuSubcategory text={subcategory} />
-                      {getSubcategoryItems(subcategory).length > 0 && (
-                        <MenuItemList
-                          items={getSubcategoryItems(subcategory)}
-                          onItemClick={handleItemClick}
-                        />
-                      )}
-                    </React.Fragment>
-                  ))}
-              </div>
-            ))}
+              {subcategories[category] &&
+                subcategories[category].map((subcategory, index) => (
+                  <React.Fragment key={index}>
+                    <MenuSubcategory text={subcategory} />
+                    {getSubcategoryItems(subcategory).length > 0 && (
+                      <MenuItemList
+                        items={getSubcategoryItems(subcategory)}
+                        onItemClick={handleItemClick}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
+            </div>
+          ))}
 
           <MenuItemModal
             item={selectedItem}

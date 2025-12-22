@@ -1,0 +1,18 @@
+.aboutus-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.aboutus-content {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: black;
+}
+
+@media (min-width: 768px) {
+  .aboutus-content {
+    font-size: 1.1rem;
+  }
+}
+
