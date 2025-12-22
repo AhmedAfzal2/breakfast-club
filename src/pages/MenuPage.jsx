@@ -21,7 +21,6 @@ import beveragesBanner from "/assets/images/banner-images/beverages.png";
 import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile.jpg";
 
 function MenuPage() {
-  const navigate = useNavigate();
   const ctx = useCart();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
@@ -176,19 +175,19 @@ function MenuPage() {
     try {
       // Calculate total amount
       const totalAmount = ctx.cartItems.reduce((total, item) => {
-        return total + (item.price * item.quantity);
+        return total + item.price * item.quantity;
       }, 0);
 
       // Prepare order data
       const orderData = {
-        items: ctx.cartItems.map(item => ({
+        items: ctx.cartItems.map((item) => ({
           itemId: item.id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          image: item.src || null
+          image: item.src || null,
         })),
-        totalAmount: totalAmount
+        totalAmount: totalAmount,
       };
 
       // Submit order to API
@@ -204,10 +203,10 @@ function MenuPage() {
 
       if (response.ok && result.success) {
         console.log("Order placed successfully:", result);
-        
+
         // Clear cart
         ctx.onClear();
-        
+
         // Show confirmation popup
         setIsOrderConfirmationOpen(true);
       } else {
@@ -234,7 +233,7 @@ function MenuPage() {
     navigate("/");
     // Scroll to top after navigation (use setTimeout to ensure navigation completes)
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     }, 100);
@@ -284,8 +283,21 @@ function MenuPage() {
   // Subcategories for each category
   const subcategories = {
     BREAKFAST: ["Sweet Breakfast", "Savory Breakfast", "Healthy"],
-    DESSERTS: ["Cakes & Cheesecakes", "Pastries", "Cookies & Donuts", "Fresh Fruit & Tarts"],
-    BEVERAGES: ["Hot Coffee", "Hot Tea", "Hot Chocolate", "Cold Coffee", "Cold Tea", "Milkshakes", "Refreshing Drinks"],
+    DESSERTS: [
+      "Cakes & Cheesecakes",
+      "Pastries",
+      "Cookies & Donuts",
+      "Fresh Fruit & Tarts",
+    ],
+    BEVERAGES: [
+      "Hot Coffee",
+      "Hot Tea",
+      "Hot Chocolate",
+      "Cold Coffee",
+      "Cold Tea",
+      "Milkshakes",
+      "Refreshing Drinks",
+    ],
   };
 
   // Banner images for categories
@@ -426,7 +438,12 @@ function MenuPage() {
           />
         </div>
       </Layout>
-      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} isPlacingOrder={isPlacingOrder} />
+      <Cart
+        isOpen={isCartOpen}
+        onBack={closeCart}
+        onPlace={onPlace}
+        isPlacingOrder={isPlacingOrder}
+      />
       <div ref={cartBgRef} className="cart-bg hidden" onClick={closeCart}></div>
       <ConfirmationPopup
         isOpen={isOrderConfirmationOpen}
