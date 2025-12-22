@@ -21,6 +21,7 @@ import beveragesBanner from "/assets/images/banner-images/beverages.png";
 import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile.jpg";
 
 function MenuPage() {
+  const navigate = useNavigate();
   const ctx = useCart();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");

@@ -6,6 +6,7 @@ import MenuPageWrapper from "./pages/MenuPageWrapper";
 import ContactPage from "./pages/ContactPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import AboutUs from "./pages/AboutUs";
+import AdminPage from "./pages/AdminPage";
 import Game from "./components/reservation/game/Game";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </Router>
 

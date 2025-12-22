@@ -4,7 +4,7 @@ import QuantityControl from "./QuantityControl";
 import { Trash2 } from "lucide-react";
 import { useCart } from "../menu/CartContext";
 
-function CartRow({ id, item }) {
+function CartRow({ id, item, readOnly }) {
   let colors = ["#fff", "#b25a68"];
   let primaryColor = colors[id % 2];
   let secondaryColor = colors[(id + 1) % 2];
@@ -16,16 +16,22 @@ function CartRow({ id, item }) {
       <div className="item-details">
         <div>
           <div style={{ fontSize: "1.35em" }}>{item.name}</div>
-          <QuantityControl item={item} fixed={true} />
+          {readOnly ? (
+            <div style={{ fontSize: "1.2em", fontWeight: "bold" }}>x{item.quantity}</div>
+          ) : (
+            <QuantityControl item={item} fixed={true} />
+          )}
         </div>
         <div style={{ alignItems: "flex-end" }}>
           <div>Rs. {item.price * item.quantity}</div>
-          <Trash2
-            className="delete"
-            onClick={() => {
-              ctx.onDelete(item.id);
-            }}
-          />
+          {!readOnly && (
+            <Trash2
+              className="delete"
+              onClick={() => {
+                ctx.onDelete(item.id);
+              }}
+            />
+          )}
         </div>
       </div>
     ) : (

@@ -8,11 +8,13 @@ import OurTeam from "../components/about-us/OurTeam";
 function AboutUs() {
   return (
     <Layout>
-      <h1 className="page-heading">ABOUT US</h1>
-      <div className="aboutus-container">
-        <OurHistory />
-        <OurMission />
-        <OurTeam />
+      <div className="about-page">
+        <h1 className="page-heading">ABOUT US</h1>
+        <div className="aboutus-container">
+          <OurHistory />
+          <OurMission />
+          <OurTeam />
+        </div>
       </div>
     </Layout>
   );

@@ -180,3 +180,16 @@
     transform: translateX(0);
   }
 }
+
+/* Ensure constant image size in receipt view */
+.receipt-items-container .image-container {
+ width: 80px; /* Fixed width */
+ height: 80px; /* Fixed height */
+ flex-shrink: 0; /* Prevent shrinking */
+}
+
+.receipt-items-container .cart-row {
+ height: auto;
+ min-height: 100px; /* Ensure row has enough height */
+}
+
