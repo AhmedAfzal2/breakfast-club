@@ -22,6 +22,7 @@
 .reserve-button-section {
   margin-top: auto;
   width: 100%;
+  margin-bottom:15px;
 }
 
 .reserve-button-section .custom-button {
@@ -148,6 +149,7 @@
 }
 
 .field-error-message {
+  text-transform: lowercase;
   display: block;
   color: var(--china-rose);
   font-family: 'Roboto Slab', serif;

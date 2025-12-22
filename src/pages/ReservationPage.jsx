@@ -29,6 +29,7 @@ function ReservationPage() {
   const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
   const [dateError, setDateError] = useState("");
   const [timeError, setTimeError] = useState("");
+  const [tableError, setTableError] = useState("");
   const [isHelpPopupOpen, setIsHelpPopupOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   // Default tables: 2x 4-seater, 2x 2-seater
@@ -91,6 +92,8 @@ function ReservationPage() {
         ...prevTables,
         { id: tableId, capacity: capacity },
       ]);
+      // Clear table error when a table is selected
+      setTableError("");
     }
   };
 
@@ -139,10 +142,22 @@ function ReservationPage() {
 
   // Handle reserve button click with validation
   const handleReserveClick = () => {
-    if (validateDateAndTime()) {
-      setGameEnable(false);
-      setIsReservationFormOpen(true);
+    // Clear previous errors
+    setTableError("");
+    
+    if (!validateDateAndTime()) {
+      return;
     }
+    
+    // Check if at least one table is selected
+    if (selectedTables.length === 0) {
+      setTableError("please reserve your table");
+      return;
+    }
+    
+    // All validations passed
+    setGameEnable(false);
+    setIsReservationFormOpen(true);
   };
 
   const tableCounts = getTableCounts();
@@ -329,43 +344,48 @@ function ReservationPage() {
   // Popup only closes when tick button is clicked, not on outside click
 
   const CustomTimeInput = ({ value, onClick }) => (
-    <div className="time-input-wrapper">
-      <input
-        type="text"
-        value={formatTimeDisplay()}
-        onClick={handleTimeInputClick}
-        placeholder="--:--"
-        className="time-input"
-        readOnly
-      />
-      <button
-        type="button"
-        className="clock-icon-button"
-        onClick={handleTimeIconClick}
-      >
-        <img src={clockIcon} alt="Clock" />
-      </button>
-      {isTimeSpinnerOpen && (
-        <div
-          className="time-spinner-popup"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
+    <div>
+      <div className="time-input-wrapper">
+        <input
+          type="text"
+          value={formatTimeDisplay()}
+          onClick={handleTimeInputClick}
+          placeholder="--:--"
+          className="time-input"
+          readOnly
+        />
+        <button
+          type="button"
+          className="clock-icon-button"
+          onClick={handleTimeIconClick}
         >
-          <TimeSpinner
-            selectedTime={selectedTime}
-            onTimeChange={handleTimeChange}
-            minTime={minTime}
-            requireDate={true}
-            isDateSelected={!!selectedDate}
-            selectedDate={selectedDate}
-          />
-        </div>
+          <img src={clockIcon} alt="Clock" />
+        </button>
+        {isTimeSpinnerOpen && (
+          <div
+            className="time-spinner-popup"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <TimeSpinner
+              selectedTime={selectedTime}
+              onTimeChange={handleTimeChange}
+              minTime={minTime}
+              requireDate={true}
+              isDateSelected={!!selectedDate}
+              selectedDate={selectedDate}
+            />
+          </div>
+        )}
+      </div>
+      {timeError && (
+        <span className="field-error-message">{timeError}</span>
       )}
     </div>
   );
@@ -421,7 +441,7 @@ function ReservationPage() {
   return (
     <Layout>
       <div className="reservation-page">
-        <h1 className="page-heading">RESERVE TABLES</h1>
+        <h1 className="page-heading">RESERVE TABLES ( RESTURANT TIMINGS:10AM - 4PM )</h1>
 
         <FormContainer fields={formFields} className="date-time-form" />
 
@@ -543,6 +563,11 @@ function ReservationPage() {
               </div>
             </div>
             <div className="reserve-button-section">
+              {tableError && (
+                <span className="field-error-message" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                  {tableError}
+                </span>
+              )}
               <Button text="reserve" onClick={handleReserveClick} />
             </div>
           </div>
@@ -626,7 +651,19 @@ function ReservationPage() {
       />
       <ConfirmationPopup
         isOpen={isConfirmationOpen}
-        onClose={() => setIsConfirmationOpen(false)}
+        onClose={() => {
+          setIsConfirmationOpen(false);
+          // Reset all reservation state
+          setSelectedDate(null);
+          setSelectedTime(null);
+          setSelectedTables([]);
+          setReservedTables([]);
+          setGameEnable(false);
+          setDateError("");
+          setTimeError("");
+          setTableError("");
+          setIsTimeSpinnerOpen(false);
+        }}
       />
     </Layout>
   );

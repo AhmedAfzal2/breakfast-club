@@ -29,11 +29,19 @@
   background-color: var(--gamboge);
   color: white;
   border: none;
+  outline: none;
+  box-shadow: none;
   font-family: 'Pixelify Sans', sans-serif;
   font-size: 1.2rem;
   cursor: pointer;
   text-transform: lowercase;
   transition: background-color 0.3s ease;
+}
+
+.custom-button:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
 }
 
 .custom-button:hover {

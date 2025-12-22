@@ -126,6 +126,21 @@ function MobileReservationPage() {
   };
 
   const handleContactFormSubmit = async (formData) => {
+    // Validate that date and time are selected
+    if (!selectedDate || !selectedTime) {
+      setShowContactInfoPopup(false);
+      setShowValidationPopup(true);
+      return;
+    }
+
+    // Validate that at least one table is selected
+    if (selectedTables.length === 0) {
+      setShowContactInfoPopup(false);
+      setShowSelectTablePopup(true);
+      // The SelectTablePopup will show its own validation popup
+      return;
+    }
+
     const tableNumbers = selectedTables.map((table) => table.id);
     const maxGuests = calculateMaxGuests();
 
@@ -157,15 +172,11 @@ function MobileReservationPage() {
 
       if (response.ok) {
         console.log("Reservation submitted successfully:", reservationData);
-        // Close all popups
+        // Close all popups first
         setShowSelectTablePopup(false);
         setShowContactInfoPopup(false);
-        // Clear all reservation state after successful submission
-        setSelectedDate(null);
-        setSelectedTime(null);
-        setSelectedTables([]);
-        setReservedTables([]);
-        // Show confirmation popup
+        setShowValidationPopup(false);
+        // Show confirmation popup (state will be cleared when popup is closed)
         setIsConfirmationOpen(true);
       } else {
         console.error("Failed to submit reservation:", result.message);
@@ -233,10 +244,13 @@ function MobileReservationPage() {
           // Ensure all popups are closed and state is cleared
           setShowSelectTablePopup(false);
           setShowContactInfoPopup(false);
+          setShowValidationPopup(false);
           setSelectedDate(null);
           setSelectedTime(null);
           setSelectedTables([]);
           setReservedTables([]);
+          setDateError("");
+          setTimeError("");
         }}
         type="reservation"
       />
