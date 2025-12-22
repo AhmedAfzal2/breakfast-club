@@ -1,14 +1,43 @@
 .menu-banner {
   width: 100%;
   height: auto;
+  aspect-ratio: 16/9;
   overflow: hidden;
   border-radius: 10px;
+  margin-bottom: 1rem;
 }
 
 .menu-banner-image {
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
   object-fit: cover;
+  border-radius: 10px;
+}
+
+.menu-banner-image.desktop-banner {
+  display: none;
+}
+
+.menu-banner-image.mobile-banner {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .menu-banner {
+    aspect-ratio: 3/1;
+    border-radius: 20px;
+  }
+  
+  .menu-banner-image {
+    border-radius: 20px;
+  }
+
+  .menu-banner-image.desktop-banner {
+    display: block;
+  }
+
+  .menu-banner-image.mobile-banner {
+    display: none;
+  }
 }
 

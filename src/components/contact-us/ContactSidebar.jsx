@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Mail, Phone, MapPin, Instagram, Facebook, Twitter, Youtube, Linkedin } from "lucide-react";
 import "./ContactSidebar.css";
 
-function ContactSidebar() {
+function ContactSidebar({ locations, selectedLocation, onLocationSelect }) {
   return (
     <div className="contact-sidebar">
       {/* Contact Info */}
@@ -22,30 +22,23 @@ function ContactSidebar() {
         </div>
       </div>
 
-      {/* Other Branches */}
+      {/* Locations */}
       <div className="sidebar-section">
-        <h3 className="sidebar-title">Other Branches</h3>
-        <div className="branch-item">
-          <MapPin className="branch-icon" size={18} />
-          <div className="branch-details">
-            <p className="branch-name">Downtown Branch</p>
-            <p className="branch-address">123 Main Street, City Center</p>
+        <h3 className="sidebar-title">Locations</h3>
+        {locations.map((location) => (
+          <div 
+            key={location.id} 
+            className={`branch-item ${selectedLocation.id === location.id ? 'active' : ''}`}
+            onClick={() => onLocationSelect(location)}
+            style={{ cursor: 'pointer' }}
+          >
+            <MapPin className="branch-icon" size={18} />
+            <div className="branch-details">
+              <p className="branch-name">{location.name}</p>
+              <p className="branch-address">{location.address}</p>
+            </div>
           </div>
-        </div>
-        <div className="branch-item">
-          <MapPin className="branch-icon" size={18} />
-          <div className="branch-details">
-            <p className="branch-name">Mall Branch</p>
-            <p className="branch-address">456 Shopping Mall, North District</p>
-          </div>
-        </div>
-        <div className="branch-item">
-          <MapPin className="branch-icon" size={18} />
-          <div className="branch-details">
-            <p className="branch-name">Airport Branch</p>
-            <p className="branch-address">789 Airport Road, Terminal 2</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Social Media */}

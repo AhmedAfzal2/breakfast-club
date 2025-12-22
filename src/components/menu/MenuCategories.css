@@ -4,15 +4,31 @@
   gap: 0.5rem;
   width: 100%;
   flex-wrap: wrap;
+  align-items: center;
   box-sizing: border-box;
   margin-bottom: 10px;
   position: -webkit-sticky;
   position: sticky;
   top: var(--header-height, 77px);
-  z-index: 999;
+  z-index: 200;
   background-color: white;
-  padding: 10px 0;
-  margin-top: 0;
+  padding: 8px;
+  box-sizing: content-box;
+}
+
+.menu-categories::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 8px;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  pointer-events: none;
 }
 
 .menu-category-button {
@@ -22,7 +38,7 @@
   min-width: 0;
   padding: 0.3rem 0.3rem;
   background-color: white;
-  font-family: 'Pixelify Sans', sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: black;
@@ -34,6 +50,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+  height: min-content;
 }
 
 .menu-category-button:hover {
@@ -48,7 +65,7 @@
   .menu-categories {
     top: var(--header-height, 51px);
   }
-  
+
   .menu-category-button {
     font-size: 0.8rem;
   }

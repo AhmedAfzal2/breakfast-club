@@ -69,8 +69,8 @@
     overflow: hidden; /* Contains the entire carousel display */
     position: relative;
     /* Fade effect on edges */
-    -webkit-mask-image: linear-gradient(to right, transparent, black 0.5%, black 99.5%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 0.5%, black 99.5%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 1.5%, black 98.5%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 1.5%, black 98.5%, transparent);
 }
 
 /* Bottom progress bar */

@@ -8,6 +8,7 @@ import { Menu } from "lucide-react";
 import homeIcon from "/assets/images/icons/home.png";
 import menuIcon from "/assets/HomePage/menu.png";
 import reservationIcon from "/assets/HomePage/reservations.png";
+import aboutIcon from "/assets/HomePage/aboutus.png";
 import contactIcon from "/assets/HomePage/contactus.png";
 import reviewsIcon from "/assets/HomePage/reviews.png";
 import aboutUsIcon from "/assets/HomePage/aboutus.png";

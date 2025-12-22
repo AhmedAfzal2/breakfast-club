@@ -6,10 +6,9 @@ import "./Cart.css";
 function Cart({ isOpen, onBack, onPlace }) {
   const ctx = useCart();
   const isEmpty = ctx.cartItems.length === 0;
-  console.log(isEmpty);
   return (
     <div id="cart" className={isOpen ? "open" : "closed"}>
-      <div style={{ flex: 1 }}>
+      <div className="cart-top-section">
         <div className="cart-header">{!isEmpty ? "your cart" : "empty"}</div>
         <Items />
         <div className="control-row">
@@ -23,7 +22,7 @@ function Cart({ isOpen, onBack, onPlace }) {
           )}
         </div>
       </div>
-      <div>
+      <div style={{ flexShrink: 0 }}>
         <div className="price">
           <div>grand total</div>
           <div>

@@ -25,7 +25,6 @@
   }
 }
 
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -131,7 +130,7 @@
 }
 
 .menu-item-modal-title {
-  font-family: 'Pixelify Sans', sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
   font-size: 2rem;
   font-weight: 600;
   color: black;
@@ -140,7 +139,7 @@
 }
 
 .menu-item-modal-price {
-  font-family: 'Roboto Slab', serif;
+  font-family: "Roboto Slab", serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: black;
@@ -148,7 +147,7 @@
 }
 
 .menu-item-modal-description {
-  font-family: 'Roboto Slab', serif;
+  font-family: "Roboto Slab", serif;
   font-size: 1rem;
   line-height: 1.6;
   color: #333;
@@ -186,6 +185,8 @@
   padding: 1.5rem 2rem;
   padding-top: 0;
   display: flex;
+  margin-left: auto;
+  width: 40%;
   justify-content: flex-end;
   margin-top: auto;
 }
@@ -196,7 +197,7 @@
   color: black;
   border: none;
   border-radius: 12px;
-  font-family: 'Pixelify Sans', sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
@@ -257,4 +258,3 @@
     width: 100%;
   }
 }
-

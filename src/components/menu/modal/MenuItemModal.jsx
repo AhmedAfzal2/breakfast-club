@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModalHeader from "./ModalHeader";
 import ModalDescription from "./ModalDescription";
 import ModalToppings from "./ModalToppings";
+import QuantityControl from "../../cart/QuantityControl";
 import { useCart } from "../CartContext";
 import "./MenuItemModal.css";
 
@@ -38,15 +39,6 @@ function MenuItemModal({ item, isOpen, onClose }) {
     setSelectedAddOn(addOn);
   };
 
-  const handleAddToBasketClick = (itemData) => {
-    const itemWithAddOn = {
-      ...item,
-      selectedAddOn: selectedAddOn,
-    };
-    onAdd(itemWithAddOn);
-    handleClose();
-  };
-
   return (
     <div className="menu-item-modal-overlay" onClick={handleOverlayClick}>
       <div className={`menu-item-modal ${isClosing ? "closing" : ""}`}>
@@ -58,12 +50,7 @@ function MenuItemModal({ item, isOpen, onClose }) {
           onAddOnChange={handleAddOnChange}
         />
         <div className="modal-footer">
-          <button
-            className="modal-add-to-basket-button"
-            onClick={handleAddToBasketClick}
-          >
-            Add to Basket
-          </button>
+          <QuantityControl item={item}></QuantityControl>
         </div>
       </div>
     </div>
