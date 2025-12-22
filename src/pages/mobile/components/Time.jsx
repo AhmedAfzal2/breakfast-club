@@ -105,7 +105,7 @@ function Time({ selectedTime, onTimeChange, timeError, selectedDate }) {
 
   return (
     <div className="mobile-time-container">
-      <label className="heading section-label">select time</label>
+      <label className="heading section-label">select time ( resturant timings: 10am - 4pm )</label>
       <div className="mobile-time-spinner-wrapper">
         <TimeSpinner
           selectedTime={selectedTime}
