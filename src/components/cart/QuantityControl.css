@@ -48,10 +48,14 @@
   background-color: var(--china-rose);
 }
 
-.quantity-control.desserts {
-  background-color: var(--gamboge);
-}
-
 .quantity-control.beverages {
   background-color: var(--cool-gray);
+}
+
+.quantity-control.breakfast .plus-minus {
+  background-color: var(--jasmine);
+}
+
+.quantity-control.beverages .plus-minus {
+  background-color: white;
 }
