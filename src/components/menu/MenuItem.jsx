@@ -14,14 +14,19 @@ function MenuItem({ item, onItemClick }) {
   };
 
   return (
-    <div className={`menu-item ${item.category ? item.category.toLowerCase() : ''}`} onClick={handleItemClick}>
+    <div
+      className={`menu-item ${
+        item.category ? item.category.toLowerCase() : ""
+      }`}
+      onClick={handleItemClick}
+    >
       <div className="menu-item-image-container">
         <img src={item.src} alt={item.name} className="menu-item-image" />
       </div>
       <div className="menu-item-content">
         <h3 className="menu-item-title">{item.name}</h3>
         <span className="menu-item-price">Rs. {item.price}</span>
-        <QuantityControl item={item} />
+        <QuantityControl item={item} category={item.category.toLowerCase()} />
       </div>
     </div>
   );

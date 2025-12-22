@@ -53,18 +53,18 @@
   height: min-content;
 }
 
-.breakfast:hover,
+.menu-category-button.breakfast:hover,
 .breakfast.active {
-  background-color: var(--gamboge);
+  background-color: var(--china-rose);
 }
 
-.desserts:hover,
+.menu-category-button.desserts:hover,
 .desserts.active {
-  background-color: var(--china-rose);
+  background-color: var(--gamboge);
   color: white;
 }
 
-.beverages:hover,
+.menu-category-button.beverages:hover,
 .beverages.active {
   background-color: var(--cool-gray);
 }

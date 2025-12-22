@@ -1,45 +1,57 @@
 .quantity-control {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: var(--gamboge);
-    padding: 4px 6px;
-    height: 1.8rem;
-    gap: 1rem;
-    color: #444;
-    border-radius: 1rem;
-    font-family: var(--font-pixel);
-    width: 100%;
-    border: none;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--gamboge);
+  padding: 4px 6px;
+  height: 1.8rem;
+  gap: 1rem;
+  color: black;
+  border-radius: 1rem;
+  font-family: var(--font-pixel);
+  width: 100%;
+  border: none;
 }
 
 .add-to-basket:hover {
-    color: white;
-    cursor: pointer;
+  color: white;
+  cursor: pointer;
 }
 
 .plus-minus {
-    border: none;
-    background-color: var(--china-rose);
-    width: 1.1rem;
-    aspect-ratio: 1 / 1;
-    font-weight: bold;
-    font-family: sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
+  border: none;
+  background-color: var(--china-rose);
+  width: 1.1rem;
+  aspect-ratio: 1 / 1;
+  font-weight: bold;
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
 }
 
 .plus-minus:hover {
-    cursor: pointer;
-    color: white;
+  cursor: pointer;
+  color: white;
 }
 
 .quantity-text {
-    font-family: var(--font-roboto-slab);
+  font-family: var(--font-roboto-slab);
 }
 
 .fixed {
-    width: 6rem;
+  width: 6rem;
+}
+
+.quantity-control.breakfast {
+  background-color: var(--china-rose);
+}
+
+.quantity-control.desserts {
+  background-color: var(--gamboge);
+}
+
+.quantity-control.beverages {
+  background-color: var(--cool-gray);
 }
