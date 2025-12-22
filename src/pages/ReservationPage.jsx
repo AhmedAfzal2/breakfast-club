@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Layout from "../components/Layout/Layout";
@@ -14,11 +14,12 @@ import "../App.css";
 import "./ReservationPage.css";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import MobileReservationPage from "./mobile/ReservationPage";
+import { useGameContext } from "../components/reservation/game/GameContext";
 
 function ReservationPage() {
   // Initialize with actual window width check
   const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return window.innerWidth <= 1000;
     }
     return false;
@@ -36,27 +37,27 @@ function ReservationPage() {
   const [selectedTables, setSelectedTables] = useState([]);
   const [gameEnable, setGameEnable] = useState(false);
   const [reservedTables, setReservedTables] = useState([]);
+  const gameCtx = useGameContext();
 
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth <= 1000;
       setIsMobile(mobile);
-      console.log('Mobile check:', mobile, 'Width:', window.innerWidth);
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Render mobile version on mobile devices
   if (isMobile) {
-    console.log('Rendering mobile version');
+    console.log("Rendering mobile version");
     return <MobileReservationPage />;
   }
-  
-  console.log('Rendering desktop version');
+
+  console.log("Rendering desktop version");
 
   // Calculate max guests based on selected tables
   const calculateMaxGuests = () => {
@@ -157,7 +158,7 @@ function ReservationPage() {
   // If a future date is selected, use that date; otherwise use current date
   const getMinTime = () => {
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
-    
+
     // If a date is selected and it's in the future, use that date
     if (selectedDate) {
       const selectedDateOnly = new Date(
@@ -165,8 +166,12 @@ function ReservationPage() {
         selectedDate.getMonth(),
         selectedDate.getDate()
       );
-      const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      
+      const todayOnly = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
+
       // If selected date is today, use one hour from now
       if (selectedDateOnly.getTime() === todayOnly.getTime()) {
         const minutes = oneHourFromNow.getMinutes();
@@ -190,7 +195,7 @@ function ReservationPage() {
         );
       }
     }
-    
+
     // No date selected, use one hour from now
     const minutes = oneHourFromNow.getMinutes();
     const roundedMinutes = minutes <= 30 ? 30 : 60;
@@ -257,18 +262,20 @@ function ReservationPage() {
       }
 
       const response = await fetch(
-        `http://localhost:3001/api/reservations/reserved-tables?date=${encodeURIComponent(date.toISOString())}&time=${encodeURIComponent(time.toISOString())}`
+        `http://localhost:3001/api/reservations/reserved-tables?date=${encodeURIComponent(
+          date.toISOString()
+        )}&time=${encodeURIComponent(time.toISOString())}`
       );
 
       if (response.ok) {
         const result = await response.json();
         return result.reservedTableIds || [];
       } else {
-        console.error('Error fetching reserved tables:', response.statusText);
+        console.error("Error fetching reserved tables:", response.statusText);
         return [];
       }
     } catch (error) {
-      console.error('Error fetching reserved tables:', error);
+      console.error("Error fetching reserved tables:", error);
       return [];
     }
   };
@@ -307,7 +314,7 @@ function ReservationPage() {
   // sets reserved tables whenever time and date are selected
   useEffect(() => {
     if (selectedDate && selectedTime) {
-      getReservedTables(selectedDate, selectedTime).then(result => {
+      getReservedTables(selectedDate, selectedTime).then((result) => {
         setReservedTables(result);
       });
     } else {
@@ -418,6 +425,37 @@ function ReservationPage() {
     },
   ];
 
+  const gameContainerRef = useRef({});
+  // resize observer for game to update viewport size on resize
+  useEffect(() => {
+    if (!gameContainerRef.current) return;
+    let timeoutId;
+
+    const observer = new ResizeObserver(([entry]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        console.log(
+          "changing size to",
+          entry.contentRect.width,
+          entry.contentRect.height
+        );
+        gameCtx.setSizes((sizes) => ({
+          ...sizes,
+          view: {
+            width: entry.contentRect.width,
+            height: entry.contentRect.height,
+          },
+        }));
+      }, 200); // wait 200ms after resizing stops
+    });
+
+    observer.observe(gameContainerRef.current);
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <Layout>
       <div className="reservation-page">
@@ -463,6 +501,7 @@ function ReservationPage() {
               className={`table-game-container ${
                 !isDateAndTimeSelected() ? "disabled" : ""
               }`}
+              ref={gameContainerRef}
             >
               {!isDateAndTimeSelected() && (
                 <div className="table-game-overlay">
@@ -507,11 +546,15 @@ function ReservationPage() {
                 {selectedTables.length > 0 ? (
                   <>
                     <div className="table-numbers">
-                      <span className="reservation-label">Selected Tables: </span>
+                      <span className="reservation-label">
+                        Selected Tables:{" "}
+                      </span>
                       <span className="table-ids">
                         {selectedTables.map((table, index) => (
                           <React.Fragment key={table.id}>
-                            <span>Table {table.id} ({table.capacity}-seater)</span>
+                            <span>
+                              Table {table.id} ({table.capacity}-seater)
+                            </span>
                             {index < selectedTables.length - 1 && (
                               <span className="bullet">•</span>
                             )}
@@ -528,12 +571,18 @@ function ReservationPage() {
                         const counts = getTableCounts();
                         const breakdown = [];
                         if (counts[2]) {
-                          breakdown.push(`${counts[2]} x 2-seater${counts[2] > 1 ? 's' : ''}`);
+                          breakdown.push(
+                            `${counts[2]} x 2-seater${counts[2] > 1 ? "s" : ""}`
+                          );
                         }
                         if (counts[4]) {
-                          breakdown.push(`${counts[4]} x 4-seater${counts[4] > 1 ? 's' : ''}`);
+                          breakdown.push(
+                            `${counts[4]} x 4-seater${counts[4] > 1 ? "s" : ""}`
+                          );
                         }
-                        return breakdown.length > 0 ? breakdown.join(' • ') : '';
+                        return breakdown.length > 0
+                          ? breakdown.join(" • ")
+                          : "";
                       })()}
                     </div>
                   </>
@@ -603,7 +652,7 @@ function ReservationPage() {
                 reservationData
               );
               setIsReservationFormOpen(false);
-              
+
               // Clear all reservation state after successful submission
               setSelectedDate(null);
               setSelectedTime(null);
@@ -612,7 +661,7 @@ function ReservationPage() {
               setGameEnable(false);
               setDateError("");
               setTimeError("");
-              
+
               // Optionally show a success message or redirect
             } else {
               console.error("Failed to submit reservation:", result.message);

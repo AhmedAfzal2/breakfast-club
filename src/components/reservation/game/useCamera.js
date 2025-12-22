@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
 import useKeyboard from "./useKeyboard";
+import { useGameContext } from "./GameContext";
 import tables from "./tables";
 import config from "./gameConstants";
 import "./style.css";
 import sprites from "./sprites";
 
-const { world, view, char, bar } = config;
+const bar = config.bar;
 
 // takes x, y coords and object containing width and height
 // and returns object with boundaries
@@ -16,25 +17,26 @@ function Pos(x, y, size) {
   this.bottom = y + size.height;
 }
 
-function collisionCompare(char, table, highlight) {
+function collisionCompare(charPos, table, highlight, char) {
   const HIGHLIGHT_RADIUS = 12;
   if (!highlight)
     return (
-      char.right > table.left &&
-      char.left < table.right &&
-      char.bottom > table.top &&
-      char.top < table.bottom
+      charPos.right > table.left &&
+      charPos.left < table.right &&
+      charPos.bottom > table.top &&
+      charPos.top < table.bottom - char.height / 2
     );
   else
     return (
-      char.right > table.left - HIGHLIGHT_RADIUS &&
-      char.left < table.right + HIGHLIGHT_RADIUS &&
-      char.bottom > table.top - HIGHLIGHT_RADIUS &&
-      char.top < table.bottom + HIGHLIGHT_RADIUS
+      charPos.right > table.left - HIGHLIGHT_RADIUS &&
+      charPos.left < table.right + HIGHLIGHT_RADIUS &&
+      charPos.bottom > table.top - HIGHLIGHT_RADIUS &&
+      charPos.top < table.bottom + HIGHLIGHT_RADIUS
     );
 }
 
-function detectCollision(cameraPos, charOffset, tables, nearTableId) {
+function detectCollision(cameraPos, charOffset, tables, nearTableId, sizes) {
+  const { char, view, world } = sizes;
   // convert character position from viewport to world
   const charX = cameraPos.x + charOffset.x + view.width / 2;
   const charY = cameraPos.y + charOffset.y + view.height / 2;
@@ -47,7 +49,7 @@ function detectCollision(cameraPos, charOffset, tables, nearTableId) {
     const tablePos = new Pos(table.x, table.y, table);
 
     // for highlighting when close by
-    if (!table.reserved && collisionCompare(charPos, tablePos, true)) {
+    if (!table.reserved && collisionCompare(charPos, tablePos, true, char)) {
       // only highlight one table near
       if (!nearAny)
         document
@@ -63,28 +65,63 @@ function detectCollision(cameraPos, charOffset, tables, nearTableId) {
 
     if (!nearAny) nearTableId.current = 0;
 
-    if (collisionCompare(charPos, tablePos, false)) return true;
+    if (collisionCompare(charPos, tablePos, false, char)) return true;
   }
 
   // bar collision
   const barPos = {
-    left: view.width - bar.width,
-    right: view.width,
+    left: world.width - bar.width,
+    right: world.width,
     top: 0,
     bottom: bar.height,
   };
-  if (collisionCompare(charPos, barPos, false)) return true;
+  if (collisionCompare(charPos, barPos, false, char)) return true;
 
   return false;
 }
 
-function applyCollisions(dx, dy, cameraPos, charOffset, tables, nearTableId) {
+function resolveOverlap(charPos, tablePos) {
+  const overlapX =
+    Math.min(charPos.right, tablePos.right) -
+    Math.max(charPos.left, tablePos.left);
+  const overlapY =
+    Math.min(charPos.bottom, tablePos.bottom) -
+    Math.max(charPos.top, tablePos.top);
+
+  // No overlap
+  if (overlapX <= 0 || overlapY <= 0) return { dx: 0, dy: 0 };
+
+  // Push out along the smaller overlap
+  if (overlapX < overlapY) {
+    // push left or right
+    return charPos.left < tablePos.left
+      ? { dx: -overlapX, dy: 0 }
+      : { dx: overlapX, dy: 0 };
+  } else {
+    // push up or down
+    return charPos.top < tablePos.top
+      ? { dx: 0, dy: -overlapY }
+      : { dx: 0, dy: overlapY };
+  }
+}
+
+function applyCollisions(
+  dx,
+  dy,
+  cameraPos,
+  charOffset,
+  tables,
+  nearTableId,
+  sizes
+) {
   // ----------- try X axis only -----------
   if (dx !== 0) {
     const nextX = charOffset.current.x + dx;
     const testPos = { x: nextX, y: charOffset.current.y };
 
-    if (detectCollision(cameraPos.current, testPos, tables, nearTableId)) {
+    if (
+      detectCollision(cameraPos.current, testPos, tables, nearTableId, sizes)
+    ) {
       dx = 0; // block X
     }
   }
@@ -94,7 +131,9 @@ function applyCollisions(dx, dy, cameraPos, charOffset, tables, nearTableId) {
     const nextY = charOffset.current.y + dy;
     const testPos = { x: charOffset.current.x, y: nextY };
 
-    if (detectCollision(cameraPos.current, testPos, tables, nearTableId)) {
+    if (
+      detectCollision(cameraPos.current, testPos, tables, nearTableId, sizes)
+    ) {
       dy = 0; // block Y
     }
   }
@@ -111,6 +150,47 @@ function walkingDirection(keys) {
   else return "none";
 }
 
+function addCoords(a, b) {
+  const ax = a.current ? a.current.x : a.x;
+  const ay = a.current ? a.current.y : a.y;
+
+  const bx = b.current ? b.current.x : b.x;
+  const by = b.current ? b.current.y : b.y;
+
+  return {
+    x: ax + bx,
+    y: ay + by,
+  };
+}
+
+function canCameraMove(coords, view, world) {
+  const halfViewW = view.width / 2;
+  const halfViewH = view.height / 2;
+
+  const canMoveX = coords.x > halfViewW && coords.x < world.width - halfViewW;
+
+  const canMoveY = coords.y > halfViewH && coords.y < world.height - halfViewH;
+
+  return {
+    x: canMoveX,
+    y: canMoveY,
+  };
+}
+
+function canCharacterMove(coords, char, world) {
+  const halfW = char.width / 2;
+  const halfH = char.height / 2;
+
+  const centerCoords = { x: coords.x + halfW, y: coords.y + halfH };
+
+  const canMoveX =
+    centerCoords.x - halfW >= 0 && centerCoords.x + halfW <= world.width;
+  const canMoveY =
+    centerCoords.y - halfH >= 0 && centerCoords.y + halfH <= world.height;
+
+  return { x: canMoveX, y: canMoveY };
+}
+
 export default function useCamera(
   bgRef,
   charRef,
@@ -118,8 +198,20 @@ export default function useCamera(
   onUnselect,
   enabled
 ) {
-  const cameraPos = useRef({ x: 0, y: world.height - view.height });
-  const charOffset = useRef({ x: 400, y: 200 });
+  const ctx = useGameContext();
+  const sizesRef = useRef(ctx.sizes);
+  const viewInitial = sizesRef.current.view;
+  const worldInitial = sizesRef.current.world;
+
+  const cameraPos = useRef({
+    x: 0,
+    y: worldInitial.height - viewInitial.height,
+  });
+  const charOffset = useRef({ x: 0, y: 0 });
+  const charCoords = useRef({
+    x: cameraPos.current.x + viewInitial.width / 2 + charOffset.current.x,
+    y: cameraPos.current.y + viewInitial.height / 2 + charOffset.current.y,
+  });
   const nearTableId = useRef(0);
   const pressedTables = useRef({});
   const keys = useKeyboard();
@@ -133,9 +225,25 @@ export default function useCamera(
   let currentDirection = "top";
 
   useEffect(() => {
+    sizesRef.current = ctx.sizes;
+  }, [ctx.sizes]);
+
+  useEffect(() => {
+    const viewInitial = sizesRef.current.view;
+    const worldInitial = sizesRef.current.world;
+    cameraPos.current = {
+      x: 0,
+      y: worldInitial.height - viewInitial.height,
+    };
+    charOffset.current = { x: 0, y: 0 };
+    charCoords.current = {
+      x: cameraPos.current.x + viewInitial.width / 2 + charOffset.current.x,
+      y: cameraPos.current.y + viewInitial.height / 2 + charOffset.current.y,
+    };
+
     let frameId;
     const animate = (time) => {
-      console.log(enabled);
+      const { char, view, world } = sizesRef.current;
       if (!enabled) {
         frameId = requestAnimationFrame(animate);
         return;
@@ -159,6 +267,9 @@ export default function useCamera(
 
       // animate walking
       const direction = walkingDirection(keys);
+      if (direction != "none" && currentDirection != direction) {
+        charRef.current.src = sprites[direction].stand;
+      }
       if (updateWalkFrame === 0) {
         if (direction == "none") {
           charRef.current.src = sprites[currentDirection].stand;
@@ -191,73 +302,54 @@ export default function useCamera(
         cameraPos,
         charOffset,
         tables,
-        nearTableId
+        nearTableId,
+        sizesRef.current
       );
       dx = result.dx;
       dy = result.dy;
 
-      // ------------------ camera movement ----------------------
+      for (const table of tables) {
+        const tablePos = new Pos(table.x, table.y, table);
+        const charPos = new Pos(
+          cameraPos.current.x + charOffset.current.x + view.width / 2,
+          cameraPos.current.y + charOffset.current.y + view.height / 2,
+          char
+        );
 
-      let newCamX = cameraPos.current.x + dx;
-      let newCamY = cameraPos.current.y + dy;
+        if (collisionCompare(charPos, tablePos, false, char)) {
+          const correction = resolveOverlap(charPos, tablePos);
+          charOffset.current.x += correction.dx;
+          charOffset.current.y += correction.dy;
+        }
+      }
 
-      // maximum camera can move
-      const maxCamX = world.width - view.width;
-      const maxCamY = world.height - view.height;
+      let newCharCoords = addCoords(charCoords, { x: dx, y: dy });
 
-      // clamp camera movement
-      let camMovedX =
-        Math.max(0, Math.min(newCamX, maxCamX)) - cameraPos.current.x;
-      let camMovedY =
-        Math.max(0, Math.min(newCamY, maxCamY)) - cameraPos.current.y;
+      const canCamMove = canCameraMove(newCharCoords, view, world);
+      const canCharMove = canCharacterMove(newCharCoords, char, world);
 
-      if (newCamX - dx <= 0 && keys.current["d"] && charOffset.current.x < 0)
-        camMovedX = 0;
-      if (
-        newCamX - dx >= maxCamX &&
-        keys.current["a"] &&
-        charOffset.current.x > 0
-      )
-        camMovedX = 0;
+      let charMove = { x: 0, y: 0 };
+      let worldMove = { x: 0, y: 0 };
 
-      if (newCamY - dy <= 0 && keys.current["s"] && charOffset.current.y < 0)
-        camMovedY = 0;
-      if (
-        newCamY - dy >= maxCamY &&
-        keys.current["w"] &&
-        charOffset.current.y > 0
-      )
-        camMovedY = 0;
-      cameraPos.current.x += camMovedX;
-      cameraPos.current.y += camMovedY;
+      if (!canCamMove.x) {
+        if (canCharMove.x) charMove.x = dx;
+      } else worldMove.x = dx;
 
-      // ----------------- character movement ----------------------
+      if (!canCamMove.y) {
+        if (canCharMove.y) charMove.y = dy;
+      } else worldMove.y = dy;
 
-      let newCharX = charOffset.current.x + dx - camMovedX;
-      let newCharY = charOffset.current.y + dy - camMovedY;
-
-      const maxCharX = view.width / 2 - char.width;
-      const maxCharY = view.height / 2 - char.height;
-
-      // clamp char movement
-      let charMovedX =
-        Math.max(-maxCharX - char.width, Math.min(newCharX, maxCharX)) -
-        charOffset.current.x;
-      let charMovedY =
-        Math.max(-maxCharY - char.height, Math.min(newCharY, maxCharY)) -
-        charOffset.current.y;
-
-      if (dx === 0) charMovedX = 0;
-      if (dy === 0) charMovedY = 0;
-
-      // remaining movement goes to character if camera hit edge
-      charOffset.current.x += charMovedX;
-      charOffset.current.y += charMovedY;
-
-      // update position of background image
+      cameraPos.current = addCoords(cameraPos, worldMove);
+      charOffset.current = addCoords(charOffset, charMove);
+      charCoords.current = addCoords(
+        charCoords,
+        addCoords(worldMove, charMove)
+      );
+      // actually move the camera by translating bg
       bgRef.current.style.transform = `translate(
         ${-cameraPos.current.x}px, ${-cameraPos.current.y}px
       )`;
+      // move character
       charRef.current.style.transform = `translate(
         ${charOffset.current.x}px, ${charOffset.current.y}px
       )`;
@@ -272,5 +364,5 @@ export default function useCamera(
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [enabled]);
+  }, [enabled, sizesRef.current]);
 }
