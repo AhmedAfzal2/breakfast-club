@@ -59,6 +59,7 @@ const RestaurantScene = forwardRef((props, ref) => {
             src={src}
             id={"table" + t.id}
             key={t.id}
+            className="table"
             style={{
               ...style.table,
               left: t.x * width,
