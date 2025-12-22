@@ -12,7 +12,8 @@
   top: var(--header-height, 77px);
   z-index: 200;
   background-color: white;
-  padding: 8px 0;
+  padding: 8px;
+  box-sizing: content-box;
 }
 
 .menu-categories::after {

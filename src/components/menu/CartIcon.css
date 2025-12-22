@@ -1,6 +1,6 @@
 .container {
   border-radius: 50%;
-  padding-right: 0.6rem;
+  padding: 0 0.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,6 +39,10 @@
   .container img {
     width: 2.5rem;
     height: 2.5rem;
+  }
+
+  .container {
+    padding: 0 0.6rem 0 0.3rem;
   }
 }
 
