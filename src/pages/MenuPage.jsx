@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import MenuCategories from "../components/menu/MenuCategories";
 import MenuSubcategory from "../components/menu/MenuSubcategory";
@@ -19,6 +20,7 @@ import beveragesBanner from "/assets/images/banner-images/beverages.png";
 import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile.jpg";
 
 function MenuPage() {
+  const navigate = useNavigate();
   const ctx = useCart();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -156,15 +158,45 @@ function MenuPage() {
     };
   }, [loading, error, menuItems]);
 
-  const onPlace = () => {
-    console.log("place", ctx.cartItems);
-    //USHAB DO
-    // u can access cart items by doing ctx.cartItems
-    // also it should navigate to home page
+  const onPlace = async () => {
+    if (ctx.cartItems.length === 0) return;
 
-    // leev this
-    ctx.onClear();
-    closeCart();
+    const totalAmount = ctx.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    const orderData = {
+      items: ctx.cartItems.map(item => ({
+        menuItemId: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        src: item.src
+      })),
+      totalAmount,
+      customerName: "Guest User",
+      status: "pending"
+    };
+
+    try {
+      const response = await fetch('http://localhost:3001/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        alert("Order placed successfully!");
+        ctx.onClear();
+        closeCart();
+        navigate('/');
+      } else {
+        alert("Failed to place order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Error placing order. Please check your connection.");
+    }
   };
 
   const handleCategorySelect = (category) => {
