@@ -5,6 +5,7 @@ import ReservationPage from "./pages/ReservationPage";
 import MenuPageWrapper from "./pages/MenuPageWrapper";
 import ContactPage from "./pages/ContactPage";
 import ReviewsPage from "./pages/ReviewsPage";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/reservations" element={<ReservationPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
+        <Route path="/about" element={<AboutUs />} />
       </Routes>
     </Router>
   );

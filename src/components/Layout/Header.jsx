@@ -11,6 +11,7 @@ import reservationIcon from "/assets/HomePage/reservations.png";
 import aboutIcon from "/assets/HomePage/aboutus.png";
 import contactIcon from "/assets/HomePage/contactus.png";
 import reviewsIcon from "/assets/HomePage/reviews.png";
+import aboutUsIcon from "/assets/HomePage/aboutus.png";
 
 function Header({ onNavClick }) {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ function Header({ onNavClick }) {
           }}
           title="About Us"
         >
-          <img src={aboutIcon} alt="About Us" />
+          <img src={aboutUsIcon} alt="About Us" />
         </a>
       </nav>
 

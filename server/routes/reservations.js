@@ -86,7 +86,7 @@ router.get('/reserved-tables', async (req, res) => {
       success: false,
       message: 'Error fetching reserved tables'
     });
-  }
+}
 });
 
 // POST /api/reservations - Handle reservation form submission
