@@ -33,6 +33,8 @@ function ReservationPage() {
   const [tableError, setTableError] = useState("");
   const [isHelpPopupOpen, setIsHelpPopupOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [showRestaurantClosedPopup, setShowRestaurantClosedPopup] = useState(false);
+  const [showAllTablesReservedPopup, setShowAllTablesReservedPopup] = useState(false);
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([]);
@@ -147,6 +149,12 @@ function ReservationPage() {
     setTableError("");
     
     if (!validateDateAndTime()) {
+      return;
+    }
+    
+    // Check if all tables are reserved
+    if (reservedTables.length === tables.length) {
+      setShowAllTablesReservedPopup(true);
       return;
     }
     
@@ -295,9 +303,34 @@ function ReservationPage() {
     }
   };
 
+  // Check if restaurant is closed for today
+  const isRestaurantClosedForToday = () => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    // Restaurant closes at 4pm (16:00)
+    return currentHour >= 16;
+  };
+
+  // Check if selected date is today
+  const isSelectedDateToday = (date) => {
+    if (!date) return false;
+    const today = new Date();
+    const selectedDateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return selectedDateOnly.getTime() === todayOnly.getTime();
+  };
+
   // Handle date and time selection - unified function
   const handleDateAndTimeSelection = (date, time) => {
     if (date !== undefined) {
+      // Check if restaurant is closed for today and user is selecting today's date
+      if (date && isSelectedDateToday(date) && isRestaurantClosedForToday()) {
+        setShowRestaurantClosedPopup(true);
+        setSelectedDate(null);
+        setSelectedTime(null);
+        return;
+      }
+      
       setSelectedDate(date);
       if (date) {
         setDateError("");
@@ -331,9 +364,16 @@ function ReservationPage() {
     if (selectedDate && selectedTime) {
       getReservedTables(selectedDate, selectedTime).then((result) => {
         setReservedTables(result);
+        // Check if all tables are reserved
+        if (result.length === tables.length) {
+          setShowAllTablesReservedPopup(true);
+        } else {
+          setShowAllTablesReservedPopup(false);
+        }
       });
     } else {
       setReservedTables([]);
+      setShowAllTablesReservedPopup(false);
     }
   }, [selectedDate, selectedTime]);
 
@@ -713,6 +753,22 @@ function ReservationPage() {
           setTableError("");
           setIsTimeSpinnerOpen(false);
         }}
+        type="reservation"
+      />
+      <ConfirmationPopup
+        isOpen={showRestaurantClosedPopup}
+        onClose={() => setShowRestaurantClosedPopup(false)}
+        type="restaurant-closed"
+      />
+      <ConfirmationPopup
+        isOpen={showAllTablesReservedPopup}
+        onClose={() => {
+          setShowAllTablesReservedPopup(false);
+          // Clear date and time when all tables are reserved
+          setSelectedDate(null);
+          setSelectedTime(null);
+        }}
+        type="all-tables-reserved"
       />
     </Layout>
   );
