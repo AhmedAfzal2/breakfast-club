@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import MenuCategories from "../components/menu/MenuCategories";
 import MenuSubcategory from "../components/menu/MenuSubcategory";
@@ -7,6 +8,7 @@ import MenuItemList from "../components/menu/MenuItemList";
 import MenuItemModal from "../components/menu/modal/MenuItemModal";
 import CartIcon from "../components/menu/CartIcon";
 import Cart from "../components/cart/Cart";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
 import "../App.css";
@@ -20,10 +22,13 @@ import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile
 
 function MenuPage() {
   const ctx = useCart();
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isOrderConfirmationOpen, setIsOrderConfirmationOpen] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const cartBgRef = useRef();
   const categoryRefs = {
     BREAKFAST: useRef(null),
@@ -156,15 +161,82 @@ function MenuPage() {
     };
   }, [loading, error, menuItems]);
 
-  const onPlace = () => {
-    console.log("place", ctx.cartItems);
-    //USHAB DO
-    // u can access cart items by doing ctx.cartItems
-    // also it should navigate to home page
+  const onPlace = async () => {
+    // Validate cart is not empty
+    if (!ctx.cartItems || ctx.cartItems.length === 0) {
+      console.error("Cart is empty");
+      return;
+    }
 
-    // leev this
-    ctx.onClear();
+    // Set loading state and close cart immediately for better UX
+    setIsPlacingOrder(true);
     closeCart();
+
+    try {
+      // Calculate total amount
+      const totalAmount = ctx.cartItems.reduce((total, item) => {
+        return total + (item.price * item.quantity);
+      }, 0);
+
+      // Prepare order data
+      const orderData = {
+        items: ctx.cartItems.map(item => ({
+          itemId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.src || null
+        })),
+        totalAmount: totalAmount
+      };
+
+      // Submit order to API
+      const response = await fetch("http://localhost:3001/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log("Order placed successfully:", result);
+        
+        // Clear cart
+        ctx.onClear();
+        
+        // Show confirmation popup
+        setIsOrderConfirmationOpen(true);
+      } else {
+        console.error("Failed to place order:", result.message);
+        alert("Failed to place order. Please try again.");
+        // Reopen cart if order failed
+        setIsCartOpen(true);
+        cartBgRef.current?.classList.remove("hidden");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Error placing order. Please try again.");
+      // Reopen cart if order failed
+      setIsCartOpen(true);
+      cartBgRef.current?.classList.remove("hidden");
+    } finally {
+      setIsPlacingOrder(false);
+    }
+  };
+
+  const handleOrderConfirmationClose = () => {
+    setIsOrderConfirmationOpen(false);
+    // Navigate to home page
+    navigate("/");
+    // Scroll to top after navigation (use setTimeout to ensure navigation completes)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 100);
   };
 
   const handleCategorySelect = (category) => {
@@ -353,8 +425,13 @@ function MenuPage() {
           />
         </div>
       </Layout>
-      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} />
+      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} isPlacingOrder={isPlacingOrder} />
       <div ref={cartBgRef} className="cart-bg hidden" onClick={closeCart}></div>
+      <ConfirmationPopup
+        isOpen={isOrderConfirmationOpen}
+        onClose={handleOrderConfirmationClose}
+        type="order"
+      />
     </>
   );
 }
