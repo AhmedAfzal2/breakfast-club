@@ -29,6 +29,11 @@ function MenuPage() {
   };
   const isScrollingRef = useRef(false);
 
+  // Menu items will be fetched from API
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // prevent scrolling when cart open
   useEffect(() => {
     if (isCartOpen) {
@@ -44,8 +49,51 @@ function MenuPage() {
 
   // Intersection Observer to detect which category is in view
   useEffect(() => {
+    // Only set up observer after menu items are loaded
+    if (loading || error) return;
+
     const observers = [];
     let timeoutId;
+    let scrollTimeoutId;
+
+    // Function to find the most visible category
+    const findMostVisibleCategory = () => {
+      if (isScrollingRef.current) return;
+
+      const categories = ["BREAKFAST", "DESSERTS", "BEVERAGES"];
+      let maxVisibility = 0;
+      let mostVisibleCategory = null;
+
+      categories.forEach((category) => {
+        const ref = categoryRefs[category];
+        if (!ref?.current) return;
+
+        const rect = ref.current.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        
+        // Calculate how much of the section is visible
+        const visibleTop = Math.max(0, rect.top);
+        const visibleBottom = Math.min(viewportHeight, rect.bottom);
+        const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+        const visibility = visibleHeight / Math.min(viewportHeight, rect.height);
+
+        // Check if banner is in viewport (top portion)
+        if (rect.top <= viewportHeight * 0.5 && rect.bottom >= 0 && visibility > maxVisibility) {
+          maxVisibility = visibility;
+          mostVisibleCategory = category;
+        }
+      });
+
+      if (mostVisibleCategory) {
+        setSelectedCategory(mostVisibleCategory);
+      }
+    };
+
+    // Scroll event listener as fallback
+    const handleScroll = () => {
+      if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
+      scrollTimeoutId = setTimeout(findMostVisibleCategory, 100);
+    };
 
     // Small delay to ensure refs are attached
     timeoutId = setTimeout(() => {
@@ -61,7 +109,7 @@ function MenuPage() {
               if (entry.isIntersecting && !isScrollingRef.current) {
                 const rect = entry.boundingClientRect;
                 // Check if the section is in the upper portion of the viewport
-                if (rect.top <= window.innerHeight * 0.4 && rect.top >= -100) {
+                if (rect.top <= window.innerHeight * 0.5 && rect.top >= -200) {
                   setSelectedCategory(category);
                 }
               }
@@ -69,24 +117,31 @@ function MenuPage() {
           },
           {
             threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5],
-            rootMargin: "-10% 0px -60% 0px",
+            rootMargin: "-10% 0px -50% 0px",
           }
         );
 
         observer.observe(ref.current);
         observers.push({ observer, element: ref.current });
       });
-    }, 100);
+
+      // Add scroll listener as fallback
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      // Initial check
+      findMostVisibleCategory();
+    }, 200);
 
     return () => {
       clearTimeout(timeoutId);
+      clearTimeout(scrollTimeoutId);
+      window.removeEventListener('scroll', handleScroll);
       observers.forEach(({ observer, element }) => {
         if (element) {
           observer.unobserve(element);
         }
       });
     };
-  }, []);
+  }, [loading, error, menuItems]);
 
   const onPlace = () => {
     console.log("place", ctx.cartItems);
@@ -154,11 +209,6 @@ function MenuPage() {
     BEVERAGES: beveragesBanner,
   };
 
-  // Menu items will be fetched from API
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   // Fetch menu items from API
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -181,6 +231,38 @@ function MenuPage() {
     };
 
     fetchMenuItems();
+  }, []);
+
+  // Measure header and menu categories height and set CSS variables
+  useEffect(() => {
+    const updateHeights = () => {
+      const header = document.querySelector('.header');
+      const menuCategories = document.querySelector('.menu-categories');
+      
+      if (header) {
+        const headerHeight = header.offsetHeight;
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+      }
+      
+      if (menuCategories) {
+        const categoriesHeight = menuCategories.offsetHeight;
+        document.documentElement.style.setProperty('--menu-categories-height', `${categoriesHeight}px`);
+      }
+    };
+
+    // Initial measurement
+    updateHeights();
+    
+    // Update on resize
+    window.addEventListener('resize', updateHeights);
+    
+    // Also update after a short delay to ensure elements are rendered
+    const timeoutId = setTimeout(updateHeights, 100);
+
+    return () => {
+      window.removeEventListener('resize', updateHeights);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const getSubcategoryItems = (subcategory) => {
@@ -206,12 +288,12 @@ function MenuPage() {
         <div className="menu-page">
           <h1 className="page-heading">MENU</h1>
 
-          <CartIcon className="cart-icon" onClick={openCart} />
-
           <MenuCategories
             onCategorySelect={handleCategorySelect}
             selectedCategory={selectedCategory}
           />
+
+          <CartIcon className="cart-icon" onClick={openCart} />
 
           {loading && (
             <div style={{ padding: "2rem", textAlign: "center" }}>

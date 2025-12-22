@@ -48,6 +48,15 @@ const menuItemsData = [
     category: "DESSERTS",
     subcategory: "Sweet Treats",
   },
+  {
+    name: "swiss roll",
+    price: 350,
+    src: "/assets/images/menu-items/dessert/swiss_roll.png",
+    description: "Delicious Swiss roll with a light, fluffy sponge cake rolled with creamy filling. A classic dessert that's both elegant and satisfying. Perfect for any occasion.",
+    addOns: ["Whipped Cream", "Chocolate Sauce", "Strawberries", "Powdered Sugar", "Vanilla Ice Cream", "Caramel Drizzle"],
+    category: "DESSERTS",
+    subcategory: "Sweet Treats",
+  },
   // Hot Drinks
   {
     name: "black tea",
