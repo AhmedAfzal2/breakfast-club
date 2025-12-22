@@ -14,7 +14,7 @@ export function CartContext({ children }) {
     setCartItems((items) => [
       ...items,
       {
-        id: item.id,
+        id: item.id || item._id,
         name: item.name,
         price: item.price,
         src: item.src,

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Calendar, Clock } from 'lucide-react';
+import Items from '../components/cart/Items';
 import './AdminPage.css';
 
 function AdminPage() {
@@ -9,10 +11,18 @@ function AdminPage() {
   
   const [reservations, setReservations] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [exitingOrders, setExitingOrders] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const ADMIN_PIN = "1234"; // Hardcoded PIN
+
+  useEffect(() => {
+    if (activeTab === 'orders' && !selectedOrder && orders.length > 0) {
+      setSelectedOrder(orders[0]);
+    }
+  }, [activeTab, orders, selectedOrder]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -37,7 +47,13 @@ function AdminPage() {
       // Fetch Orders
       const ordResponse = await fetch('http://localhost:3001/api/orders');
       const ordData = await ordResponse.json();
-      setOrders(ordData);
+      setOrders(ordData.reverse());
+
+      // Fetch Menu Items for fallback image lookup
+      const menuResponse = await fetch('http://localhost:3001/api/menu-items');
+      const menuData = await menuResponse.json();
+      setMenuItems(menuData);
+
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
@@ -72,14 +88,46 @@ function AdminPage() {
   };
 
   // Order Actions
+  const handleCompleteOrder = async (id) => {
+    // 1. Start animation
+    setExitingOrders(prev => [...prev, id]);
+
+    // 2. Wait for animation
+    setTimeout(async () => {
+      try {
+        await fetch(`http://localhost:3001/api/orders/${id}`, {
+          method: 'DELETE'
+        });
+        
+        // 3. Remove from local state
+        setOrders(prev => prev.filter(o => o._id !== id));
+        setExitingOrders(prev => prev.filter(oid => oid !== id));
+        
+        if (selectedOrder && selectedOrder._id === id) {
+          setSelectedOrder(null);
+        }
+      } catch (err) {
+        console.error("Error updating order:", err);
+        // Revert animation if failed
+        setExitingOrders(prev => prev.filter(oid => oid !== id));
+      }
+    }, 500);
+  };
+
   const updateOrderStatus = async (id, status) => {
+    if (status === 'completed') {
+      handleCompleteOrder(id);
+      return;
+    }
     try {
       await fetch(`http://localhost:3001/api/orders/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-      fetchData();
+      // Refresh data but keep order (unless we want to remove cancelled too?)
+      // For now, just update status in place
+      setOrders(prev => prev.map(o => o._id === id ? { ...o, status } : o));
       if (selectedOrder && selectedOrder._id === id) {
         setSelectedOrder(prev => ({ ...prev, status }));
       }
@@ -128,13 +176,14 @@ function AdminPage() {
             Orders
           </button>
         </div>
-        <button onClick={() => setIsAuthenticated(false)} className="action-btn btn-delete">Logout</button>
+        <button onClick={() => setIsAuthenticated(false)} className="action-btn btn-delete" style={{width: '100px', height: '40px', fontFamily: 'var(--font-pixel)', Size:"30px"}}>Logout</button>
       </header>
 
-      <div className="admin-content">
-        {loading && <p>Loading data...</p>}
-        
-        {!loading && activeTab === 'reservations' && (
+      <div className="admin-content-wrapper">
+        <div className="admin-content">
+          {loading && <p>Loading data...</p>}
+          
+          {!loading && activeTab === 'reservations' && (
           <div className="reservations-table-container">
             <table className="reservations-table">
               <thead>
@@ -195,14 +244,14 @@ function AdminPage() {
           <div className="orders-layout">
             {/* Left: Orders List */}
             <div className="orders-list">
-              {orders.map(order => (
+              {orders.map((order, index) => (
                 <div 
                   key={order._id} 
-                  className={`order-list-item ${selectedOrder?._id === order._id ? 'active' : ''}`}
+                  className={`order-list-item ${selectedOrder?._id === order._id ? 'active' : ''} ${exitingOrders.includes(order._id) ? 'exiting' : ''}`}
                   onClick={() => setSelectedOrder(order)}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                    <strong>Order #{order._id.slice(-6)}</strong>
+                    <strong>Order #{index + 1}</strong>
                     <span className={`status-badge status-${order.status}`}>{order.status}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', color: '#666' }}>
@@ -221,53 +270,57 @@ function AdminPage() {
             <div className="receipt-view-container">
               {selectedOrder ? (
                 <div className="receipt-view">
-                  <div className="receipt-header">
-                    {/* Assuming first item image or a generic logo */}
-                    {selectedOrder.items[0]?.src && (
-                      <img src={selectedOrder.items[0].src} alt="Item" className="receipt-image" />
-                    )}
-                    <h2>Order Receipt</h2>
-                    <p>#{selectedOrder._id}</p>
-                    <p>{new Date(selectedOrder.createdAt).toLocaleString()}</p>
-                    <p>Customer: {selectedOrder.customerName}</p>
-                  </div>
-
-                  <div className="receipt-items">
-                    {selectedOrder.items.map((item, idx) => (
-                      <div key={idx} className="receipt-row">
-                        <span>{item.quantity}x {item.name}</span>
-                        <span>Rs. {item.price * item.quantity}</span>
+                  <div className="ticket-hole"></div>
+                  
+                  <div className="receipt-header-section">
+                    <div className="receipt-order-info">
+                      <h2>Order #{orders.findIndex(o => o._id === selectedOrder._id) + 1}</h2>
+                      <div className="receipt-time">
+                        <Clock size={16} />
+                        <span>{new Date(selectedOrder.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                       </div>
-                    ))}
+                    </div>
                   </div>
 
-                  <div className="receipt-total">
-                    <span>TOTAL</span>
-                    <span>Rs. {selectedOrder.totalAmount}</span>
+                  <div className="receipt-items-container">
+                    {/* Reuse Cart Items Component */}
+                    <Items items={selectedOrder.items.map(item => ({
+                      ...item,
+                      // Ensure image src is populated correctly
+                      src: item.menuItemId?.src || item.src || (menuItems.find(m => m.name === item.name)?.src)
+                    }))} readOnly={true} />
                   </div>
 
-                  <div className="receipt-actions">
-                    {selectedOrder.status === 'pending' && (
-                      <>
-                        <button 
-                          className="receipt-btn receipt-btn-complete"
-                          onClick={() => updateOrderStatus(selectedOrder._id, 'completed')}
-                        >
-                          Complete
-                        </button>
-                        <button 
-                          className="receipt-btn receipt-btn-cancel"
-                          onClick={() => updateOrderStatus(selectedOrder._id, 'cancelled')}
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    )}
-                    {selectedOrder.status !== 'pending' && (
-                      <div style={{ width: '100%', textAlign: 'center', padding: '10px', backgroundColor: '#eee', borderRadius: '8px' }}>
-                        Order is {selectedOrder.status}
-                      </div>
-                    )}
+                  <div className="receipt-footer-section">
+                    <div className="receipt-total">
+                      <span>GRAND TOTAL</span>
+                      <span>Rs. {selectedOrder.totalAmount}</span>
+                    </div>
+
+                    <div className="receipt-actions">
+                      {selectedOrder.status === 'pending' && (
+                        <>
+                          <button 
+                            className="custom-button receipt-btn-complete"
+                            onClick={() => updateOrderStatus(selectedOrder._id, 'completed')}
+                          >
+                            Complete
+                          </button>
+                          <button 
+                            className="custom-button receipt-btn-cancel"
+                            style={{ backgroundColor: '#dc3545' }}
+                            onClick={() => updateOrderStatus(selectedOrder._id, 'cancelled')}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                      {selectedOrder.status !== 'pending' && (
+                        <div className="order-status-message">
+                          Order is {selectedOrder.status}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -276,6 +329,7 @@ function AdminPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
