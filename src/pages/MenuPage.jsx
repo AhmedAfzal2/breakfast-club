@@ -23,7 +23,6 @@ import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile
 function MenuPage() {
   const navigate = useNavigate();
   const ctx = useCart();
-  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

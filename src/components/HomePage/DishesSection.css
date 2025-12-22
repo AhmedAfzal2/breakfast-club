@@ -104,19 +104,20 @@
 
 /* --- Individual Dish Card Styling --- */
 .dish-card {
-    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, filter 0.3s ease;
     flex: 0 0 calc(38% - 2rem); 
-    opacity: 0.6;
-    background-color: rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    background-color: #e0e0e0; /* Visible grey */
     border-radius: 0.75rem;
     cursor: default;
+    filter: grayscale(100%);
 }
 
 /* Hover effect for unselected (grey) cards */
 .dish-card:not(.highlighted):hover {
-    background-color: rgba(0, 0, 0, 0.25); /* Slightly darker grey */
-    opacity: 0.8; /* Slightly more visible */
-    transform: scale(1.02); /* Subtle scale */
+    background-color: #d0d0d0;
+    transform: scale(1.02);
+    opacity: 1;
 }
 
 /* Highlighted Card Style (Applied via JSX class 'highlighted') */
@@ -125,6 +126,7 @@
     box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
     background-color: var(--jasmine); 
     border-radius: 0.75rem;
+    filter: grayscale(0%);
 }
 
 
@@ -224,7 +226,7 @@
 }
 
 .load-animation {
-    opacity: 0;
+    /* opacity: 0; Removed to ensure visibility if animation fails */
     transform: translateX(-50px);
     animation: slideInFromLeft 0.6s forwards ease-out;
 }
