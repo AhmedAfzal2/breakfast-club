@@ -14,7 +14,7 @@ function MenuItem({ item, onItemClick }) {
   };
 
   return (
-    <div className="menu-item" onClick={handleItemClick}>
+    <div className={`menu-item ${item.category ? item.category.toLowerCase() : ''}`} onClick={handleItemClick}>
       <div className="menu-item-image-container">
         <img src={item.src} alt={item.name} className="menu-item-image" />
       </div>
