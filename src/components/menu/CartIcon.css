@@ -23,11 +23,11 @@
     font-family: var(--font-roboto-slab);
 }
 
-img {
+.container img {
     width: 3rem;
     transition: transform 0.3s;
 }
 
-img:hover {
+.container img:hover {
     transform: scale(1.1);
 }
