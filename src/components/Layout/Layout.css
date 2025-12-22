@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   position: sticky;
+  box-shadow: 0 2px 4px rgba(255, 196, 106, 0.58);
   top: 0;
   background-color: white;
   z-index: 1000;
@@ -39,7 +40,7 @@
 }
 
 .nav-link img {
-  width: 10rem;  /* Bigger buttons */
+  width: 10rem; /* Bigger buttons */
   height: auto;
   object-fit: contain;
   display: block;
