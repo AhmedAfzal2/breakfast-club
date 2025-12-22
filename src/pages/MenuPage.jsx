@@ -37,14 +37,19 @@ function MenuPage() {
   // prevent scrolling when cart open
   useEffect(() => {
     if (isCartOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
 
-    return () => {
-      document.body.style.overflow = "";
-    };
+      return () => {
+        const scrollY = document.body.style.top;
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      };
+    }
   }, [isCartOpen]);
 
   // Intersection Observer to detect which category is in view
@@ -70,15 +75,20 @@ function MenuPage() {
 
         const rect = ref.current.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
-        
+
         // Calculate how much of the section is visible
         const visibleTop = Math.max(0, rect.top);
         const visibleBottom = Math.min(viewportHeight, rect.bottom);
         const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-        const visibility = visibleHeight / Math.min(viewportHeight, rect.height);
+        const visibility =
+          visibleHeight / Math.min(viewportHeight, rect.height);
 
         // Check if banner is in viewport (top portion)
-        if (rect.top <= viewportHeight * 0.5 && rect.bottom >= 0 && visibility > maxVisibility) {
+        if (
+          rect.top <= viewportHeight * 0.5 &&
+          rect.bottom >= 0 &&
+          visibility > maxVisibility
+        ) {
           maxVisibility = visibility;
           mostVisibleCategory = category;
         }
@@ -126,7 +136,7 @@ function MenuPage() {
       });
 
       // Add scroll listener as fallback
-      window.addEventListener('scroll', handleScroll, { passive: true });
+      window.addEventListener("scroll", handleScroll, { passive: true });
       // Initial check
       findMostVisibleCategory();
     }, 200);
@@ -134,7 +144,7 @@ function MenuPage() {
     return () => {
       clearTimeout(timeoutId);
       clearTimeout(scrollTimeoutId);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
       observers.forEach(({ observer, element }) => {
         if (element) {
           observer.unobserve(element);
@@ -236,31 +246,37 @@ function MenuPage() {
   // Measure header and menu categories height and set CSS variables
   useEffect(() => {
     const updateHeights = () => {
-      const header = document.querySelector('.header');
-      const menuCategories = document.querySelector('.menu-categories');
-      
+      const header = document.querySelector(".header");
+      const menuCategories = document.querySelector(".menu-categories");
+
       if (header) {
         const headerHeight = header.offsetHeight;
-        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+        document.documentElement.style.setProperty(
+          "--header-height",
+          `${headerHeight}px`
+        );
       }
-      
+
       if (menuCategories) {
         const categoriesHeight = menuCategories.offsetHeight;
-        document.documentElement.style.setProperty('--menu-categories-height', `${categoriesHeight}px`);
+        document.documentElement.style.setProperty(
+          "--menu-categories-height",
+          `${categoriesHeight}px`
+        );
       }
     };
 
     // Initial measurement
     updateHeights();
-    
+
     // Update on resize
-    window.addEventListener('resize', updateHeights);
-    
+    window.addEventListener("resize", updateHeights);
+
     // Also update after a short delay to ensure elements are rendered
     const timeoutId = setTimeout(updateHeights, 100);
 
     return () => {
-      window.removeEventListener('resize', updateHeights);
+      window.removeEventListener("resize", updateHeights);
       clearTimeout(timeoutId);
     };
   }, []);
@@ -268,7 +284,6 @@ function MenuPage() {
   const getSubcategoryItems = (subcategory) => {
     return menuItems.filter((item) => item.subcategory === subcategory);
   };
-
 
   return (
     <>
@@ -278,10 +293,11 @@ function MenuPage() {
 
           <MenuCategories
             onCategorySelect={handleCategorySelect}
+            onClick={openCart}
             selectedCategory={selectedCategory}
           />
 
-          <CartIcon className="cart-icon" onClick={openCart} />
+          {/* <CartIcon className="cart-icon" onClick={openCart} /> */}
 
           {loading && (
             <div style={{ padding: "2rem", textAlign: "center" }}>
