@@ -15,41 +15,7 @@ function Time({ selectedTime, onTimeChange, timeError, selectedDate }) {
       setLocalTimeError("");
     } else {
       setLocalTimeError("");
-      // Set default time to one hour from now if no time is selected
-      if (!selectedTime) {
-        const now = new Date();
-        const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
-        const selectedDateOnly = new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate()
-        );
-        const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        
-        // If selected date is today, use one hour from now
-        if (selectedDateOnly.getTime() === todayOnly.getTime()) {
-          const minutes = oneHourFromNow.getMinutes();
-          const roundedMinutes = minutes <= 30 ? 30 : 60;
-          const defaultTime = new Date(oneHourFromNow);
-          defaultTime.setMinutes(roundedMinutes === 60 ? 0 : roundedMinutes);
-          if (roundedMinutes === 60) {
-            defaultTime.setHours(defaultTime.getHours() + 1);
-          }
-          defaultTime.setSeconds(0);
-          defaultTime.setMilliseconds(0);
-          onTimeChange(defaultTime);
-        } else {
-          // If selected date is in the future, use 12:00 PM of that date
-          const defaultTime = new Date(
-            selectedDate.getFullYear(),
-            selectedDate.getMonth(),
-            selectedDate.getDate(),
-            12,
-            0
-          );
-          onTimeChange(defaultTime);
-        }
-      }
+      // Don't automatically set time - user must confirm with tick button
     }
   }, [selectedDate]);
 
