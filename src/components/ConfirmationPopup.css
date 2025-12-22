@@ -1,73 +1,120 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap');
-
 .cute-confirm-overlay {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .cute-confirm-popup {
-  background: var(--jasmine);
-  width: 260px;
-  padding: 20px;
-  border-radius: 18px;
+  background-color: var(--jasmine);
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  border: 2px solid var(--china-rose);
   position: relative;
   text-align: center;
-
-  animation: cutePop 0.22s ease-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: cutePop 0.3s ease-out;
 }
 
 @keyframes cutePop {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .cute-close-btn {
   position: absolute;
-  top: 8px;
+  top: 10px;
   right: 10px;
   background: transparent;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  color: var(--china-rose);
   cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.cute-close-btn:hover {
+  transform: scale(1.1);
+  color: var(--gamboge);
+}
+
+.cute-close-btn:active {
+  transform: scale(0.95);
 }
 
 .cute-confirm-title {
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: 1.2rem;
-  margin: 10px 0;
-  color: #333;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.5rem;
+  margin-top:10px;
+  font-weight: 600;
+  color: var(--china-rose);
+  text-transform: uppercase;
 }
 
 .cute-confirm-img {
-  width: 70px;
-  height: 70px;
+  aspect-ratio: 1/1;
+  width: 60%;
+  height: 60%;
   object-fit: contain;
-  margin: 10px auto;
+  margin: 0 auto 0 auto;
+  display: block;
 }
 
 .cute-confirm-text {
-  font-size: 0.9rem;
-  color: #444;
-  margin-bottom: 14px;
+  text-transform: lowercase;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.8);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
 }
 
 .cute-ok-btn {
-  background: var(--gamboge);
+  background-color: var(--gamboge);
   color: white;
-  padding: 8px 16px;
-  border-radius: 10px;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.1rem;
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: transform 0.15s ease;
+  text-transform: lowercase;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  display: block;
 }
 
 .cute-ok-btn:hover {
-  transform: scale(1.04);
+  background-color: var(--china-rose);
+  transform: scale(1.02);
+}
+
+.cute-ok-btn:active {
+  transform: scale(0.98);
 }

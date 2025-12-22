@@ -26,6 +26,26 @@
   flex-direction: column;
 }
 
+/* Desktop: Slide in from left to center */
+@media (min-width: 769px) {
+  .reservation-form-overlay {
+    justify-content: center;
+  }
+
+  .reservation-form-popup {
+    animation: slideInFromLeftToCenter 0.5s ease;
+  }
+
+  @keyframes slideInFromLeftToCenter {
+    from {
+      transform: translateX(calc(-50vw - 50%));
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
+
 .reservation-form-header {
   display: flex;
   align-items: center;
@@ -185,6 +205,7 @@
 }
 
 .error-message {
+  text-transform: lowercase;
   color: var(--china-rose);
   font-family: 'Roboto Slab', serif;
   font-size: 0.85rem;
