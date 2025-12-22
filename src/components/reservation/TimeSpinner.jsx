@@ -268,23 +268,9 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateS
             </button>
           </div>
           <div className="time-spinner-group">
-            <button
-              type="button"
-              className="spinner-button spinner-button-up"
-              onClick={(e) => handleButtonClick(e, toggleAmPm)}
-            >
-              <img src={arrowIcon} alt="Up" />
-            </button>
             <div className="spinner-value-wrapper">
               <div className="spinner-value">{amPm}</div>
             </div>
-            <button
-              type="button"
-              className="spinner-button spinner-button-down"
-              onClick={(e) => handleButtonClick(e, toggleAmPm)}
-            >
-              <img src={arrowIcon} alt="Down" />
-            </button>
           </div>
         </div>
         <button

@@ -21,6 +21,21 @@ function ConfirmationPopup({ isOpen, onClose, type = "reservation" }) {
       title: "Reservation Received!",
       text: "Your details were submitted successfully.",
       showImage: true
+    },
+    order: {
+      title: "Order Placed!",
+      text: "Your order has been placed successfully.",
+      showImage: true
+    },
+    "restaurant-closed": {
+      title: "Restaurant Closed",
+      text: "The restaurant is closed for reservations today. Restaurant timings: 10am - 4pm. Please select a future date.",
+      showImage: true
+    },
+    "all-tables-reserved": {
+      title: "All Tables Reserved",
+      text: "All tables are reserved for this time slot. Please select a different date or time.",
+      showImage: true
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, X } from "lucide-react";
 import Game from "../../../components/reservation/game/Game";
 import Button from "../../../components/Button";
@@ -20,7 +20,9 @@ function SelectTablePopup({
   const [isClosing, setIsClosing] = useState(false);
   const [gameEnable, setGameEnable] = useState(false);
   const [isHelpPopupOpen, setIsHelpPopupOpen] = useState(false);
-  const [showTableValidationPopup, setShowTableValidationPopup] = useState(false);
+  const [showTableValidationPopup, setShowTableValidationPopup] =
+    useState(false);
+  const [showAllTablesReservedPopup, setShowAllTablesReservedPopup] = useState(false);
 
   // Calculate max guests based on selected tables
   const calculateMaxGuests = () => {
@@ -66,6 +68,12 @@ function SelectTablePopup({
   };
 
   const handleContinueClick = () => {
+    // Check if all tables are reserved
+    if (reservedTables.length === tables.length) {
+      setShowAllTablesReservedPopup(true);
+      return;
+    }
+    
     // Validate that at least one table is selected
     if (selectedTables.length === 0) {
       setShowTableValidationPopup(true);
@@ -229,6 +237,15 @@ function SelectTablePopup({
         isOpen={showTableValidationPopup}
         onClose={() => setShowTableValidationPopup(false)}
         type="error-table"
+      />
+      <ConfirmationPopup
+        isOpen={showAllTablesReservedPopup}
+        onClose={() => {
+          setShowAllTablesReservedPopup(false);
+          // Close the select table popup when all tables are reserved
+          onClose();
+        }}
+        type="all-tables-reserved"
       />
     </div>
   );
