@@ -9,12 +9,12 @@ import "./MenuItemModal.css";
 function MenuItemModal({ item, isOpen, onClose }) {
   const onAdd = useCart().onAdd;
   const [isClosing, setIsClosing] = useState(false);
-  const [selectedAddOn, setSelectedAddOn] = useState(null);
+  const [selectedAddOns, setSelectedAddOns] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
       setIsClosing(false);
-      setSelectedAddOn(null); // Reset add-on selection when modal opens
+      setSelectedAddOns([]); // Reset add-on selections when modal opens
     }
   }, [isOpen]);
 
@@ -25,7 +25,7 @@ function MenuItemModal({ item, isOpen, onClose }) {
     setTimeout(() => {
       onClose();
       setIsClosing(false);
-      setSelectedAddOn(null);
+      setSelectedAddOns([]);
     }, 300); // Match animation duration
   };
 
@@ -36,17 +36,28 @@ function MenuItemModal({ item, isOpen, onClose }) {
   };
 
   const handleAddOnChange = (addOn) => {
-    setSelectedAddOn(addOn);
+    setSelectedAddOns(prev => {
+      if (prev.includes(addOn)) {
+        // Remove if already selected
+        return prev.filter(a => a !== addOn);
+      } else {
+        // Add if not selected
+        return [...prev, addOn];
+      }
+    });
   };
+
+  // Get category for background color
+  const category = item.category ? item.category.toLowerCase() : '';
 
   return (
     <div className="menu-item-modal-overlay" onClick={handleOverlayClick}>
-      <div className={`menu-item-modal ${isClosing ? "closing" : ""}`}>
+      <div className={`menu-item-modal ${category} ${isClosing ? "closing" : ""}`}>
         <ModalHeader item={item} onClose={handleClose} />
         <ModalDescription description={item.description} />
         <ModalToppings
           addOns={item.addOns}
-          selectedAddOn={selectedAddOn}
+          selectedAddOns={selectedAddOns}
           onAddOnChange={handleAddOnChange}
         />
         <div className="modal-footer">

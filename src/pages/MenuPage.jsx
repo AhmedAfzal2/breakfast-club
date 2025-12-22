@@ -282,9 +282,9 @@ function MenuPage() {
 
   // Subcategories for each category
   const subcategories = {
-    BREAKFAST: ["Hot Breakfast", "Healthy", "Light Breakfast"],
-    DESSERTS: ["Sweet Treats"],
-    BEVERAGES: ["Hot", "Cold"],
+    BREAKFAST: ["Sweet Breakfast", "Savory Breakfast", "Healthy"],
+    DESSERTS: ["Cakes & Cheesecakes", "Pastries", "Cookies & Donuts", "Fresh Fruit & Tarts"],
+    BEVERAGES: ["Hot Coffee", "Hot Tea", "Hot Chocolate", "Cold Coffee", "Cold Tea", "Milkshakes", "Refreshing Drinks"],
   };
 
   // Banner images for categories

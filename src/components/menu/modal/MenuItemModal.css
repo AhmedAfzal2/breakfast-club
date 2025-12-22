@@ -35,7 +35,7 @@
 }
 
 .menu-item-modal {
-  background-color: var(--jasmine);
+  background-color: var(--pastel-pink);
   border-radius: 16px;
   max-width: 600px;
   width: 90%;
@@ -46,6 +46,27 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
+}
+
+.menu-item-modal:hover {
+  /* No hover effects on the modal container itself */
+  background-color: var(--pastel-pink);
+}
+
+.menu-item-modal.beverages {
+  background-color: var(--pastel-blue);
+}
+
+.menu-item-modal.beverages:hover {
+  background-color: var(--pastel-blue);
+}
+
+.menu-item-modal.desserts {
+  background-color: var(--jasmine);
+}
+
+.menu-item-modal.desserts:hover {
+  background-color: var(--jasmine);
 }
 
 @keyframes slideUp {

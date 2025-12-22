@@ -8,7 +8,7 @@
   max-width: 100%;
   padding: 20px;
   cursor: pointer;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
 }
 
 .menu-item.beverages {
@@ -22,6 +22,19 @@
 .menu-item:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transform: scale(1.02);
+}
+
+/* Darker hover colors for each category - only background changes */
+.menu-item:not(.beverages):not(.desserts):hover {
+  background-color: #e8b3b8; /* Darker pastel-pink */
+}
+
+.menu-item.beverages:hover {
+  background-color: #a8c5d9; /* Darker pastel-blue */
+}
+
+.menu-item.desserts:hover {
+  background-color: #fad869; /* Darker jasmine */
 }
 .menu-item-image-container {
   width: 50%;
