@@ -21,6 +21,11 @@ function ConfirmationPopup({ isOpen, onClose, type = "reservation" }) {
       title: "Reservation Received!",
       text: "Your details were submitted successfully.",
       showImage: true
+    },
+    order: {
+      title: "Order Placed!",
+      text: "Your order has been placed successfully.",
+      showImage: true
     }
   };
 
