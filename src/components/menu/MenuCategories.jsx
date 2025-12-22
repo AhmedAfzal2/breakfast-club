@@ -30,7 +30,7 @@ function MenuCategories({
           key={index}
           className={`menu-category-button ${
             selectedCategory === category ? "active" : ""
-          }`}
+          } ${category.toLowerCase()}`}
           onClick={() => handleCategoryClick(category)}
         >
           {category}
