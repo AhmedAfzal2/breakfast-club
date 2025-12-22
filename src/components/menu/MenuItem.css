@@ -69,8 +69,7 @@
 
   .menu-item-image-container {
     width: 60%;
-    height: 150px;
-    min-height: 150px;
+    min-height: 100px;
     max-height: 150px;
     aspect-ratio: 1 / 1;
   }
@@ -89,4 +88,3 @@
     font-size: 0.9rem;
   }
 }
-

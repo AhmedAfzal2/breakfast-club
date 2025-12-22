@@ -13,7 +13,7 @@ import "../App.css";
 import "./MenuPage.css";
 import breakfastBanner from "/assets/images/banner-images/breakfast.png";
 import dessertBanner from "/assets/images/banner-images/dessert.png";
-import beveragesBanner from "/assets/images/banner-images/beverages.png";
+import beveragesBanner from "/assets/images/banner-images/beverages.jpg";
 
 function MenuPage() {
   const ctx = useCart();
@@ -269,18 +269,6 @@ function MenuPage() {
     return menuItems.filter((item) => item.subcategory === subcategory);
   };
 
-  const getCategoryColor = (category) => {
-    switch (category) {
-      case "BREAKFAST":
-        return "var(--jasmine)";
-      case "DESSERTS":
-        return "var(--china-rose)";
-      case "BEVERAGES":
-        return "var(--cool-gray)";
-      default:
-        return "var(--jasmine)";
-    }
-  };
 
   return (
     <>
@@ -331,7 +319,6 @@ function MenuPage() {
                         <MenuItemList
                           items={getSubcategoryItems(subcategory)}
                           onItemClick={handleItemClick}
-                          cardColor={getCategoryColor(category)}
                         />
                       )}
                     </React.Fragment>

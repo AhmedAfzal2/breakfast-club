@@ -348,7 +348,7 @@
   }
   
   .layout-content {
-    padding: 20px 30px;
+    padding: 20px calc(30px + 1rem);
   }
   
   .nav-bar {
