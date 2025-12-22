@@ -12,8 +12,11 @@ import { menuApi } from "../services/menuApi";
 import "../App.css";
 import "./MenuPage.css";
 import breakfastBanner from "/assets/images/banner-images/breakfast.png";
-import dessertBanner from "/assets/images/banner-images/dessert.png";
-import beveragesBanner from "/assets/images/banner-images/beverages.jpg";
+import breakfastBannerMobile from "/assets/images/banner-images/breakfast_mobile.png";
+import dessertBanner from "/assets/images/banner-images/desserts.png";
+import dessertBannerMobile from "/assets/images/banner-images/dessert_mobile.png";
+import beveragesBanner from "/assets/images/banner-images/beverages.png";
+import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile.jpg";
 
 function MenuPage() {
   const ctx = useCart();
@@ -214,9 +217,9 @@ function MenuPage() {
 
   // Banner images for categories
   const categoryBanners = {
-    BREAKFAST: breakfastBanner,
-    DESSERTS: dessertBanner,
-    BEVERAGES: beveragesBanner,
+    BREAKFAST: { desktop: breakfastBanner, mobile: breakfastBannerMobile },
+    DESSERTS: { desktop: dessertBanner, mobile: dessertBannerMobile },
+    BEVERAGES: { desktop: beveragesBanner, mobile: beveragesBannerMobile },
   };
 
   // Fetch menu items from API
@@ -322,7 +325,8 @@ function MenuPage() {
               >
                 {categoryBanners[category] && (
                   <MenuBanner
-                    imageSrc={categoryBanners[category]}
+                    imageSrc={categoryBanners[category].desktop}
+                    mobileImageSrc={categoryBanners[category].mobile}
                     alt={`${category} banner`}
                   />
                 )}
