@@ -1,23 +1,34 @@
 import mongoose from 'mongoose';
 
 const OrderSchema = new mongoose.Schema({
+  // Order items
   items: [{
-    menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem' },
+    itemId: { type: String, required: true },
     name: { type: String, required: true },
     price: { type: Number, required: true },
     quantity: { type: Number, required: true },
-    src: { type: String } // Image URL
+    image: { type: String, default: null }
   }],
+  
+  // Total amount
   totalAmount: { type: Number, required: true },
-  customerName: { type: String, default: 'Guest' },
-  tableNumber: { type: String },
+  
+  // Order status
   status: {
     type: String,
-    enum: ['pending', 'completed', 'cancelled'],
+    enum: ['pending', 'preparing', 'ready', 'completed', 'cancelled'],
     default: 'pending'
-  }
+  },
+  
+  // Order timestamp
+  orderDate: { type: Date, default: Date.now }
 }, { timestamps: true });
+
+// Index for efficient queries
+OrderSchema.index({ orderDate: -1 });
+OrderSchema.index({ status: 1 });
 
 const Order = mongoose.model('Order', OrderSchema);
 
 export default Order;
+

@@ -8,6 +8,7 @@ import MenuItemList from "../components/menu/MenuItemList";
 import MenuItemModal from "../components/menu/modal/MenuItemModal";
 import CartIcon from "../components/menu/CartIcon";
 import Cart from "../components/cart/Cart";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
 import "../App.css";
@@ -22,10 +23,13 @@ import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile
 function MenuPage() {
   const navigate = useNavigate();
   const ctx = useCart();
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("BREAKFAST");
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isOrderConfirmationOpen, setIsOrderConfirmationOpen] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const cartBgRef = useRef();
   const categoryRefs = {
     BREAKFAST: useRef(null),
@@ -159,44 +163,81 @@ function MenuPage() {
   }, [loading, error, menuItems]);
 
   const onPlace = async () => {
-    if (ctx.cartItems.length === 0) return;
+    // Validate cart is not empty
+    if (!ctx.cartItems || ctx.cartItems.length === 0) {
+      console.error("Cart is empty");
+      return;
+    }
 
-    const totalAmount = ctx.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    const orderData = {
-      items: ctx.cartItems.map(item => ({
-        menuItemId: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        src: item.src
-      })),
-      totalAmount,
-      customerName: "Guest User",
-      status: "pending"
-    };
+    // Set loading state and close cart immediately for better UX
+    setIsPlacingOrder(true);
+    closeCart();
 
     try {
-      const response = await fetch('http://localhost:3001/api/orders', {
-        method: 'POST',
+      // Calculate total amount
+      const totalAmount = ctx.cartItems.reduce((total, item) => {
+        return total + (item.price * item.quantity);
+      }, 0);
+
+      // Prepare order data
+      const orderData = {
+        items: ctx.cartItems.map(item => ({
+          itemId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.src || null
+        })),
+        totalAmount: totalAmount
+      };
+
+      // Submit order to API
+      const response = await fetch("http://localhost:3001/api/orders", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(orderData),
       });
 
-      if (response.ok) {
-        alert("Order placed successfully!");
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log("Order placed successfully:", result);
+        
+        // Clear cart
         ctx.onClear();
-        closeCart();
-        navigate('/');
+        
+        // Show confirmation popup
+        setIsOrderConfirmationOpen(true);
       } else {
+        console.error("Failed to place order:", result.message);
         alert("Failed to place order. Please try again.");
+        // Reopen cart if order failed
+        setIsCartOpen(true);
+        cartBgRef.current?.classList.remove("hidden");
       }
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("Error placing order. Please check your connection.");
+      alert("Error placing order. Please try again.");
+      // Reopen cart if order failed
+      setIsCartOpen(true);
+      cartBgRef.current?.classList.remove("hidden");
+    } finally {
+      setIsPlacingOrder(false);
     }
+  };
+
+  const handleOrderConfirmationClose = () => {
+    setIsOrderConfirmationOpen(false);
+    // Navigate to home page
+    navigate("/");
+    // Scroll to top after navigation (use setTimeout to ensure navigation completes)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 100);
   };
 
   const handleCategorySelect = (category) => {
@@ -242,9 +283,9 @@ function MenuPage() {
 
   // Subcategories for each category
   const subcategories = {
-    BREAKFAST: ["Hot Breakfast", "Healthy", "Light Breakfast"],
-    DESSERTS: ["Sweet Treats"],
-    BEVERAGES: ["Hot", "Cold"],
+    BREAKFAST: ["Sweet Breakfast", "Savory Breakfast", "Healthy"],
+    DESSERTS: ["Cakes & Cheesecakes", "Pastries", "Cookies & Donuts", "Fresh Fruit & Tarts"],
+    BEVERAGES: ["Hot Coffee", "Hot Tea", "Hot Chocolate", "Cold Coffee", "Cold Tea", "Milkshakes", "Refreshing Drinks"],
   };
 
   // Banner images for categories
@@ -385,8 +426,13 @@ function MenuPage() {
           />
         </div>
       </Layout>
-      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} />
+      <Cart isOpen={isCartOpen} onBack={closeCart} onPlace={onPlace} isPlacingOrder={isPlacingOrder} />
       <div ref={cartBgRef} className="cart-bg hidden" onClick={closeCart}></div>
+      <ConfirmationPopup
+        isOpen={isOrderConfirmationOpen}
+        onClose={handleOrderConfirmationClose}
+        type="order"
+      />
     </>
   );
 }

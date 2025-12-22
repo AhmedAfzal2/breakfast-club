@@ -13,12 +13,12 @@
   box-sizing: border-box;
   overflow: hidden;
   opacity: 1;
-  animation: slideUp 0.5s ease;
+  animation: slideInFromLeft 0.5s ease;
   text-transform: lowercase;
 }
 
 .mobile-popup-header {
-  background-color: var(--jasmine);
+  background-color: white;
   padding: 2px 0.5rem;
   display: flex;
   align-items: center;
@@ -57,24 +57,24 @@
 }
 
 .mobile-contact-info-popup.slide-down {
-  animation: slideDown 0.5s ease;
+  animation: slideOutToLeft 0.5s ease;
 }
 
-@keyframes slideUp {
+@keyframes slideInFromLeft {
   from {
-    transform: translateY(100%);
+    transform: translateX(-100%);
   }
   to {
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
-@keyframes slideDown {
+@keyframes slideOutToLeft {
   from {
-    transform: translateY(0);
+    transform: translateX(0);
   }
   to {
-    transform: translateY(100%);
+    transform: translateX(-100%);
   }
 }
 
