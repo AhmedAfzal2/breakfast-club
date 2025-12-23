@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import tables from "./tables";
+import config from "./gameConstants";
 import "./style.css";
 
 const style = {
@@ -17,12 +18,14 @@ const style = {
     position: "absolute",
     top: 0,
     right: 0,
-    width: 375,
-    height: 410,
   },
 };
 
 const RestaurantScene = forwardRef((props, ref) => {
+  const { width, height } = props.size;
+  const { selectedTables, onTableClick } = props;
+  const bar = config.bar;
+
   return (
     <div
       ref={ref}
@@ -35,20 +38,37 @@ const RestaurantScene = forwardRef((props, ref) => {
       }}
       className="restaurant-scene"
     >
-      <img src="/assets/images/bar.png" style={{ ...style.bar }} />
+      <img
+        src="/assets/images/bar.png"
+        style={{
+          ...style.bar,
+          width: bar.width * width,
+          height: bar.height * height,
+        }}
+      />
       {tables.map((t) => {
+        const isSelected = selectedTables?.some((st) => st.id === t.id);
+        const src = t.reserved
+          ? t.seated_src
+          : isSelected
+          ? t.reserved_src
+          : t.src;
+
         return (
           <img
-            src={t.reserved ? t.seated_src : t.src}
+            src={src}
             id={"table" + t.id}
             key={t.id}
+            className="table"
             style={{
               ...style.table,
-              left: t.x,
-              top: t.y,
-              width: t.width,
-              height: t.height,
+              left: t.x * width,
+              top: t.y * height,
+              width: t.width * width,
+              height: t.height * height,
+              cursor: t.reserved ? "default" : "pointer",
             }}
+            onClick={() => onTableClick && onTableClick(t.id)}
           />
         );
       })}

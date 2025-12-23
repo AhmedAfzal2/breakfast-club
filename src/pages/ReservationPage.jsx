@@ -236,12 +236,12 @@ function ReservationPage() {
         minTime.setMilliseconds(0);
         return minTime;
       } else {
-        // If selected date is in the future, allow any time from that date
+        // If selected date is in the future, default to restaurant opening time (10 AM)
         return new Date(
           selectedDate.getFullYear(),
           selectedDate.getMonth(),
           selectedDate.getDate(),
-          0,
+          10,
           0
         );
       }
@@ -602,6 +602,7 @@ function ReservationPage() {
                 onUnselect={handleTableDeselect}
                 enabled={gameEnable}
                 reservedTables={reservedTables}
+                selectedTables={selectedTables}
               />
             </div>
           </div>

@@ -1,73 +1,39 @@
-const TWO_TABLE_SIZE = { width: 225, height: 150 };
-const FOUR_TABLE_SIZE = { width: 260, height: 180 };
+const TWO_TABLE_SIZE = { width: 225 / 1200, height: 150 / 720 };
+const FOUR_TABLE_SIZE = { width: 260 / 1200, height: 180 / 720 };
+
+let idCounter = 1;
+
+const Table2 = (x, y) => ({
+  id: idCounter++,
+  x: x / 1200,
+  y: y / 720,
+  width: TWO_TABLE_SIZE.width,
+  height: TWO_TABLE_SIZE.height,
+  src: "/assets/images/table_2.png",
+  reserved_src: "assets/images/table_2_reserved.png",
+  seated_src: "assets/images/table_2_seated.png",
+  capacity: 2,
+});
+
+const Table4 = (x, y) => ({
+  id: idCounter++,
+  x: x / 1200,
+  y: y / 720,
+  width: FOUR_TABLE_SIZE.width,
+  height: FOUR_TABLE_SIZE.height,
+  src: "/assets/images/table_4.png",
+  reserved_src: "assets/images/table_4_reserved.png",
+  seated_src: "assets/images/table_4_seated.png",
+  capacity: 4,
+});
 
 const tables = [
-  {
-    id: 1,
-    x: 360,
-    y: 560,
-    width: TWO_TABLE_SIZE.width,
-    height: TWO_TABLE_SIZE.height,
-    src: "/assets/images/table_2.png",
-    reserved_src: "assets/images/table_2_reserved.png",
-    seated_src: "assets/images/table_2_seated.png",
-    capacity: 2,
-  },
-  {
-    id: 2,
-    x: 360,
-    y: 40,
-    width: TWO_TABLE_SIZE.width,
-    height: TWO_TABLE_SIZE.height,
-    src: "/assets/images/table_2.png",
-    reserved_src: "assets/images/table_2_reserved.png",
-    seated_src: "assets/images/table_2_seated.png",
-    capacity: 2,
-  },
-  {
-    id: 3,
-    x: 0,
-    y: 8,
-    width: FOUR_TABLE_SIZE.width,
-    height: FOUR_TABLE_SIZE.height,
-    src: "/assets/images/table_4.png",
-    reserved_src: "assets/images/table_4_reserved.png",
-    seated_src: "assets/images/table_4_seated.png",
-    capacity: 4,
-  },
-  {
-    id: 4,
-    x: 0,
-    y: 540,
-    width: FOUR_TABLE_SIZE.width,
-    height: FOUR_TABLE_SIZE.height,
-    src: "/assets/images/table_4.png",
-    reserved_src: "assets/images/table_4_reserved.png",
-    seated_src: "assets/images/table_4_seated.png",
-    capacity: 4,
-  },
-  {
-    id: 5,
-    x: 360,
-    y: 300,
-    width: TWO_TABLE_SIZE.width,
-    height: TWO_TABLE_SIZE.height,
-    src: "/assets/images/table_2.png",
-    reserved_src: "assets/images/table_2_reserved.png",
-    seated_src: "assets/images/table_2_seated.png",
-    capacity: 2,
-  },
-  {
-    id: 6,
-    x: 0,
-    y: 274,
-    width: FOUR_TABLE_SIZE.width,
-    height: FOUR_TABLE_SIZE.height,
-    src: "/assets/images/table_4.png",
-    reserved_src: "assets/images/table_4_reserved.png",
-    seated_src: "assets/images/table_4_seated.png",
-    capacity: 4,
-  },
+  Table2(360, 560),
+  Table2(360, 40),
+  Table4(0, 8),
+  Table4(0, 540),
+  Table2(360, 300),
+  Table4(0, 274),
 ];
 
 export default tables;
