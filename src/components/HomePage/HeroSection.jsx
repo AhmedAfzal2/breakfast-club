@@ -26,7 +26,7 @@ const HeroSection = () => {
           The perfect spot for your next breakfast or brunch!
         </p>
         <div className="hero-actions">
-          <button className="btn">
+          <button className="btn" onClick={() => navigate('/menu')}>
             <img src={OrderIcon} alt="Order Now" className="btn-icon" />
           </button>
           <button className="btn" onClick={handleReservationClick}>

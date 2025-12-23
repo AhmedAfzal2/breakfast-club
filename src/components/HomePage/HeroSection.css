@@ -94,29 +94,37 @@
     /* Make the image fill the button, slightly smaller than the button size */
     width: 100%; 
     height: 100%;
- 
+    object-fit: contain;
+}
 
 /* Mobile adjustments to prevent text overflow */
 @media (max-width: 768px) {
+    .hero-section {
+        aspect-ratio: auto;
+        min-height: 300px;
+    }
+
     .hero-content-centered {
-        width: 70%;
-        padding: 1.5vw;
+        width: 90%;
+        padding: 1rem;
     }
     
     .hero-title {
-        /* Slightly larger min font size for readability on mobile */
-        font-size: clamp(1.2rem, 5vw, 2rem);
+        font-size: 2rem;
+        margin-bottom: 1rem;
     }
     
     .hero-subtitle {
-        font-size: clamp(0.7rem, 2vw, 1rem);
-        margin-bottom: 1em;
+        display: none;
     }
     
     .hero-actions {
-        gap: 1vw;
+        gap: 1rem;
     }
-}   object-fit: contain;
+    
+    .btn {
+        width: 45%;
+    }
 }
 
 .btn:hover {
