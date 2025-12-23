@@ -9,6 +9,7 @@ import MenuItemModal from "../components/menu/modal/MenuItemModal";
 import CartIcon from "../components/menu/CartIcon";
 import Cart from "../components/cart/Cart";
 import ConfirmationPopup from "../components/ConfirmationPopup";
+import Loading from "../components/Loading";
 import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
 import "../App.css";
@@ -387,9 +388,7 @@ function MenuPage() {
           {/* <CartIcon className="cart-icon" onClick={openCart} /> */}
 
           {loading && (
-            <div style={{ padding: "2rem", textAlign: "center" }}>
-              <p>Loading menu items...</p>
-            </div>
+            <Loading message="Loading menu items..." />
           )}
 
           {error && (

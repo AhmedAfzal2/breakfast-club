@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 import { Quote } from "lucide-react";
 import { reviewsApi } from "../services/reviewsApi";
+import Loading from "../components/Loading";
 import "../App.css";
 import "./ReviewsPage.css";
 import "../components/HomePage/ReviewsSection.css";
@@ -67,7 +68,7 @@ function ReviewsPage() {
       <div className="reviews-page">
         <h1 className="page-heading">REVIEWS</h1>
         
-        {loading && <p>Loading reviews...</p>}
+        {loading && <Loading message="Loading reviews..." />}
         {error && <p className="error-message">Error loading reviews: {error}</p>}
         
         {!loading && !error && (

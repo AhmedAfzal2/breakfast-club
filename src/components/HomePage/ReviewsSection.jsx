@@ -7,6 +7,7 @@ import '../Layout/Layout.css';
 const FilledStarIcon = '/assets/images/icons/star_filled.png'; // Path to filled star icon
 const UnfilledStarIcon = '/assets/images/icons/star_unfilled.png'; // Path to unfilled star icon
 import { reviewsApi } from '../../services/reviewsApi';
+import Loading from '../Loading';
 
 const StarRating = ({ rating }) => {
   const stars = [];
@@ -69,7 +70,7 @@ const ReviewsSection = () => {
       <h2 className="section-title">What Our <span style={{color: "var(--china-rose)"}}>Customers</span> Are Saying</h2>
       <p className="section-subtitle">Real reviews from satisfied breakfast lovers.</p>
       
-      {loading && <p>Loading reviews...</p>}
+      {loading && <Loading message="Loading reviews..." />}
       {error && <p className="error-message">Error loading reviews: {error}</p>}
       
       {!loading && !error && (

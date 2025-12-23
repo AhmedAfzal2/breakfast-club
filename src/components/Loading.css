@@ -1,0 +1,44 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.loading-video {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.loading-text {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.2rem;
+  color: var(--china-rose);
+  font-weight: 600;
+  text-transform: lowercase;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .loading-goat {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .loading-text {
+    font-size: 1rem;
+  }
+}
+
