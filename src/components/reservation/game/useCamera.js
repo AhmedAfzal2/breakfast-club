@@ -6,8 +6,6 @@ import config from "./gameConstants";
 import "./style.css";
 import sprites from "./sprites";
 
-const bar = config.bar;
-
 // takes x, y coords and object containing width and height
 // and returns object with boundaries
 function Pos(x, y, size) {
@@ -69,11 +67,12 @@ function detectCollision(cameraPos, charOffset, tables, nearTableId, sizes) {
   }
 
   // bar collision
+  const bar = config.bar;
   const barPos = {
-    left: world.width - bar.width,
+    left: world.width - bar.width * world.width,
     right: world.width,
     top: 0,
-    bottom: bar.height,
+    bottom: bar.height * world.height,
   };
   if (collisionCompare(charPos, barPos, false, char)) return true;
 
@@ -142,11 +141,19 @@ function applyCollisions(
 }
 
 // takes keys pressed and returns a direction to walk in
-function walkingDirection(keys) {
-  if (keys.current["w"] && !keys.current["s"]) return "top";
-  else if (keys.current["s"] && !keys.current["w"]) return "bottom";
-  else if (keys.current["d"] && !keys.current["a"]) return "right";
-  else if (keys.current["a"] && !keys.current["d"]) return "left";
+function walkingDirection(keys, controllerRef) {
+  const k = keys.current;
+  const c = controllerRef ? controllerRef.current : {};
+
+  const w = k["w"] || c["w"];
+  const s = k["s"] || c["s"];
+  const a = k["a"] || c["a"];
+  const d = k["d"] || c["d"];
+
+  if (w && !s) return "top";
+  else if (s && !w) return "bottom";
+  else if (d && !a) return "right";
+  else if (a && !d) return "left";
   else return "none";
 }
 
@@ -196,7 +203,9 @@ export default function useCamera(
   charRef,
   onSelect,
   onUnselect,
-  enabled
+  enabled,
+  selectedTables,
+  controllerRef
 ) {
   const ctx = useGameContext();
   const sizesRef = useRef(ctx.sizes);
@@ -213,8 +222,8 @@ export default function useCamera(
     y: cameraPos.current.y + viewInitial.height / 2 + charOffset.current.y,
   });
   const nearTableId = useRef(0);
-  const pressedTables = useRef({});
   const keys = useKeyboard();
+  const selectedTablesRef = useRef(selectedTables);
 
   const speed = 200; // pixels per second
   const lastTime = useRef(0);
@@ -229,8 +238,12 @@ export default function useCamera(
   }, [ctx.sizes]);
 
   useEffect(() => {
-    const viewInitial = sizesRef.current.view;
-    const worldInitial = sizesRef.current.world;
+    selectedTablesRef.current = selectedTables;
+  }, [selectedTables]);
+
+  useEffect(() => {
+    const viewInitial = ctx.sizes.view;
+    const worldInitial = ctx.sizes.world;
     cameraPos.current = {
       x: 0,
       y: worldInitial.height - viewInitial.height,
@@ -248,25 +261,34 @@ export default function useCamera(
         frameId = requestAnimationFrame(animate);
         return;
       }
+
+      const scaledTables = tables.map((t) => ({
+        ...t,
+        x: t.x * world.width,
+        y: t.y * world.height,
+        width: t.width * world.width,
+        height: t.height * world.height,
+      }));
+
       if (keys.current["e"] && nearTableId.current !== 0) {
         // check for table select
-        if (!pressedTables.current[nearTableId.current]) {
-          document.getElementById("table" + nearTableId.current).src =
-            tables.find((t) => t.id == nearTableId.current).reserved_src;
+        const isSelected = selectedTablesRef.current.some(
+          (t) => t.id === nearTableId.current
+        );
+        if (!isSelected) {
           onSelect(nearTableId.current);
-          pressedTables.current[nearTableId.current] = true;
         }
       } else if (nearTableId.current !== 0 && keys.current["f"]) {
-        if (pressedTables.current[nearTableId.current]) {
-          document.getElementById("table" + nearTableId.current).src =
-            tables.find((t) => t.id == nearTableId.current).src;
+        const isSelected = selectedTablesRef.current.some(
+          (t) => t.id === nearTableId.current
+        );
+        if (isSelected) {
           onUnselect(nearTableId.current);
-          pressedTables.current[nearTableId.current] = false;
         }
       }
 
       // animate walking
-      const direction = walkingDirection(keys);
+      const direction = walkingDirection(keys, controllerRef);
       if (direction != "none" && currentDirection != direction) {
         charRef.current.src = sprites[direction].stand;
       }
@@ -290,25 +312,28 @@ export default function useCamera(
       let dx = 0;
       let dy = 0;
 
+      const k = keys.current;
+      const c = controllerRef ? controllerRef.current : {};
+
       // update position based on keys pressed
-      if (keys.current["w"]) dy -= speed * deltaTime;
-      if (keys.current["s"]) dy += speed * deltaTime;
-      if (keys.current["a"]) dx -= speed * deltaTime;
-      if (keys.current["d"]) dx += speed * deltaTime;
+      if (k["w"] || c["w"]) dy -= speed * deltaTime;
+      if (k["s"] || c["s"]) dy += speed * deltaTime;
+      if (k["a"] || c["a"]) dx -= speed * deltaTime;
+      if (k["d"] || c["d"]) dx += speed * deltaTime;
 
       const result = applyCollisions(
         dx,
         dy,
         cameraPos,
         charOffset,
-        tables,
+        scaledTables,
         nearTableId,
         sizesRef.current
       );
       dx = result.dx;
       dy = result.dy;
 
-      for (const table of tables) {
+      for (const table of scaledTables) {
         const tablePos = new Pos(table.x, table.y, table);
         const charPos = new Pos(
           cameraPos.current.x + charOffset.current.x + view.width / 2,
@@ -364,5 +389,5 @@ export default function useCamera(
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [enabled, sizesRef.current]);
+  }, [enabled, ctx.sizes]);
 }

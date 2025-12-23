@@ -1,0 +1,55 @@
+.mobile-controller {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 1000;
+  user-select: none;
+  touch-action: none;
+}
+
+.d-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  grid-template-rows: repeat(3, 30px);
+  gap: 5px;
+}
+
+.d-pad-btn {
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid #333;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.d-pad-btn:active {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(0.95);
+}
+
+.d-pad-btn.up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.d-pad-btn.left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.d-pad-btn.right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.d-pad-btn.down {
+  grid-column: 2;
+  grid-row: 3;
+}

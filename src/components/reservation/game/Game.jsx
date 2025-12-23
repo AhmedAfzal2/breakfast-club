@@ -4,12 +4,21 @@ import useCamera from "./useCamera";
 import RestaurantScene from "./RestaurantScene";
 import { useGameContext } from "./GameContext";
 import tables from "./tables";
+import MobileController from "./MobileController";
 import "./Game.css";
 
-function Game({ onSelect, onUnselect, enabled, reservedTables }) {
+function Game({
+  onSelect,
+  onUnselect,
+  enabled,
+  reservedTables,
+  selectedTables,
+  showController = false,
+}) {
   const bgRef = useRef();
   const charRef = useRef();
   const viewportRef = useRef();
+  const controllerRef = useRef({});
 
   const ctx = useGameContext();
   const { char, view, world } = ctx.sizes;
@@ -19,7 +28,27 @@ function Game({ onSelect, onUnselect, enabled, reservedTables }) {
     else table.reserved = false;
   }
 
-  useCamera(bgRef, charRef, onSelect, onUnselect, enabled);
+  useCamera(
+    bgRef,
+    charRef,
+    onSelect,
+    onUnselect,
+    enabled,
+    selectedTables,
+    controllerRef
+  );
+
+  const handleTableClick = (tableId) => {
+    const table = tables.find((t) => t.id === tableId);
+    if (table && table.reserved) return;
+
+    const isSelected = selectedTables.some((t) => t.id === tableId);
+    if (isSelected) {
+      onUnselect(tableId);
+    } else {
+      onSelect(tableId);
+    }
+  };
 
   return (
     <div ref={viewportRef} className="viewport">
@@ -35,9 +64,15 @@ function Game({ onSelect, onUnselect, enabled, reservedTables }) {
           marginLeft: `-${view.width / 2}px`,
         }}
       >
-        <RestaurantScene ref={bgRef} size={world} />
+        <RestaurantScene
+          ref={bgRef}
+          size={world}
+          selectedTables={selectedTables}
+          onTableClick={handleTableClick}
+        />
         <Character ref={charRef} size={char} />
       </div>
+      {showController && <MobileController controllerRef={controllerRef} />}
     </div>
   );
 }

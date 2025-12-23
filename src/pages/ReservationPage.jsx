@@ -602,6 +602,7 @@ function ReservationPage() {
                 onUnselect={handleTableDeselect}
                 enabled={gameEnable}
                 reservedTables={reservedTables}
+                selectedTables={selectedTables}
               />
             </div>
           </div>
