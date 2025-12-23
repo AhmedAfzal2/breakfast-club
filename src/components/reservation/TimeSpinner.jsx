@@ -17,8 +17,8 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateS
     if (selectedTime) {
       return selectedTime.getMinutes();
     }
-    const minM = minTime.getMinutes();
-    return minM === 0 ? 0 : 30;
+    // Use the actual minutes from minTime (which is already rounded to next available slot)
+    return minTime.getMinutes();
   });
 
   const [amPm, setAmPm] = useState(() => {
@@ -235,6 +235,16 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateS
       setAmPm(selectedTime.getHours() >= 12 ? "PM" : "AM");
     }
   }, [selectedTime]);
+
+  // Sync with minTime changes when no selectedTime (to update default display)
+  useEffect(() => {
+    if (!selectedTime && minTime) {
+      let h = minTime.getHours();
+      setHours(h > 12 ? h - 12 : h === 0 ? 12 : h);
+      setMinutes(minTime.getMinutes());
+      setAmPm(minTime.getHours() >= 12 ? "PM" : "AM");
+    }
+  }, [minTime, selectedTime]);
 
   const formatTime = () => {
     if (!selectedTime) return "";

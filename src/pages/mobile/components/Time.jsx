@@ -22,8 +22,18 @@ function Time({ selectedTime, onTimeChange, timeError, selectedDate }) {
   const now = new Date();
   const getMinTime = () => {
     if (!selectedDate) {
-      // Return a far future date to prevent any time selection
-      return new Date(now.getFullYear() + 1, 0, 1);
+      // When no date selected, still show 1 hour from now as default (will be validated on submit)
+      const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+      const minutes = oneHourFromNow.getMinutes();
+      const roundedMinutes = minutes <= 30 ? 30 : 60;
+      const minTime = new Date(oneHourFromNow);
+      minTime.setMinutes(roundedMinutes === 60 ? 0 : roundedMinutes);
+      if (roundedMinutes === 60) {
+        minTime.setHours(minTime.getHours() + 1);
+      }
+      minTime.setSeconds(0);
+      minTime.setMilliseconds(0);
+      return minTime;
     }
     
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
@@ -47,12 +57,12 @@ function Time({ selectedTime, onTimeChange, timeError, selectedDate }) {
       minTime.setMilliseconds(0);
       return minTime;
     } else {
-      // If selected date is in the future, allow any time from that date
+      // If selected date is in the future, default to restaurant opening time (10 AM)
       return new Date(
         selectedDate.getFullYear(),
         selectedDate.getMonth(),
         selectedDate.getDate(),
-        0,
+        10,
         0
       );
     }
