@@ -7,8 +7,7 @@ const style = {
   scene: {
     position: "relative",
     backgroundImage: "url('/assets/images/tiles.png')",
-    backgroundRepeat: "repeat",
-    backgroundSize: "420px 420px",
+    backgroundSize: "cover",
   },
   table: {
     position: "absolute",
