@@ -49,17 +49,24 @@ const DishesSection = forwardRef((props, ref) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const [isPaused, setIsPaused] = useState(false);
+
+    useEffect(() => {
+        if (!isPaused) {
+            const interval = setInterval(() => {
+                setStartIndex(prev => (prev === maxStartIndex ? 0 : prev + 1));
+            }, 2000);
+            return () => clearInterval(interval);
+        }
+    }, [startIndex, maxStartIndex, isPaused]);
+
     // --- NAVIGATION LOGIC ---
     const nextDishes = () => {
-        if (startIndex < maxStartIndex) { 
-            setStartIndex(prev => prev + 1);
-        }
+        setStartIndex(prev => (prev === maxStartIndex ? 0 : prev + 1));
     };
 
     const prevDishes = () => {
-        if (startIndex > 0) {
-            setStartIndex(prev => prev - 1);
-        }
+        setStartIndex(prev => (prev === 0 ? maxStartIndex : prev - 1));
     };
     function translateValuea(index) {
         return `calc(
@@ -102,7 +109,11 @@ const DishesSection = forwardRef((props, ref) => {
             </div>
             
             {/* --- RIGHT COLUMN: Carousel --- */}
-            <div className="dishes-carousel-column">
+            <div 
+                className="dishes-carousel-column"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+            >
                 <div 
                     className="carousel-container"
                     style={{ '--progress-width': `${((startIndex + 1) / dummyDishes.length) * 100}%` }}
