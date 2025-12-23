@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout/Layout";
 import ContactForm from "../components/contact-us/ContactForm";
 import ContactSidebar from "../components/contact-us/ContactSidebar";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 import "../App.css";
 import "./ContactPage.css";
 
@@ -28,6 +29,11 @@ const locations = [
 
 function ContactPage() {
   const [selectedLocation, setSelectedLocation] = React.useState(locations[0]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleFormSubmit = () => {
+    setShowConfirmation(true);
+  };
 
   return (
     <Layout>
@@ -35,7 +41,7 @@ function ContactPage() {
         <h1 className="page-heading">CONTACT US</h1>
         <div className="contact-grid">
           <div className="contact-form-column">
-            <ContactForm />
+            <ContactForm onSuccess={handleFormSubmit} />
           </div>
           <div className="contact-sidebar-column">
             <ContactSidebar 
@@ -63,6 +69,11 @@ function ContactPage() {
           </div>
         </div>
       </div>
+      <ConfirmationPopup
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        type="contact"
+      />
     </Layout>
   );
 }

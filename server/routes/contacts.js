@@ -79,27 +79,37 @@ router.post('/', async (req, res) => {
       }
     }
 
-    // Send email notification to restaurant owner
-    const emailResult = await sendContactEmail(req.body);
-    if (!emailResult.success) {
-      console.warn('Email sending failed:', emailResult.message);
-      // Don't fail the request if email fails, just log it
-    }
-
-    // Optionally send confirmation email to customer
-    if (process.env.SEND_CONFIRMATION_EMAIL === 'true') {
-      const confirmationResult = await sendConfirmationEmail(req.body);
-      if (!confirmationResult.success) {
-        console.warn('Confirmation email sending failed:', confirmationResult.message);
-      }
-    }
-
+    // Return response immediately after saving to database
     res.status(200).json({
       success: true,
       message: 'Contact form submitted successfully',
-      emailSent: emailResult.success,
       reviewCreated: reviewCreated
     });
+
+    // Send emails in the background (non-blocking)
+    // Don't await - let it run asynchronously
+    sendContactEmail(req.body).then((emailResult) => {
+      if (!emailResult.success) {
+        console.warn('Email sending failed:', emailResult.message);
+      } else {
+        console.log('✅ Contact email sent successfully');
+      }
+    }).catch((error) => {
+      console.error('Error sending contact email:', error);
+    });
+
+    // Optionally send confirmation email to customer (also non-blocking)
+    if (process.env.SEND_CONFIRMATION_EMAIL === 'true') {
+      sendConfirmationEmail(req.body).then((confirmationResult) => {
+        if (!confirmationResult.success) {
+          console.warn('Confirmation email sending failed:', confirmationResult.message);
+        } else {
+          console.log('✅ Confirmation email sent successfully');
+        }
+      }).catch((error) => {
+        console.error('Error sending confirmation email:', error);
+      });
+    }
   } catch (error) {
     console.error('Error processing contact submission:', error);
     res.status(500).json({
