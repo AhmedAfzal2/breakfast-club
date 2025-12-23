@@ -76,6 +76,16 @@ function detectCollision(cameraPos, charOffset, tables, nearTableId, sizes) {
   };
   if (collisionCompare(charPos, barPos, false, char)) return true;
 
+  // plant collision
+  const plant = config.plant;
+  const plantPos = {
+    left: world.width - plant.width * world.width,
+    right: world.width,
+    bottom: world.height,
+    top: world.height - plant.height * world.height,
+  };
+  if (collisionCompare(charPos, plantPos, false, char)) return true;
+
   return false;
 }
 
