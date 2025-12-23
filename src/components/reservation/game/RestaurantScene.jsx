@@ -6,7 +6,7 @@ import "./style.css";
 const style = {
   scene: {
     position: "relative",
-    backgroundImage: "url('/assets/images/tiles.png')",
+    backgroundImage: "url('/assets/images/tilesb.png')",
     backgroundSize: "cover",
   },
   table: {
