@@ -33,8 +33,8 @@ function SelectTablePopup({
       gameCtx.setSizes((sizes) => ({
         ...sizes,
         char: {
-          width: 26,
-          height: (26 * 82) / 40,
+          width: 30,
+          height: 60,
         },
         world: {
           width: rect.width * 2,

@@ -7,8 +7,7 @@ const style = {
   scene: {
     position: "relative",
     backgroundImage: "url('/assets/images/tiles.png')",
-    backgroundRepeat: "repeat",
-    backgroundSize: "420px 420px",
+    backgroundSize: "cover",
   },
   table: {
     position: "absolute",
@@ -19,12 +18,18 @@ const style = {
     top: 0,
     right: 0,
   },
+  plant: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+  },
 };
 
 const RestaurantScene = forwardRef((props, ref) => {
   const { width, height } = props.size;
   const { selectedTables, onTableClick } = props;
   const bar = config.bar;
+  const plant = config.plant;
 
   return (
     <div
@@ -44,6 +49,14 @@ const RestaurantScene = forwardRef((props, ref) => {
           ...style.bar,
           width: bar.width * width,
           height: bar.height * height,
+        }}
+      />
+      <img
+        src="/assets/images/plant.png"
+        style={{
+          ...style.plant,
+          width: plant.width * width,
+          height: plant.height * height,
         }}
       />
       {tables.map((t) => {

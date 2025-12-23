@@ -9,7 +9,7 @@ export function useGameContext() {
 
 export function GameContextProvider({ children }) {
   const [sizes, setSizes] = useState({
-    char: { width: 40, height: 82 },
+    char: { width: 50, height: 100 },
     view: { width: 1200, height: 580 },
     world: { width: 1200, height: 720 },
   });
