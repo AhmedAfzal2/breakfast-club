@@ -107,7 +107,11 @@ function Header({ onNavClick }) {
       </nav>
 
       {/* Right Side Logo */}
-      <div className="logo-container">
+      <div 
+        className="logo-container" 
+        onClick={() => handleNavClick("/")} 
+        style={{ cursor: 'pointer' }}
+      >
         <img src={breakfastClubLogo} alt="Breakfast Club Logo" />
       </div>
     </header>

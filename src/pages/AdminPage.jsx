@@ -36,8 +36,8 @@ function AdminPage() {
     }
   };
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (isPolling = false) => {
+    if (!isPolling) setLoading(true);
     try {
       // Fetch Reservations
       const resResponse = await fetch('http://localhost:3001/api/reservations');
@@ -47,19 +47,32 @@ function AdminPage() {
       // Fetch Orders
       const ordResponse = await fetch('http://localhost:3001/api/orders');
       const ordData = await ordResponse.json();
-      setOrders(ordData.reverse());
+      // Filter out cancelled orders and reverse
+      setOrders(ordData.filter(o => o.status !== 'cancelled').reverse());
 
       // Fetch Menu Items for fallback image lookup
-      const menuResponse = await fetch('http://localhost:3001/api/menu-items');
-      const menuData = await menuResponse.json();
-      setMenuItems(menuData);
+      if (!isPolling) {
+        const menuResponse = await fetch('http://localhost:3001/api/menu-items');
+        const menuData = await menuResponse.json();
+        setMenuItems(menuData);
+      }
 
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
-      setLoading(false);
+      if (!isPolling) setLoading(false);
     }
   };
+
+  useEffect(() => {
+    let interval;
+    if (isAuthenticated) {
+      interval = setInterval(() => {
+        fetchData(true);
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
 
   // Reservation Actions
   const updateReservationStatus = async (id, status) => {
@@ -116,9 +129,19 @@ function AdminPage() {
 
   const updateOrderStatus = async (id, status) => {
     if (status === 'completed') {
-      handleCompleteOrder(id);
+      if (window.confirm("Are you sure you want to complete this order?")) {
+        handleCompleteOrder(id);
+      }
       return;
     }
+
+    if (status === 'cancelled') {
+      if (window.confirm("Are you sure you want to cancel and remove this order?")) {
+        handleCompleteOrder(id);
+      }
+      return;
+    }
+
     try {
       await fetch(`http://localhost:3001/api/orders/${id}/status`, {
         method: 'PATCH',

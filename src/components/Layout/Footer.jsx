@@ -94,7 +94,7 @@ function Footer() {
             </p>
           </div>
           <div className="tool-image">
-            <img src="assets\images\menu-items\drinks\Cold\sharbat.png" alt="Beverages" />
+            <img src="assets\images\menu-items\drinks\refreshing_drinks\sharbat.png" alt="Beverages" />
           </div>
         </Link>
         <Link to="/reservations" className="tool-card">
