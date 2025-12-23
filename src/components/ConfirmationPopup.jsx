@@ -36,6 +36,11 @@ function ConfirmationPopup({ isOpen, onClose, type = "reservation" }) {
       title: "All Tables Reserved",
       text: "All tables are reserved for this time slot. Please select a different date or time.",
       showImage: true
+    },
+    contact: {
+      title: "Thank You!",
+      text: "Your feedback has been submitted successfully. We'll get back to you soon.",
+      showImage: true
     }
   };
 

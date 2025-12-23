@@ -8,7 +8,7 @@ import SubmitButton from "./SubmitButton";
 import ValidationMessage from "./ValidationMessage";
 import "./ContactForm.css";
 
-function ContactForm() {
+function ContactForm({ onSuccess }) {
   const [rating, setRating] = useState(0);
   const [errors, setErrors] = useState({});
   const [showErrors, setShowErrors] = useState(false);
@@ -100,13 +100,16 @@ function ContactForm() {
       const response = await contactApi.submitContactForm(formData);
       
       if (response.success) {
-        alert("Thank you for your feedback! We'll get back to you soon.");
-        
         // Reset form
         form.reset();
         setRating(0);
         setErrors({});
         setShowErrors(false);
+        
+        // Trigger confirmation popup
+        if (onSuccess) {
+          onSuccess();
+        }
       } else {
         throw new Error(response.message || 'Failed to submit form');
       }
