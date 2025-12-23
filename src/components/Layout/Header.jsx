@@ -1,17 +1,17 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Layout.css";
-import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
+const breakfastClubLogo = "/assets/images/breakfast_club_logo.png";
 import { Menu } from "lucide-react";
 
 // Import icons
-import homeIcon from "/assets/images/icons/home.png";
-import menuIcon from "/assets/HomePage/menu.png";
-import reservationIcon from "/assets/HomePage/reservations.png";
-import aboutIcon from "/assets/HomePage/aboutus.png";
-import contactIcon from "/assets/HomePage/contactus.png";
-import reviewsIcon from "/assets/HomePage/reviews.png";
-import aboutUsIcon from "/assets/HomePage/aboutus.png";
+const homeIcon = "/assets/images/icons/home.png";
+const menuIcon = "/assets/HomePage/menu.png";
+const reservationIcon = "/assets/HomePage/reservations.png";
+const aboutIcon = "/assets/HomePage/aboutus.png";
+const contactIcon = "/assets/HomePage/contactus.png";
+const reviewsIcon = "/assets/HomePage/reviews.png";
+const aboutUsIcon = "/assets/HomePage/aboutus.png";
 
 function Header({ onNavClick }) {
   const navigate = useNavigate();

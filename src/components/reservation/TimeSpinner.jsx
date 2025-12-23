@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import arrowIcon from "/assets/images/icons/arrow.png";
-import tickIcon from "/assets/images/icons/tick.png";
+const arrowIcon = "/assets/images/icons/arrow.png";
+const tickIcon = "/assets/images/icons/tick.png";
 import "./TimeSpinner.css";
 
 function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateSelected, selectedDate }) {

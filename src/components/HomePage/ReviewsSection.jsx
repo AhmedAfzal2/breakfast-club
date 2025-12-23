@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import './ReviewsSection.css';
 import { Quote } from 'lucide-react'; // Using lucide-react for icons
 import '../Layout/Layout.css';
-import FilledStarIcon from '/assets/images/icons/star_filled.png'; // Path to filled star icon
-import UnfilledStarIcon from '/assets/images/icons/star_unfilled.png'; // Path to unfilled star icon
+const FilledStarIcon = '/assets/images/icons/star_filled.png'; // Path to filled star icon
+const UnfilledStarIcon = '/assets/images/icons/star_unfilled.png'; // Path to unfilled star icon
 import { reviewsApi } from '../../services/reviewsApi';
 
 const StarRating = ({ rating }) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import "./Layout.css";
-import chickens from "/assets/images/icons/chickens.png";
+const chickens = "/assets/images/icons/chickens.png";
 import NavBarRow from "./NavBarRow";
 import { Menu, Info, Phone, Calendar, Star, X} from "lucide-react";
 

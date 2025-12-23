@@ -1,6 +1,6 @@
 import React from "react";
 import "./ConfirmationPopup.css";
-import henImg from "/assets/images/hen.png"; // <-- replace with your image
+const henImg = "/assets/images/hen.png"; // <-- replace with your image
 
 function ConfirmationPopup({ isOpen, onClose, type = "reservation" }) {
   if (!isOpen) return null;

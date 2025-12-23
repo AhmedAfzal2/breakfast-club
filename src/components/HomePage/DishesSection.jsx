@@ -4,7 +4,7 @@ import React, { useState, forwardRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DishesSection.css'; 
 // --- ASSUMED IMPORTS ---
-import OrderIcon from '/assets/HomePage/menu.png';
+const OrderIcon = '/assets/HomePage/menu.png';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 // -----------------------
 

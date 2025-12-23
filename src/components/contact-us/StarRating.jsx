@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./StarRating.css";
-import starFilled from "/assets/images/icons/star_filled.png";
-import starUnfilled from "/assets/images/icons/star_unfilled.png";
+const starFilled = "/assets/images/icons/star_filled.png";
+const starUnfilled = "/assets/images/icons/star_unfilled.png";
 
 function StarRating({ value, onChange, label }) {
   const [hoveredRating, setHoveredRating] = useState(0);

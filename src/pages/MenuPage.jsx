@@ -13,12 +13,12 @@ import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
 import "../App.css";
 import "./MenuPage.css";
-import breakfastBanner from "/assets/images/banner-images/breakfast.png";
-import breakfastBannerMobile from "/assets/images/banner-images/breakfast_mobile.png";
-import dessertBanner from "/assets/images/banner-images/desserts.png";
-import dessertBannerMobile from "/assets/images/banner-images/dessert_mobile.png";
-import beveragesBanner from "/assets/images/banner-images/beverages.png";
-import beveragesBannerMobile from "/assets/images/banner-images/beverages_mobile.jpg";
+const breakfastBanner = "/assets/images/banner-images/breakfast.png";
+const breakfastBannerMobile = "/assets/images/banner-images/breakfast_mobile.png";
+const dessertBanner = "/assets/images/banner-images/desserts.png";
+const dessertBannerMobile = "/assets/images/banner-images/dessert_mobile.png";
+const beveragesBanner = "/assets/images/banner-images/beverages.png";
+const beveragesBannerMobile = "/assets/images/banner-images/beverages_mobile.jpg";
 
 function MenuPage() {
   const ctx = useCart();

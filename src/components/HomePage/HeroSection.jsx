@@ -1,9 +1,9 @@
 // src/components/HomePage/HeroSection.jsx
 import React from 'react';
 import './HeroSection.css'; 
-import HeroImage from '/assets/HomePage/hero.png'; // Ensure the path is correct
-import OrderIcon from '/assets/HomePage/menu.png'; // Ensure the path is correct
-import ReserveIcon from '/assets/HomePage/reservations.png'; // Ensure the path is correct
+const HeroImage = '/assets/HomePage/hero.png'; // Ensure the path is correct
+const OrderIcon = '/assets/HomePage/menu.png'; // Ensure the path is correct
+const ReserveIcon = '/assets/HomePage/reservations.png'; // Ensure the path is correct
 import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {

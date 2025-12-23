@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Footer.css";
-import breakfastClubLogo from "/assets/images/breakfast_club_logo.png";
+const breakfastClubLogo = "/assets/images/breakfast_club_logo.png";
 import {
   Instagram,
   Linkedin,
