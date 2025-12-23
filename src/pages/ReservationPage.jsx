@@ -41,6 +41,8 @@ function ReservationPage() {
   const [gameEnable, setGameEnable] = useState(false);
   const [reservedTables, setReservedTables] = useState([]);
   const gameCtx = useGameContext();
+  const timeSpinnerPopupRef = useRef(null);
+  const timeInputWrapperRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -53,6 +55,32 @@ function ReservationPage() {
 
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Handle click outside time spinner to close it (desktop only)
+  useEffect(() => {
+    if (!isTimeSpinnerOpen || isMobile) return;
+
+    const handleClickOutside = (event) => {
+      if (
+        timeSpinnerPopupRef.current &&
+        timeInputWrapperRef.current &&
+        !timeSpinnerPopupRef.current.contains(event.target) &&
+        !timeInputWrapperRef.current.contains(event.target)
+      ) {
+        setIsTimeSpinnerOpen(false);
+      }
+    };
+
+    // Use a small delay to avoid closing immediately when opening
+    const timeoutId = setTimeout(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isTimeSpinnerOpen, isMobile]);
 
   // Render mobile version on mobile devices
   if (isMobile) {
@@ -388,11 +416,9 @@ function ReservationPage() {
     handleDateAndTimeSelection(undefined, time);
   };
 
-  // Popup only closes when tick button is clicked, not on outside click
-
   const CustomTimeInput = ({ value, onClick }) => (
     <div>
-      <div className="time-input-wrapper">
+      <div className="time-input-wrapper" ref={timeInputWrapperRef}>
         <input
           type="text"
           value={formatTimeDisplay()}
@@ -410,6 +436,7 @@ function ReservationPage() {
         </button>
         {isTimeSpinnerOpen && (
           <div
+            ref={timeSpinnerPopupRef}
             className="time-spinner-popup"
             onClick={(e) => {
               e.preventDefault();

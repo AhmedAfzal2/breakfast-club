@@ -59,43 +59,165 @@ function TimeSpinner({ selectedTime, onTimeChange, minTime, requireDate, isDateS
   };
 
   const incrementHours = () => {
-    let newHours = hours + 1;
-    if (newHours > 12) newHours = 1;
+    // Restaurant hours: 10 AM, 11 AM, 12 PM, 1 PM, 2 PM, 3 PM, 4 PM (circular)
+    // Convert current time to 24-hour format to check
+    let currentHour24 = hours;
+    if (amPm === "PM" && hours !== 12) currentHour24 = hours + 12;
+    if (amPm === "AM" && hours === 12) currentHour24 = 0;
+    
+    let newHour24;
+    if (currentHour24 === 10) {
+      newHour24 = 11;
+    } else if (currentHour24 === 11) {
+      newHour24 = 12;
+    } else if (currentHour24 === 12) {
+      newHour24 = 13;
+    } else if (currentHour24 === 13) {
+      newHour24 = 14;
+    } else if (currentHour24 === 14) {
+      newHour24 = 15;
+    } else if (currentHour24 === 15) {
+      newHour24 = 16;
+    } else if (currentHour24 === 16) {
+      // Wrap around to 10 AM
+      newHour24 = 10;
+    } else {
+      // If outside range, default to 10 AM
+      newHour24 = 10;
+    }
+    
+    // Convert back to 12-hour format
+    let newHours = newHour24 > 12 ? newHour24 - 12 : newHour24 === 0 ? 12 : newHour24;
+    let newAmPm = newHour24 >= 12 ? "PM" : "AM";
+    
     setHours(newHours);
-    updateTime(newHours, minutes, amPm);
+    setAmPm(newAmPm);
+    updateTime(newHours, minutes, newAmPm);
   };
 
   const decrementHours = () => {
-    let newHours = hours - 1;
-    if (newHours < 1) newHours = 12;
+    // Restaurant hours: 10 AM, 11 AM, 12 PM, 1 PM, 2 PM, 3 PM, 4 PM (circular)
+    // Convert current time to 24-hour format to check
+    let currentHour24 = hours;
+    if (amPm === "PM" && hours !== 12) currentHour24 = hours + 12;
+    if (amPm === "AM" && hours === 12) currentHour24 = 0;
+    
+    let newHour24;
+    if (currentHour24 === 10) {
+      // Wrap around to 4 PM
+      newHour24 = 16;
+    } else if (currentHour24 === 11) {
+      newHour24 = 10;
+    } else if (currentHour24 === 12) {
+      newHour24 = 11;
+    } else if (currentHour24 === 13) {
+      newHour24 = 12;
+    } else if (currentHour24 === 14) {
+      newHour24 = 13;
+    } else if (currentHour24 === 15) {
+      newHour24 = 14;
+    } else if (currentHour24 === 16) {
+      newHour24 = 15;
+    } else {
+      // If outside range, default to 10 AM
+      newHour24 = 10;
+    }
+    
+    // Convert back to 12-hour format
+    let newHours = newHour24 > 12 ? newHour24 - 12 : newHour24 === 0 ? 12 : newHour24;
+    let newAmPm = newHour24 >= 12 ? "PM" : "AM";
+    
     setHours(newHours);
-    updateTime(newHours, minutes, amPm);
+    setAmPm(newAmPm);
+    updateTime(newHours, minutes, newAmPm);
   };
 
   const incrementMinutes = () => {
     let newMinutes = minutes + 30;
     let newHours = hours;
+    let newAmPm = amPm;
+    
     if (newMinutes >= 60) {
       newMinutes = 0;
-      newHours = hours + 1;
-      if (newHours > 12) newHours = 1;
+      // Use the same circular logic as incrementHours
+      // Convert current time to 24-hour format
+      let currentHour24 = hours;
+      if (amPm === "PM" && hours !== 12) currentHour24 = hours + 12;
+      if (amPm === "AM" && hours === 12) currentHour24 = 0;
+      
+      let newHour24;
+      if (currentHour24 === 10) {
+        newHour24 = 11;
+      } else if (currentHour24 === 11) {
+        newHour24 = 12;
+      } else if (currentHour24 === 12) {
+        newHour24 = 13;
+      } else if (currentHour24 === 13) {
+        newHour24 = 14;
+      } else if (currentHour24 === 14) {
+        newHour24 = 15;
+      } else if (currentHour24 === 15) {
+        newHour24 = 16;
+      } else if (currentHour24 === 16) {
+        // Wrap around to 10 AM
+        newHour24 = 10;
+      } else {
+        // If outside range, default to 10 AM
+        newHour24 = 10;
+      }
+      
+      // Convert back to 12-hour format
+      newHours = newHour24 > 12 ? newHour24 - 12 : newHour24 === 0 ? 12 : newHour24;
+      newAmPm = newHour24 >= 12 ? "PM" : "AM";
       setHours(newHours);
+      setAmPm(newAmPm);
     }
     setMinutes(newMinutes);
-    updateTime(newHours, newMinutes, amPm);
+    updateTime(newHours, newMinutes, newAmPm);
   };
 
   const decrementMinutes = () => {
     let newMinutes = minutes - 30;
     let newHours = hours;
+    let newAmPm = amPm;
+    
     if (newMinutes < 0) {
       newMinutes = 30;
-      newHours = hours - 1;
-      if (newHours < 1) newHours = 12;
+      // Use the same circular logic as decrementHours
+      // Convert current time to 24-hour format
+      let currentHour24 = hours;
+      if (amPm === "PM" && hours !== 12) currentHour24 = hours + 12;
+      if (amPm === "AM" && hours === 12) currentHour24 = 0;
+      
+      let newHour24;
+      if (currentHour24 === 10) {
+        // Wrap around to 4 PM
+        newHour24 = 16;
+      } else if (currentHour24 === 11) {
+        newHour24 = 10;
+      } else if (currentHour24 === 12) {
+        newHour24 = 11;
+      } else if (currentHour24 === 13) {
+        newHour24 = 12;
+      } else if (currentHour24 === 14) {
+        newHour24 = 13;
+      } else if (currentHour24 === 15) {
+        newHour24 = 14;
+      } else if (currentHour24 === 16) {
+        newHour24 = 15;
+      } else {
+        // If outside range, default to 10 AM
+        newHour24 = 10;
+      }
+      
+      // Convert back to 12-hour format
+      newHours = newHour24 > 12 ? newHour24 - 12 : newHour24 === 0 ? 12 : newHour24;
+      newAmPm = newHour24 >= 12 ? "PM" : "AM";
       setHours(newHours);
+      setAmPm(newAmPm);
     }
     setMinutes(newMinutes);
-    updateTime(newHours, newMinutes, amPm);
+    updateTime(newHours, newMinutes, newAmPm);
   };
 
   const toggleAmPm = () => {
