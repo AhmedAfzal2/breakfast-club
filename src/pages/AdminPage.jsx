@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock } from 'lucide-react';
 import Items from '../components/cart/Items';
+import Loading from '../components/Loading';
 import './AdminPage.css';
 
 function AdminPage() {
@@ -204,7 +205,7 @@ function AdminPage() {
 
       <div className="admin-content-wrapper">
         <div className="admin-content">
-          {loading && <p>Loading data...</p>}
+          {loading && <Loading message="Loading data..." />}
           
           {!loading && activeTab === 'reservations' && (
           <div className="reservations-table-container">
