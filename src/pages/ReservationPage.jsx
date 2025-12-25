@@ -7,8 +7,6 @@ import Button from "../components/Button";
 import FormContainer from "../components/reservation/FormContainer";
 import TimeSpinner from "../components/reservation/TimeSpinner";
 import ReservationForm from "../components/reservation/ReservationForm";
-import calendarIcon from "../../assets/images/icons/calendar.png";
-import clockIcon from "../../assets/images/icons/clock.png";
 import Game from "../components/reservation/game/Game";
 import tables from "../components/reservation/game/tables";
 import "../App.css";
@@ -276,7 +274,7 @@ function ReservationPage() {
         readOnly
       />
       <button type="button" className="calendar-icon-button" onClick={onClick}>
-        <img src={calendarIcon} alt="Calendar" />
+        <img src="/assets/images/icons/calendar.png" alt="Calendar" />
       </button>
     </div>
   );
@@ -432,7 +430,7 @@ function ReservationPage() {
           className="clock-icon-button"
           onClick={handleTimeIconClick}
         >
-          <img src={clockIcon} alt="Clock" />
+          <img src="/assets/images/icons/clock.png" alt="Clock" />
         </button>
         {isTimeSpinnerOpen && (
           <div
