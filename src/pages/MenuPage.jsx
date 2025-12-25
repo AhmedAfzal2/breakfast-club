@@ -12,14 +12,17 @@ import ConfirmationPopup from "../components/ConfirmationPopup";
 import Loading from "../components/Loading";
 import { useCart } from "../components/menu/CartContext";
 import { menuApi } from "../services/menuApi";
+import { ordersApi } from "../services/ordersApi";
 import "../App.css";
 import "./MenuPage.css";
 const breakfastBanner = "/assets/images/banner-images/breakfast.png";
-const breakfastBannerMobile = "/assets/images/banner-images/breakfast_mobile.png";
+const breakfastBannerMobile =
+  "/assets/images/banner-images/breakfast_mobile.png";
 const dessertBanner = "/assets/images/banner-images/desserts.png";
 const dessertBannerMobile = "/assets/images/banner-images/dessert_mobile.png";
 const beveragesBanner = "/assets/images/banner-images/beverages.png";
-const beveragesBannerMobile = "/assets/images/banner-images/beverages_mobile.jpg";
+const beveragesBannerMobile =
+  "/assets/images/banner-images/beverages_mobile.jpg";
 
 function MenuPage() {
   const ctx = useCart();
@@ -191,17 +194,9 @@ function MenuPage() {
       };
 
       // Submit order to API
-      const response = await fetch("http://localhost:3001/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const result = await ordersApi.createOrder(orderData);
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (result.success) {
         console.log("Order placed successfully:", result);
 
         // Clear cart
@@ -387,9 +382,7 @@ function MenuPage() {
 
           {/* <CartIcon className="cart-icon" onClick={openCart} /> */}
 
-          {loading && (
-            <Loading message="Loading menu items..." />
-          )}
+          {loading && <Loading message="Loading menu items..." />}
 
           {error && (
             <div style={{ padding: "2rem", textAlign: "center", color: "red" }}>

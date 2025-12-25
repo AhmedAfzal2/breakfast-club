@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { API_BASE_URL } from "./apiConfig";
 
 export const menuApi = {
   // Get all menu items
@@ -6,11 +6,11 @@ export const menuApi = {
     try {
       const response = await fetch(`${API_BASE_URL}/menu-items`);
       if (!response.ok) {
-        throw new Error('Failed to fetch menu items');
+        throw new Error("Failed to fetch menu items");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching menu items:', error);
+      console.error("Error fetching menu items:", error);
       throw error;
     }
   },
@@ -18,13 +18,18 @@ export const menuApi = {
   // Get menu items by category
   getMenuItemsByCategory: async (category) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/menu-items/category/${category}`);
+      const response = await fetch(
+        `${API_BASE_URL}/menu-items/category/${category}`
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch menu items for category: ${category}`);
       }
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching menu items for category ${category}:`, error);
+      console.error(
+        `Error fetching menu items for category ${category}:`,
+        error
+      );
       throw error;
     }
   },
@@ -36,11 +41,16 @@ export const menuApi = {
         `${API_BASE_URL}/menu-items/category/${category}/subcategory/${subcategory}`
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch menu items for ${category}/${subcategory}`);
+        throw new Error(
+          `Failed to fetch menu items for ${category}/${subcategory}`
+        );
       }
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching menu items for ${category}/${subcategory}:`, error);
+      console.error(
+        `Error fetching menu items for ${category}/${subcategory}:`,
+        error
+      );
       throw error;
     }
   },
@@ -59,4 +69,3 @@ export const menuApi = {
     }
   },
 };
-

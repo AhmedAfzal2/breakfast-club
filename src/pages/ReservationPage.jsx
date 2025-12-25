@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Layout from "../components/Layout/Layout";
+import { reservationsApi } from "../services/reservationsApi";
 import Button from "../components/Button";
 import FormContainer from "../components/reservation/FormContainer";
 import TimeSpinner from "../components/reservation/TimeSpinner";
@@ -33,8 +34,10 @@ function ReservationPage() {
   const [tableError, setTableError] = useState("");
   const [isHelpPopupOpen, setIsHelpPopupOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-  const [showRestaurantClosedPopup, setShowRestaurantClosedPopup] = useState(false);
-  const [showAllTablesReservedPopup, setShowAllTablesReservedPopup] = useState(false);
+  const [showRestaurantClosedPopup, setShowRestaurantClosedPopup] =
+    useState(false);
+  const [showAllTablesReservedPopup, setShowAllTablesReservedPopup] =
+    useState(false);
   // Default tables: 2x 4-seater, 2x 2-seater
   // This will be updated when the table selection game is implemented
   const [selectedTables, setSelectedTables] = useState([]);
@@ -175,23 +178,23 @@ function ReservationPage() {
   const handleReserveClick = () => {
     // Clear previous errors
     setTableError("");
-    
+
     if (!validateDateAndTime()) {
       return;
     }
-    
+
     // Check if all tables are reserved
     if (reservedTables.length === tables.length) {
       setShowAllTablesReservedPopup(true);
       return;
     }
-    
+
     // Check if at least one table is selected
     if (selectedTables.length === 0) {
       setTableError("please reserve your table");
       return;
     }
-    
+
     // All validations passed
     setGameEnable(false);
     setIsReservationFormOpen(true);
@@ -312,19 +315,8 @@ function ReservationPage() {
         return [];
       }
 
-      const response = await fetch(
-        `http://localhost:3001/api/reservations/reserved-tables?date=${encodeURIComponent(
-          date.toISOString()
-        )}&time=${encodeURIComponent(time.toISOString())}`
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        return result.reservedTableIds || [];
-      } else {
-        console.error("Error fetching reserved tables:", response.statusText);
-        return [];
-      }
+      const result = await reservationsApi.getReservedTables(date, time);
+      return result.reservedTableIds || [];
     } catch (error) {
       console.error("Error fetching reserved tables:", error);
       return [];
@@ -343,8 +335,16 @@ function ReservationPage() {
   const isSelectedDateToday = (date) => {
     if (!date) return false;
     const today = new Date();
-    const selectedDateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const selectedDateOnly = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+    const todayOnly = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
     return selectedDateOnly.getTime() === todayOnly.getTime();
   };
 
@@ -358,7 +358,7 @@ function ReservationPage() {
         setSelectedTime(null);
         return;
       }
-      
+
       setSelectedDate(date);
       if (date) {
         setDateError("");
@@ -458,9 +458,7 @@ function ReservationPage() {
           </div>
         )}
       </div>
-      {timeError && (
-        <span className="field-error-message">{timeError}</span>
-      )}
+      {timeError && <span className="field-error-message">{timeError}</span>}
     </div>
   );
 
@@ -546,7 +544,9 @@ function ReservationPage() {
   return (
     <Layout>
       <div className="reservation-page">
-        <h1 className="page-heading">RESERVE TABLES ( RESTURANT TIMINGS:10AM - 4PM )</h1>
+        <h1 className="page-heading">
+          RESERVE TABLES ( RESTURANT TIMINGS:10AM - 4PM )
+        </h1>
 
         <FormContainer fields={formFields} className="date-time-form" />
 
@@ -681,7 +681,10 @@ function ReservationPage() {
             </div>
             <div className="reserve-button-section">
               {tableError && (
-                <span className="field-error-message" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                <span
+                  className="field-error-message"
+                  style={{ display: "block", marginBottom: "0.5rem" }}
+                >
                   {tableError}
                 </span>
               )}
@@ -726,40 +729,23 @@ function ReservationPage() {
           console.log("========================");
 
           try {
-            const response = await fetch(
-              "http://localhost:3001/api/reservations",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(reservationData),
-              }
+            const result = await reservationsApi.createReservation(
+              reservationData
             );
 
-            const result = await response.json();
+            console.log("Reservation submitted successfully:", reservationData);
+            setIsReservationFormOpen(false);
 
-            if (response.ok) {
-              console.log(
-                "Reservation submitted successfully:",
-                reservationData
-              );
-              setIsReservationFormOpen(false);
+            // Clear all reservation state after successful submission
+            setSelectedDate(null);
+            setSelectedTime(null);
+            setSelectedTables([]);
+            setReservedTables([]);
+            setGameEnable(false);
+            setDateError("");
+            setTimeError("");
 
-              // Clear all reservation state after successful submission
-              setSelectedDate(null);
-              setSelectedTime(null);
-              setSelectedTables([]);
-              setReservedTables([]);
-              setGameEnable(false);
-              setDateError("");
-              setTimeError("");
-
-              // Optionally show a success message or redirect
-            } else {
-              console.error("Failed to submit reservation:", result.message);
-              // Optionally show an error message
-            }
+            // Optionally show a success message or redirect
           } catch (error) {
             console.error("Error submitting reservation:", error);
             // Optionally show an error message
