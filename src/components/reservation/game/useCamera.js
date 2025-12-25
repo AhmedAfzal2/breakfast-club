@@ -16,7 +16,7 @@ function Pos(x, y, size) {
 }
 
 function collisionCompare(charPos, table, highlight, char) {
-  const HIGHLIGHT_RADIUS = 12;
+  const HIGHLIGHT_RADIUS = 8;
   if (!highlight)
     return (
       charPos.right > table.left &&
@@ -301,6 +301,7 @@ export default function useCamera(
       const direction = walkingDirection(keys, controllerRef);
       if (direction != "none" && currentDirection != direction) {
         charRef.current.src = sprites[direction].stand;
+        currentDirection = direction;
       }
       if (updateWalkFrame === 0) {
         if (direction == "none") {
@@ -308,7 +309,7 @@ export default function useCamera(
         } else {
           charRef.current.src = sprites[direction].walk[walkFrame];
           currentDirection = direction;
-          walkFrame = (walkFrame + 1) % 2;
+          walkFrame = (walkFrame + 1) % 4;
         }
       }
 
