@@ -4,7 +4,38 @@ import { useGameContext } from "./GameContext";
 import tables from "./tables";
 import config from "./gameConstants";
 import "./style.css";
-import sprites from "./sprites";
+
+const assets = {};
+
+async function loadImage(name, src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      assets[name] = img;
+      resolve();
+    };
+  });
+}
+
+function drawSprite(ctx, char, direction, frame) {
+  const width = assets.char.width / 3;
+  const height = assets.char.height / 4;
+  frame = frame === 2 ? 0 : frame;
+  frame = frame === 3 ? 2 : frame;
+  ctx.clearRect(0, 0, char.width, char.height);
+  ctx.drawImage(
+    assets.char,
+    frame * width + 2,
+    direction * height + 2,
+    width - 2,
+    height - 2,
+    0,
+    0,
+    char.width,
+    char.height
+  );
+}
 
 // takes x, y coords and object containing width and height
 // and returns object with boundaries
@@ -160,11 +191,11 @@ function walkingDirection(keys, controllerRef) {
   const a = k["a"] || c["a"];
   const d = k["d"] || c["d"];
 
-  if (w && !s) return "top";
-  else if (s && !w) return "bottom";
-  else if (d && !a) return "right";
-  else if (a && !d) return "left";
-  else return "none";
+  if (w && !s) return 3;
+  else if (s && !w) return 0;
+  else if (d && !a) return 2;
+  else if (a && !d) return 1;
+  else return null;
 }
 
 function addCoords(a, b) {
@@ -241,7 +272,11 @@ export default function useCamera(
   let walkFrame = 0;
   let updateWalkFrame = 0;
   const UPDATE_FRAME_DELAY = 20;
-  let currentDirection = "top";
+  let currentDirection = 0;
+
+  useEffect(() => {
+    loadImage("char", "/assets/images/bob.png");
+  }, []);
 
   useEffect(() => {
     sizesRef.current = ctx.sizes;
@@ -264,13 +299,16 @@ export default function useCamera(
       y: cameraPos.current.y + viewInitial.height / 2 + charOffset.current.y,
     };
 
+    const charCtx = charRef.current.getContext("2d");
+
     let frameId;
     const animate = (time) => {
-      const { char, view, world } = sizesRef.current;
-      if (!enabled) {
+      if (!enabled || !assets.char) {
         frameId = requestAnimationFrame(animate);
         return;
       }
+
+      const { char, view, world } = sizesRef.current;
 
       const scaledTables = tables.map((t) => ({
         ...t,
@@ -299,18 +337,18 @@ export default function useCamera(
 
       // animate walking
       const direction = walkingDirection(keys, controllerRef);
-      if (direction != "none" && currentDirection != direction) {
-        charRef.current.src = sprites[direction].stand;
+      if (direction === null) {
+        drawSprite(charCtx, char, currentDirection, 0);
+        walkFrame = 1;
+      }
+      if (direction !== null && currentDirection != direction) {
+        drawSprite(charCtx, char, direction, 0);
         currentDirection = direction;
       }
-      if (updateWalkFrame === 0) {
-        if (direction == "none") {
-          charRef.current.src = sprites[currentDirection].stand;
-        } else {
-          charRef.current.src = sprites[direction].walk[walkFrame];
-          currentDirection = direction;
-          walkFrame = (walkFrame + 1) % 4;
-        }
+      if (updateWalkFrame === 0 && direction !== null) {
+        drawSprite(charCtx, char, direction, walkFrame);
+        currentDirection = direction;
+        walkFrame = (walkFrame + 1) % 4;
       }
 
       updateWalkFrame = (updateWalkFrame + 1) % UPDATE_FRAME_DELAY;
