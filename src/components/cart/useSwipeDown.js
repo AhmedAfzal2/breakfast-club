@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 
-export default function useSwipeDown(divRef, callback) {
+export default function useSwipeDown(divRef, callback, topRef) {
   let startY = 0;
   let endY = 0;
 
@@ -29,8 +29,13 @@ export default function useSwipeDown(divRef, callback) {
       }
     };
 
-    divRef.current.addEventListener("touchstart", touchStart);
-    divRef.current.addEventListener("touchmove", touchMove);
+    if (topRef && topRef.current) {
+      topRef.current.addEventListener("touchstart", touchStart);
+      topRef.current.addEventListener("touchmove", touchMove);
+    } else {
+      divRef.current.addEventListener("touchstart", touchStart);
+      divRef.current.addEventListener("touchmove", touchMove);
+    }
     divRef.current.addEventListener("touchend", touchEnd);
   }, [divRef.current]);
 }
