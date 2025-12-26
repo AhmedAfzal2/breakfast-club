@@ -18,6 +18,7 @@ import {
 function Footer() {
   const [isOpen, setIsOpen] = useState(false);
   const footerRef = useRef(null);
+  const topRef = useRef(null);
 
   const toggleFooter = () => {
     setIsOpen(!isOpen);
@@ -52,7 +53,7 @@ function Footer() {
           <ChevronDown className="chevron chevron-down" size={22} />
         </div>
         <div className="footer-content">
-          <div className="footer-top">
+          <div className="footer-top" ref={topRef}>
             <div className="footer-logo">
               <img src={breakfastClubLogo} alt="Breakfast Club Logo" />
             </div>
