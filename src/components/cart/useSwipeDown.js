@@ -10,21 +10,27 @@ export default function useSwipeDown(divRef, callback) {
   useEffect(() => {
     if (!divRef.current) return;
 
-    divRef.current.addEventListener("touchstart", (e) => {
+    const touchStart = (e) => {
       startY =
         e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
-    });
+    };
 
-    divRef.current.addEventListener("touchmove", (e) => {
+    const touchMove = (e) => {
       e.preventDefault();
-    });
+    };
 
-    divRef.current.addEventListener("touchend", (e) => {
+    const touchEnd = (e) => {
       endY =
-        e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+        e.changedTouches && e.changedTouches.length > 0
+          ? e.changedTouches[0].clientY
+          : e.clientY;
       if (endY - startY > THRESHOLD) {
         callback();
       }
-    });
+    };
+
+    divRef.current.addEventListener("touchstart", touchStart);
+    divRef.current.addEventListener("touchmove", touchMove);
+    divRef.current.addEventListener("touchend", touchEnd);
   }, [divRef.current]);
 }
