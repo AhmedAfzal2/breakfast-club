@@ -9,9 +9,14 @@ export default function useSwipeDown(divRef, callback) {
 
   useEffect(() => {
     if (!divRef.current) return;
+
     divRef.current.addEventListener("touchstart", (e) => {
       startY =
         e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+    });
+
+    divRef.current.addEventListener("touchmove", (e) => {
+      e.preventDefault();
     });
 
     divRef.current.addEventListener("touchend", (e) => {
