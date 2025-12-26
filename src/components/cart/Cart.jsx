@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Items from "./Items";
 import { useRef } from "react";
 import useSwipeDown from "./useSwipeDown";
@@ -8,14 +8,18 @@ import "./Cart.css";
 function Cart({ isOpen, onBack, onPlace, isPlacingOrder = false }) {
   const ctx = useCart();
   const isEmpty = ctx.cartItems.length === 0;
+  const isScroll = ctx.cartItems.length > 6;
   const cartRef = useRef(null);
+  const topRef = useRef(null);
 
-  useSwipeDown(cartRef, onBack);
+  useSwipeDown(cartRef, onBack, isScroll ? topRef : null);
 
   return (
     <div ref={cartRef} id="cart" className={isOpen ? "open" : "closed"}>
       <div className="cart-top-section">
-        <div className="cart-header">{!isEmpty ? "your cart" : "empty"}</div>
+        <div className="cart-header" ref={topRef}>
+          {!isEmpty ? "your cart" : "empty"}
+        </div>
         <Items />
         <div className="control-row">
           <div

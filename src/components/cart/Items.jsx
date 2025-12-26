@@ -7,7 +7,7 @@ const MIN_ROWS = 6;
 function Items({ items, readOnly }) {
   const ctx = useCart();
   const sourceItems = items || (ctx ? ctx.cartItems : []);
-  
+
   const isScroll = sourceItems.length > MIN_ROWS;
   // extend the array with nulls if < min rows
   const newItems =
@@ -15,7 +15,11 @@ function Items({ items, readOnly }) {
       ? [...sourceItems, ...Array(MIN_ROWS - sourceItems.length).fill(null)]
       : sourceItems;
   return (
-    <div className={(!isScroll && "no-fade") + " items-list"}>
+    <div
+      className={(!isScroll && "no-fade") + " items-list"}
+      onTouchStart={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
       {newItems.map((item, index) => (
         <CartRow key={index} id={index} item={item} readOnly={readOnly} />
       ))}

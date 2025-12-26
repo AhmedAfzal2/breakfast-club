@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 
 export default function useSwipeDown(divRef, callback, topRef) {
-  let startY = 0;
+  let startY = null;
   let endY = 0;
 
   const THRESHOLD = 50;
@@ -20,6 +20,7 @@ export default function useSwipeDown(divRef, callback, topRef) {
     };
 
     const touchEnd = (e) => {
+      if (startY === null) return;
       endY =
         e.changedTouches && e.changedTouches.length > 0
           ? e.changedTouches[0].clientY
@@ -27,7 +28,7 @@ export default function useSwipeDown(divRef, callback, topRef) {
       if (endY - startY > THRESHOLD) {
         callback();
       }
-      startY = Number.MAX_SAFE_INTEGER;
+      startY = null;
     };
 
     if (topRef && topRef.current) {
@@ -41,5 +42,21 @@ export default function useSwipeDown(divRef, callback, topRef) {
     }
     divRef.current.addEventListener("touchend", touchEnd);
     divRef.current.addEventListener("mouseup", touchEnd);
-  }, [divRef.current]);
+
+    return () => {
+      if (topRef && topRef.current) {
+        topRef.current.removeEventListener("touchstart", touchStart);
+        topRef.current.removeEventListener("touchmove", touchMove);
+        topRef.current.removeEventListener("mousedown", touchStart);
+        topRef.current.removeEventListener("mousemove", touchMove);
+      } else if (divRef.current) {
+        divRef.current.removeEventListener("touchstart", touchStart);
+        divRef.current.removeEventListener("touchmove", touchMove);
+      }
+      if (divRef.current) {
+        divRef.current.removeEventListener("touchend", touchEnd);
+        divRef.current.removeEventListener("mouseup", touchEnd);
+      }
+    };
+  }, [divRef, topRef, callback]);
 }
