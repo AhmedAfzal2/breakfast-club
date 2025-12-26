@@ -24,7 +24,7 @@ function Footer() {
     setIsOpen(!isOpen);
   };
 
-  useSwipeDown(footerRef, toggleFooter, topRef);
+  useSwipeDown(footerRef, () => setIsOpen(false), topRef);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

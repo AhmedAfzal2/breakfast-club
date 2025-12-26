@@ -27,15 +27,19 @@ export default function useSwipeDown(divRef, callback, topRef) {
       if (endY - startY > THRESHOLD) {
         callback();
       }
+      startY = Number.MAX_SAFE_INTEGER;
     };
 
     if (topRef && topRef.current) {
       topRef.current.addEventListener("touchstart", touchStart);
       topRef.current.addEventListener("touchmove", touchMove);
+      topRef.current.addEventListener("mousedown", touchStart);
+      topRef.current.addEventListener("mousemove", touchMove);
     } else {
       divRef.current.addEventListener("touchstart", touchStart);
       divRef.current.addEventListener("touchmove", touchMove);
     }
     divRef.current.addEventListener("touchend", touchEnd);
+    divRef.current.addEventListener("mouseup", touchEnd);
   }, [divRef.current]);
 }
