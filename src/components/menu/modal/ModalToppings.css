@@ -4,13 +4,13 @@
 }
 
 .modal-toppings-heading {
-  font-family: 'Pixelify Sans', sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: black;
   margin: 0 0 1rem 0;
   text-transform: lowercase;
-  border-bottom: 2px solid var(--gamboge);
+  border-bottom: 2px solid var(--china-rose);
   padding-bottom: 0.5rem;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .modal-topping-item:hover {
-    background-color: rgba(178, 90, 104, 0.5); ;
+  background-color: rgba(178, 90, 104, 0.5);
 }
 
 .modal-topping-checkbox {
@@ -42,7 +42,7 @@
 }
 
 .modal-topping-name {
-  font-family: 'Roboto Slab', serif;
+  font-family: "Roboto Slab", serif;
   text-transform: lowercase;
   font-size: 1rem;
   color: #000000;
@@ -98,4 +98,3 @@
     height: 16px;
   }
 }
-
