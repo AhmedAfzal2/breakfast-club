@@ -72,7 +72,17 @@
 }
 
 .modal-header-close:hover {
-  background-color: rgba(236, 160, 50, 0.2);
+  background-color: rgba(178, 90, 104, 0.2);
+  transform: scale(1.1);
+}
+
+.beverages .modal-header-close:hover {
+  background-color: rgba(115, 143, 245, 0.2);
+  transform: scale(1.1);
+}
+
+.desserts .modal-header-close:hover {
+  background-color: rgba(236, 158, 50, 0.2);
   transform: scale(1.1);
 }
 
